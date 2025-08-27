@@ -1,0 +1,155 @@
+<footer class="nw-footer">
+    <div class="container">
+        <div class="nw-footer__bar">
+            <div class="nw-brand">
+                <img src="/assets/logowolf.png" alt="Neural Wise Wolf" width="24" height="24">
+                <span>Neural Wise Wolf © 2025</span>
+            </div>
+            
+            <div class="nw-links">
+                <a href="/about.html">О проекте</a>
+                <a href="/about.html">Контакты</a>
+                <a href="/about.html">Реклама</a>
+            </div>
+            
+            <div class="nw-social">
+                <a href="https://t.me/neural_wise_wolf" title="Telegram канал" aria-label="Telegram" target="_blank" rel="noopener">
+                    <span>📢</span>
+                </a>
+                <a href="https://t.me/neural_wise_wolf_bot" title="Нейроклык бот" aria-label="Telegram Bot" target="_blank" rel="noopener">
+                    <span>🤖</span>
+                </a>
+                <a href="https://t.me/neural_wolf" title="Вопросы и поддержка" aria-label="Telegram Support" target="_blank" rel="noopener">
+                    <span>💬</span>
+                </a>
+                <a href="https://www.instagram.com/neural_wise_wolf" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener">
+                    <span>📷</span>
+                </a>
+                <a href="https://www.youtube.com/@neural_wolf" title="YouTube" aria-label="YouTube" target="_blank" rel="noopener">
+                    <span>🎥</span>
+                </a>
+                <a href="https://www.tiktok.com/@neural_wolf" title="TikTok" aria-label="TikTok" target="_blank" rel="noopener">
+                    <span>🎵</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="nw-footer__info">
+            <p>Волчья подборка умных инструментов для твоих повседневных задач. Созданно при поддерже нейросетей и бессоных ночей. От души!</p>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .nw-footer {
+        background: var(--bg-dark);
+        color: white;
+        padding: var(--space-xl) 0;
+        margin-top: auto;
+    }
+    
+    .nw-footer__bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xl);
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--space-lg);
+    }
+    
+    .nw-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        color: white;
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+    
+    .nw-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-lg);
+    }
+    
+    .nw-links a {
+        color: white;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+        font-size: 0.9rem;
+    }
+    
+    .nw-links a:hover {
+        opacity: 1;
+    }
+    
+    .nw-social {
+        display: flex;
+        gap: var(--space-sm);
+    }
+    
+    .nw-social a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.2s ease;
+        text-decoration: none;
+        position: relative;
+    }
+    
+    .nw-social a:hover {
+        background: var(--accent-secondary);
+        transform: translateY(-2px);
+    }
+    
+    .nw-social a:hover::after {
+        content: attr(title);
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--accent-primary);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+        z-index: 1000;
+    }
+    
+    .nw-footer__info {
+        text-align: center;
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+    
+    .nw-footer__info p {
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .nw-footer__bar {
+            flex-direction: column;
+            text-align: center;
+            gap: var(--space-lg);
+        }
+        
+        .nw-links {
+            justify-content: center;
+        }
+        
+        .nw-social {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nw-social a {
+            width: 2.2rem;
+            height: 2.2rem;
+        }
+    }
+</style>

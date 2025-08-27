@@ -1,0 +1,64 @@
+<header class="header">
+    <nav class="nav container">
+        <a href="/" class="logo">
+            <img src="/assets/logowolf.png" alt="Neural Wise Wolf" width="32" height="32">
+            <span>НейроВолки </span>
+        </a>
+        
+        
+        <button class="pill-btn" id="openMenu">
+            <span>Меню</span>
+            <span>≡</span>
+        </button>
+    </nav>
+</header>
+
+
+<style>
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-light);
+        backdrop-filter: blur(10px);
+    }
+    
+    .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-md);
+        height: 4rem;
+    }
+    
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        text-decoration: none;
+    }
+    
+    .logo img {
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+    }
+    
+    .logo:hover img {
+        transform: rotate(15deg);
+    }
+    
+    @media (max-width: 768px) {
+        .searchbar {
+            display: none !important;
+        }
+        
+        .logo span {
+            font-size: 1rem;
+        }
+    }
+</style>
+
