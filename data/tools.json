@@ -1,0 +1,895 @@
+{
+  "tools": [
+    {
+      "slug": "percentage-calculator",
+      "title": "Калькулятор процентов",
+      "description": "Расчет процентов, скидок, наценок и долей",
+      "category": "math",
+      "icon": "📊",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "calculator",
+      "title": "Калькулятор",
+      "description": "Простой калькулятор для базовых вычислений",
+      "category": "math",
+      "icon": "🧮",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "fraction-calculator",
+      "title": "Калькулятор дробей",
+      "description": "Вычисления с дробями",
+      "category": "math",
+      "icon": "➗",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "decimal-to-fraction",
+      "title": "Десятичные в дроби",
+      "description": "Преобразование десятичных в обыкновенные дроби",
+      "category": "math",
+      "icon": "➗",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "roman-numerals-converter",
+      "title": "Римские цифры",
+      "description": "Конвертер арабских и римских чисел",
+      "category": "math",
+      "icon": "🔢",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "gcd-lcm-calculator",
+      "title": "НОД и НОК",
+      "description": "Калькулятор наибольшего общего делителя и наименьшего общего кратного",
+      "category": "math",
+      "icon": "➗",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "prime-number-checker",
+      "title": "Простое число",
+      "description": "Проверка числа на простоту",
+      "category": "math",
+      "icon": "🔎",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "factorial-calculator",
+      "title": "Факториал",
+      "description": "Вычисление факториала",
+      "category": "math",
+      "icon": "✖️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "power-root-calculator",
+      "title": "Степени и корни",
+      "description": "Возведение в степень и извлечение корня",
+      "category": "math",
+      "icon": "📐",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "average-median-mode",
+      "title": "Среднее, медиана, мода",
+      "description": "Статистические показатели набора чисел",
+      "category": "math",
+      "icon": "📊",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "ratio-calculator",
+      "title": "Пропорции",
+      "description": "Калькулятор отношений и пропорций",
+      "category": "math",
+      "icon": "➗",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "probability-calculator",
+      "title": "Вероятность",
+      "description": "Калькулятор вероятностей",
+      "category": "math",
+      "icon": "🎲",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "equation-solver",
+      "title": "Решение уравнений",
+      "description": "Решатель алгебраических уравнений",
+      "category": "math",
+      "icon": "🧮",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "quadratic-solver",
+      "title": "Квадратные уравнения",
+      "description": "Решение квадратных уравнений",
+      "category": "math",
+      "icon": "🧮",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "matrix-multiplication",
+      "title": "Умножение матриц",
+      "description": "Операции над матрицами",
+      "category": "math",
+      "icon": "🟦",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "determinant-calculator",
+      "title": "Детерминант",
+      "description": "Вычисление определителя матрицы",
+      "category": "math",
+      "icon": "🟦",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "log-calculator",
+      "title": "Логарифмы",
+      "description": "Вычисление логарифмов",
+      "category": "math",
+      "icon": "📈",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "interest-calculator",
+      "title": "Проценты",
+      "description": "Простой и сложный процент",
+      "category": "math",
+      "icon": "💰",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "unit-circle-visualizer",
+      "title": "Единичная окружность",
+      "description": "Тригонометрическая визуализация",
+      "category": "math",
+      "icon": "⭕",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "base-converter",
+      "title": "Системы счисления",
+      "description": "Преобразование чисел между основаниями",
+      "category": "math",
+      "icon": "🔣",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "length-converter",
+      "title": "Конвертер длины",
+      "description": "Метры, футы, дюймы и др.",
+      "category": "convert",
+      "icon": "📏",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "weight-converter",
+      "title": "Конвертер массы",
+      "description": "Килограммы и фунты",
+      "category": "convert",
+      "icon": "⚖️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "temperature-converter",
+      "title": "Температура",
+      "description": "Celsius, Fahrenheit, Kelvin",
+      "category": "convert",
+      "icon": "🌡️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "speed-converter",
+      "title": "Скорость",
+      "description": "Км/ч, м/с, узлы",
+      "category": "convert",
+      "icon": "🏎️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "area-converter",
+      "title": "Площадь",
+      "description": "Кв. м, акры и др.",
+      "category": "convert",
+      "icon": "📐",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "volume-converter",
+      "title": "Объем",
+      "description": "Литры, галлоны и др.",
+      "category": "convert",
+      "icon": "🧪",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "time-converter",
+      "title": "Время",
+      "description": "Секунды, минуты, часы",
+      "category": "convert",
+      "icon": "⏱️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "data-size-converter",
+      "title": "Размер данных",
+      "description": "Байты, килобайты и др.",
+      "category": "convert",
+      "icon": "💾",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "pressure-converter",
+      "title": "Давление",
+      "description": "Па, бар, атм",
+      "category": "convert",
+      "icon": "🎚️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "energy-converter",
+      "title": "Энергия",
+      "description": "Дж, кал, кВт·ч",
+      "category": "convert",
+      "icon": "⚡",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "power-converter",
+      "title": "Мощность",
+      "description": "Ватты, лошадиные силы",
+      "category": "convert",
+      "icon": "🔋",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "currency-converter",
+      "title": "Валюта",
+      "description": "Базовый офлайн-конвертер валют",
+      "category": "convert",
+      "icon": "💱",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "angle-converter",
+      "title": "Углы",
+      "description": "Градусы, радианы",
+      "category": "convert",
+      "icon": "📐",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "frequency-converter",
+      "title": "Частота",
+      "description": "Герцы, обороты/мин",
+      "category": "convert",
+      "icon": "📻",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "density-converter",
+      "title": "Плотность",
+      "description": "Кг/м³ и др.",
+      "category": "convert",
+      "icon": "🌊",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "case-converter",
+      "title": "Регистр текста",
+      "description": "Преобразование текста в верхний/нижний регистр",
+      "category": "text",
+      "icon": "🔠",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "text-reverser",
+      "title": "Обратный текст",
+      "description": "Переворот текста",
+      "category": "text",
+      "icon": "🔄",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "text-counter",
+      "title": "Счетчик текста",
+      "description": "Подсчет символов и слов",
+      "category": "text",
+      "icon": "📏",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "remove-duplicates-lines",
+      "title": "Удалить дубликаты",
+      "description": "Удаление повторяющихся строк",
+      "category": "text",
+      "icon": "🗑️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "sort-lines",
+      "title": "Сортировка строк",
+      "description": "Сортировка текста по строкам",
+      "category": "text",
+      "icon": "↕️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "lorem-ipsum-generator",
+      "title": "Lorem Ipsum",
+      "description": "Генератор текста-заполнителя",
+      "category": "text",
+      "icon": "✍️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-word-generator",
+      "title": "Случайные слова",
+      "description": "Генератор случайных слов",
+      "category": "text",
+      "icon": "🎲",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "palindrome-checker",
+      "title": "Палиндром",
+      "description": "Проверка слова на палиндром",
+      "category": "text",
+      "icon": "🔁",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "anagram-finder",
+      "title": "Анаграммы",
+      "description": "Поиск анаграмм",
+      "category": "text",
+      "icon": "🔤",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "text-compare",
+      "title": "Сравнение текстов",
+      "description": "Сравнение двух текстов",
+      "category": "text",
+      "icon": "📄",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "url-encoder-decoder",
+      "title": "URL кодирование",
+      "description": "Кодирование и декодирование URL",
+      "category": "text",
+      "icon": "🔗",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "base64-encoder-decoder",
+      "title": "Base64",
+      "description": "Кодирование и декодирование Base64",
+      "category": "text",
+      "icon": "🔐",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "slug-generator",
+      "title": "Slug генератор",
+      "description": "Создание slug для ссылок",
+      "category": "text",
+      "icon": "🔗",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "emoji-remover",
+      "title": "Удаление эмодзи",
+      "description": "Очистка текста от эмодзи",
+      "category": "text",
+      "icon": "😊",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "whitespace-cleaner",
+      "title": "Очистка пробелов",
+      "description": "Удаление лишних пробелов",
+      "category": "text",
+      "icon": "⬜",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "json-formatter",
+      "title": "JSON форматтер",
+      "description": "Форматирование JSON",
+      "category": "dev",
+      "icon": "🧾",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "xml-formatter",
+      "title": "XML форматтер",
+      "description": "Форматирование XML",
+      "category": "dev",
+      "icon": "🧾",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "yaml-to-json",
+      "title": "YAML → JSON",
+      "description": "Конвертация YAML в JSON",
+      "category": "dev",
+      "icon": "🔄",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "html-minifier",
+      "title": "HTML минификатор",
+      "description": "Сжатие HTML",
+      "category": "dev",
+      "icon": "🌐",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "css-minifier",
+      "title": "CSS минификатор",
+      "description": "Сжатие CSS",
+      "category": "dev",
+      "icon": "🎨",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "js-minifier",
+      "title": "JS минификатор",
+      "description": "Сжатие JavaScript",
+      "category": "dev",
+      "icon": "📜",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "regex-tester",
+      "title": "Regex тестер",
+      "description": "Проверка регулярных выражений",
+      "category": "dev",
+      "icon": "🔍",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "uuid-generator",
+      "title": "UUID",
+      "description": "Генератор UUID",
+      "category": "dev",
+      "icon": "🆔",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "hash-generator",
+      "title": "Хэш",
+      "description": "MD5/SHA хэширование",
+      "category": "dev",
+      "icon": "#️⃣",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "jwt-decoder",
+      "title": "JWT декодер",
+      "description": "Расшифровка токенов JWT",
+      "category": "dev",
+      "icon": "🔑",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "ip-address-lookup",
+      "title": "IP адрес",
+      "description": "Определение IP адреса",
+      "category": "dev",
+      "icon": "🌍",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "barcode-generator",
+      "title": "Штрихкод",
+      "description": "Генератор штрихкодов",
+      "category": "dev",
+      "icon": "🏷️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "color-picker",
+      "title": "Цвет",
+      "description": "Палитра и выбор цвета",
+      "category": "dev",
+      "icon": "🎨",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "gradient-generator",
+      "title": "Градиент",
+      "description": "Создание градиентов",
+      "category": "dev",
+      "icon": "🌈",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "coin-flip",
+      "title": "Монетка",
+      "description": "Подбросить монетку",
+      "category": "random",
+      "icon": "💲",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "dice-roller",
+      "title": "Кости",
+      "description": "Бросок кубика",
+      "category": "random",
+      "icon": "🎲",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-number-generator",
+      "title": "Случайное число",
+      "description": "Генератор случайных чисел",
+      "category": "random",
+      "icon": "🔢",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "password-generator",
+      "title": "Пароли",
+      "description": "Генератор паролей",
+      "category": "random",
+      "icon": "🔐",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "username-generator",
+      "title": "Имена пользователей",
+      "description": "Генератор имен пользователей",
+      "category": "random",
+      "icon": "👤",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "nickname-generator",
+      "title": "Ники",
+      "description": "Генератор прозвищ",
+      "category": "random",
+      "icon": "🧑‍🎤",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-string-generator",
+      "title": "Строки",
+      "description": "Генератор случайных строк",
+      "category": "random",
+      "icon": "🔡",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-color-generator",
+      "title": "Цвета",
+      "description": "Генератор случайных цветов",
+      "category": "random",
+      "icon": "🌈",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-date-generator",
+      "title": "Даты",
+      "description": "Генератор случайных дат",
+      "category": "random",
+      "icon": "📅",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-country-generator",
+      "title": "Страны",
+      "description": "Генератор стран",
+      "category": "random",
+      "icon": "🌍",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-emoji-generator",
+      "title": "Эмодзи",
+      "description": "Генератор случайных эмодзи",
+      "category": "random",
+      "icon": "😊",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-animal-generator",
+      "title": "Животные",
+      "description": "Генератор животных",
+      "category": "random",
+      "icon": "🐾",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-meme-idea",
+      "title": "Идеи мемов",
+      "description": "Генератор мемных идей",
+      "category": "random",
+      "icon": "😂",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-quote-generator",
+      "title": "Цитаты",
+      "description": "Генератор цитат",
+      "category": "random",
+      "icon": "💬",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "random-prompt-generator",
+      "title": "Промпты",
+      "description": "Генератор идей-промптов",
+      "category": "random",
+      "icon": "🤖",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "bmi-calculator",
+      "title": "ИМТ",
+      "description": "Калькулятор индекса массы тела",
+      "category": "life",
+      "icon": "⚖️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "calorie-calculator",
+      "title": "Калории",
+      "description": "Калькулятор калорийности",
+      "category": "life",
+      "icon": "🍎",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "bmr-calculator",
+      "title": "BMR",
+      "description": "Калькулятор основного обмена",
+      "category": "life",
+      "icon": "🔥",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "ideal-weight-calculator",
+      "title": "Идеальный вес",
+      "description": "Расчет идеального веса",
+      "category": "life",
+      "icon": "⚖️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "pace-calculator",
+      "title": "Темп бега",
+      "description": "Калькулятор темпа",
+      "category": "life",
+      "icon": "🏃",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "sleep-calculator",
+      "title": "Сон",
+      "description": "Калькулятор сна",
+      "category": "life",
+      "icon": "😴",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "loan-calculator",
+      "title": "Кредит",
+      "description": "Калькулятор кредита",
+      "category": "life",
+      "icon": "💵",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "mortgage-calculator",
+      "title": "Ипотека",
+      "description": "Калькулятор ипотеки",
+      "category": "life",
+      "icon": "🏠",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "tip-calculator",
+      "title": "Чаевые",
+      "description": "Калькулятор чаевых",
+      "category": "life",
+      "icon": "💰",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "discount-calculator",
+      "title": "Скидка",
+      "description": "Калькулятор скидок",
+      "category": "life",
+      "icon": "🏷️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "morse-code-translator",
+      "title": "Азбука Морзе",
+      "description": "Переводчик азбуки Морзе",
+      "category": "fun",
+      "icon": "📻",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "binary-text-converter",
+      "title": "Бинарный текст",
+      "description": "Конвертер текста в двоичный код",
+      "category": "fun",
+      "icon": "01",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "ascii-art-generator",
+      "title": "ASCII арт",
+      "description": "Генератор ASCII изображений",
+      "category": "fun",
+      "icon": "🔠",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "zodiac-finder",
+      "title": "Знак зодиака",
+      "description": "Определение знака зодиака по дате",
+      "category": "fun",
+      "icon": "♈",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "age-calculator",
+      "title": "Возраст",
+      "description": "Калькулятор возраста",
+      "category": "life",
+      "icon": "🎂",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "love-calculator",
+      "title": "Любовь",
+      "description": "Калькулятор совместимости",
+      "category": "fun",
+      "icon": "❤️",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "truth-or-dare-generator",
+      "title": "Правда или действие",
+      "description": "Генератор игры",
+      "category": "fun",
+      "icon": "🎲",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "coin-collection-tracker",
+      "title": "Коллекция монет",
+      "description": "Трекер коллекции монет",
+      "category": "fun",
+      "icon": "🪙",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "sudoku-generator",
+      "title": "Судоку",
+      "description": "Генератор судоку",
+      "category": "fun",
+      "icon": "🔢",
+      "popular": false,
+      "new": false
+    },
+    {
+      "slug": "maze-generator",
+      "title": "Лабиринт",
+      "description": "Генератор лабиринтов",
+      "category": "fun",
+      "icon": "🌀",
+      "popular": false,
+      "new": false
+    }
+  ]
+}
