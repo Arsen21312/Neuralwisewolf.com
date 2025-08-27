@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Счетчик символов и слов | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-счетчик символов, слов и строк. Быстро посчитайте количество текста для документов, блогов или сообщений.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .counter-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .result-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .result-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .result-card .count {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="text-counter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Счетчик символов и слов</h1>
+                <p class="tool-description">Быстрый и точный инструмент для подсчета символов, слов и строк в любом тексте. Просто вставьте текст, и результат появится мгновенно.</p>
+            </div>
+
+            <div class="counter-container">
+                <textarea id="text-input" placeholder="Вставьте ваш текст здесь..."></textarea>
+
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h4>Символов</h4>
+                        <span class="count" id="char-count">0</span>
+                    </div>
+                    <div class="result-card">
+                        <h4>Слов</h4>
+                        <span class="count" id="word-count">0</span>
+                    </div>
+                    <div class="result-card">
+                        <h4>Строк</h4>
+                        <span class="count" id="line-count">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Мгновенный подсчет</h4>
+                    <p>Результаты обновляются в реальном времени по мере того, как вы набираете или вставляете текст.</p>
+                </div>
+                <div class="feature">
+                    <h4>💡 Точность</h4>
+                    <p>Корректно считает слова и строки, учитывая пробелы и переносы.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Все операции выполняются локально в вашем браузере, без отправки данных на сервер.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Зачем нужен счетчик текста?</h2>
+                <p>Счетчик слов и символов — это незаменимый инструмент для студентов, писателей, маркетологов и всех, кто работает с текстом. Он помогает уложиться в лимиты, заданные для эссе, твитов, постов в социальных сетях или рекламных объявлений. Подсчет строк полезен для форматирования кода или списков.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Инструмент считывает текст из поля ввода и использует простой JavaScript для подсчета. Количество символов — это просто длина всей строки. Количество слов определяется путем разбиения текста по пробелам и знакам препинания. Количество строк — по символу переноса строки (`\n`). Все это происходит мгновенно, без задержек.</p>
+            </div>
+
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textInput = document.getElementById('text-input');
+            const charCount = document.getElementById('char-count');
+            const wordCount = document.getElementById('word-count');
+            const lineCount = document.getElementById('line-count');
+
+            function updateCounts() {
+                const text = textInput.value;
+                
+                // Count characters
+                const chars = text.length;
+                charCount.textContent = chars;
+                
+                // Count words
+                const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+                wordCount.textContent = words;
+                
+                // Count lines
+                const lines = text.split('\n').length;
+                lineCount.textContent = lines;
+            }
+
+            textInput.addEventListener('input', updateCounts);
+            
+            // Initial count on page load
+            updateCounts();
+        });
+    </script>
+</body>
+
+</html>

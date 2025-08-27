@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер времени | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-конвертер времени. Переводите секунды, минуты, часы, дни, недели, месяцы и годы в другие единицы измерения.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .converter-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="convert" data-slug="time-converter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Конвертер времени</h1>
+                <p class="tool-description">Конвертируйте время из одной единицы измерения в другую. Идеально для планирования, расчетов и понимания временных интервалов.</p>
+            </div>
+
+            <div class="converter-container">
+                <div class="field">
+                    <label for="input-value" class="field-label">Количество</label>
+                    <input type="number" id="input-value" value="1" min="0" step="any">
+                </div>
+                <div class="field">
+                    <label for="input-unit" class="field-label">Из</label>
+                    <select id="input-unit">
+                        <option value="seconds">Секунды</option>
+                        <option value="minutes">Минуты</option>
+                        <option value="hours">Часы</option>
+                        <option value="days">Дни</option>
+                        <option value="weeks">Недели</option>
+                        <option value="months">Месяцы</option>
+                        <option value="years">Годы</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="output-unit" class="field-label">В</label>
+                    <select id="output-unit">
+                        <option value="seconds">Секунды</option>
+                        <option value="minutes">Минуты</option>
+                        <option value="hours">Часы</option>
+                        <option value="days">Дни</option>
+                        <option value="weeks">Недели</option>
+                        <option value="months">Месяцы</option>
+                        <option value="years">Годы</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="output-value" class="field-label">Результат</label>
+                    <input type="text" id="output-value" readonly>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Конвертируем...</p>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Быстрые расчеты</h4>
+                    <p>Мгновенно конвертируйте время между различными единицами.</p>
+                </div>
+                <div class="feature">
+                    <h4>🌍 Разные единицы</h4>
+                    <p>Поддерживает секунды, минуты, часы, дни, недели, месяцы и годы.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Все операции выполняются локально в вашем браузере, без отправки данных на сервер.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое единицы времени?</h2>
+                <p><strong>Время</strong> — это базовая физическая величина, которая измеряет продолжительность событий. Существуют различные единицы времени, основанные на астрономических явлениях (вращение Земли, обращение вокруг Солнца) или принятые соглашениями. Стандартной единицей времени в Международной системе единиц (СИ) является секунда.</p>
+                
+                <h3>Как работает конвертация времени?</h3>
+                <p>Конвертация основана на фиксированных коэффициентах. Например, 1 минута — это 60 секунд, 1 час — это 60 минут, а 1 день — 24 часа. Наш инструмент использует эти коэффициенты для точных расчетов. Обрати внимание, что для месяцев и лет используются усредненные значения, чтобы обеспечить общую точность. Для месяцев берется среднее значение в 30.44 дня, а для года — 365.25 дней, чтобы учесть високосные годы.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputValue = document.getElementById('input-value');
+            const inputUnit = document.getElementById('input-unit');
+            const outputUnit = document.getElementById('output-unit');
+            const outputValue = document.getElementById('output-value');
+            const loadingIndicator = document.getElementById('loading');
+            
+            const conversionRates = {
+                seconds: {
+                    seconds: 1,
+                    minutes: 1 / 60,
+                    hours: 1 / 3600,
+                    days: 1 / 86400,
+                    weeks: 1 / 604800,
+                    months: 1 / 2629746, // Average seconds per month
+                    years: 1 / 31557600  // Average seconds per year
+                },
+                minutes: {
+                    seconds: 60,
+                    minutes: 1,
+                    hours: 1 / 60,
+                    days: 1 / 1440,
+                    weeks: 1 / 10080,
+                    months: 1 / 43829.1,
+                    years: 1 / 525949
+                },
+                hours: {
+                    seconds: 3600,
+                    minutes: 60,
+                    hours: 1,
+                    days: 1 / 24,
+                    weeks: 1 / 168,
+                    months: 1 / 730.485,
+                    years: 1 / 8765.82
+                },
+                days: {
+                    seconds: 86400,
+                    minutes: 1440,
+                    hours: 24,
+                    days: 1,
+                    weeks: 1 / 7,
+                    months: 1 / 30.44,
+                    years: 1 / 365.25
+                },
+                weeks: {
+                    seconds: 604800,
+                    minutes: 10080,
+                    hours: 168,
+                    days: 7,
+                    weeks: 1,
+                    months: 1 / 4.345,
+                    years: 1 / 52.179
+                },
+                months: {
+                    seconds: 2629746,
+                    minutes: 43829.1,
+                    hours: 730.485,
+                    days: 30.44,
+                    weeks: 4.345,
+                    months: 1,
+                    years: 1 / 12
+                },
+                years: {
+                    seconds: 31557600,
+                    minutes: 525960,
+                    hours: 8766,
+                    days: 365.25,
+                    weeks: 52.179,
+                    months: 12,
+                    years: 1
+                }
+            };
+            
+            function convertTime() {
+                const value = parseFloat(inputValue.value);
+                const fromUnit = inputUnit.value;
+                const toUnit = outputUnit.value;
+
+                if (isNaN(value)) {
+                    outputValue.value = 'Введите число';
+                    return;
+                }
+
+                if (fromUnit === toUnit) {
+                    outputValue.value = value.toFixed(3);
+                    return;
+                }
+
+                loadingIndicator.style.display = 'block';
+
+                setTimeout(() => {
+                    try {
+                        const result = value * conversionRates[fromUnit][toUnit];
+                        outputValue.value = result.toFixed(5);
+                    } catch (e) {
+                        outputValue.value = 'Ошибка: ' + e.message;
+                    } finally {
+                        loadingIndicator.style.display = 'none';
+                    }
+                }, 100);
+            }
+
+            inputValue.addEventListener('input', convertTime);
+            inputUnit.addEventListener('change', convertTime);
+            outputUnit.addEventListener('change', convertTime);
+
+            convertTime(); // Initial conversion on page load
+        });
+    </script>
+</body>
+
+</html>

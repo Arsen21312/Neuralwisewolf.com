@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Минификатор | Neural Wise Wolf</title>
+    <meta name="description" content="Минификация и оптимизация CSS кода. Удаление комментариев, пробелов, ненужных символов. Сжатие CSS для ускорения загрузки сайта.">
+    <base href="/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        
+        .css-minifier {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 968px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .editor-panel {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .panel-header {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .panel-stats {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .editor-content {
+            position: relative;
+        }
+        
+        .code-editor {
+            width: 100%;
+            min-height: 300px;
+            padding: 1.5rem;
+            border: none;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            resize: vertical;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .code-editor:focus {
+            outline: none;
+        }
+        
+        .editor-actions {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .editor-btn {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .editor-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .controls-container {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-group {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .control-group h3 {
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .control-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .control-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .control-item label {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .control-item .info {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-left: 0.25rem;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            padding: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .results-section {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin: 0.25rem 0 0;
+        }
+        
+        .comparison {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .comparison-bar {
+            height: 20px;
+            background: var(--border-light);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .comparison-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-success), var(--accent-primary));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .comparison-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .tool-features {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .tool-features .feature {
+            margin-bottom: 1.5rem;
+        }
+        
+        .savings-positive {
+            color: var(--accent-success);
+            font-weight: 600;
+        }
+        
+        .savings-negative {
+            color: var(--accent-danger);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .editor-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.7rem;
+            }
+        }
+        
+        .code-highlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: transparent;
+            z-index: 1;
+        }
+        
+        .code-highlight .comment {
+            color: var(--text-muted) !important;
+        }
+        
+        .code-highlight .selector {
+            color: var(--accent-primary) !important;
+        }
+        
+        .code-highlight .property {
+            color: var(--accent-success) !important;
+        }
+        
+        .code-highlight .value {
+            color: var(--accent-warning) !important;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="dev" data-slug="css-minifier">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>CSS Минификатор</h1>
+                <p class="tool-description">Минификация и оптимизация CSS кода. Удаление комментариев, пробелов и ненужных символов</p>
+            </div>
+
+            <div class="css-minifier">
+                <div class="editor-container">
+                    <!-- Исходный CSS -->
+                    <div class="editor-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <span>📝 Исходный CSS</span>
+                            </div>
+                            <div class="panel-stats" id="input-stats">0 chars</div>
+                        </div>
+                        <div class="editor-content">
+                            <textarea class="code-editor" id="css-input" placeholder="Введите ваш CSS код здесь..." autofocus></textarea>
+                            <div class="editor-actions">
+                                <button class="editor-btn" onclick="clearInput()">Очистить</button>
+                                <button class="editor-btn" onclick="loadExample()">Пример</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Минифицированный CSS -->
+                    <div class="editor-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <span>📦 Минифицированный CSS</span>
+                            </div>
+                            <div class="panel-stats" id="output-stats">0 chars</div>
+                        </div>
+                        <div class="editor-content">
+                            <textarea class="code-editor" id="css-output" placeholder="Здесь появится минифицированная версия..." readonly></textarea>
+                            <div class="editor-actions">
+                                <button class="editor-btn" onclick="copyOutput()">Копировать</button>
+                                <button class="editor-btn" onclick="downloadCSS()">Скачать</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-container">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <h3>⚙️ Основные опции</h3>
+                            <div class="control-item">
+                                <input type="checkbox" id="remove-comments" checked>
+                                <label for="remove-comments">Удалить комментарии</label>
+                                <span class="info" title="Удаляет /* комментарии */">ℹ️</span>
+                            </div>
+                            <div class="control-item">
+                                <input type="checkbox" id="remove-whitespace" checked>
+                                <label for="remove-whitespace">Удалить пробелы</label>
+                            </div>
+                            <div class="control-item">
+                                <input type="checkbox" id="remove-semicolons" checked>
+                                <label for="remove-semicolons">Удалить последние точки с запятой</label>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>🎯 Оптимизации</h3>
+                            <div class="control-item">
+                                <input type="checkbox" id="optimize-colors">
+                                <label for="optimize-colors">Оптимизировать цвета</label>
+                                <span class="info" title="#FF0000 → red">ℹ️</span>
+                            </div>
+                            <div class="control-item">
+                                <input type="checkbox" id="optimize-zeros">
+                                <label for="optimize-zeros">Оптимизировать нули</label>
+                                <span class="info" title="0px → 0">ℹ️</span>
+                            </div>
+                            <div class="control-item">
+                                <input type="checkbox" id="optimize-font-weight">
+                                <label for="optimize-font-weight">Оптимизировать font-weight</label>
+                                <span class="info" title="font-weight: bold → font-weight:700">ℹ️</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h3>⚡ Дополнительно</h3>
+                            <div class="control-item">
+                                <input type="checkbox" id="sort-properties">
+                                <label for="sort-properties">Сортировать свойства</label>
+                            </div>
+                            <div class="control-item">
+                                <input type="checkbox" id="remove-important">
+                                <label for="remove-important">Удалить !important</label>
+                                <span class="info" title="Осторожно: может сломать стили">⚠️</span>
+                            </div>
+                            <div class="control-item">
+                                <input type="checkbox" id="minify-selectors">
+                                <label for="minify-selectors">Минифицировать селекторы</label>
+                                <span class="info" title=".class-name → .a">ℹ️</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary action-btn" onclick="minifyCSS()">
+                            ⚡ Минифицировать CSS
+                        </button>
+                        <button class="btn btn-secondary action-btn" onclick="beautifyCSS()">
+                            🎨 Форматировать
+                        </button>
+                        <button class="btn btn-secondary action-btn" onclick="compareCSS()">
+                            📊 Сравнить
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results-section" id="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h3>📊 Результаты минификации</h3>
+                    </div>
+                    
+                    <div class="results-stats">
+                        <div class="stat-card">
+                            <p class="stat-value" id="original-size">0 KB</p>
+                            <p class="stat-label">Исходный размер</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="stat-value" id="minified-size">0 KB</p>
+                            <p class="stat-label">Минифицированный</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="stat-value" id="savings-percent">0%</p>
+                            <p class="stat-label">Экономия</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="stat-value" id="savings-bytes">0 B</p>
+                            <p class="stat-label">Сохранено</p>
+                        </div>
+                    </div>
+
+                    <div class="comparison">
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" id="comparison-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="comparison-labels">
+                            <span>Минифицированный</span>
+                            <span>Исходный</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡ Ускорение загрузки</h4>
+                    <p>Уменьшение размера CSS файлов на 30-70% для быстрой загрузки сайта</p>
+                </div>
+                <div class="feature">
+                    <h4>🎯 Безопасная минификация</h4>
+                    <p>Сохранение функциональности CSS при удалении ненужных символов</p>
+                </div>
+                <div class="feature">
+                    <h4>📊 Детальная статистика</h4>
+                    <p>Точные данные об экономии места и проценте сжатия</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>Зачем минифицировать CSS?</h2>
+                <p>Минификация CSS - это процесс удаления всех ненужных символов из кода без изменения его функциональности. Это критически важно для производительности веб-сайтов.</p>
+                
+                <h3>🎯 Преимущества минификации</h3>
+                <ul>
+                    <li><strong>Ускорение загрузки</strong> - меньший размер файлов = быстрая загрузка страниц</li>
+                    <li><strong>Экономия трафика</strong> - меньше данных передается пользователям</li>
+                    <li><strong>Улучшение SEO</strong> - скорость загрузки влияет на ранжирование</li>
+                    <li><strong>Оптимизация кэширования</strong> - меньшие файлы лучше кэшируются</li>
+                </ul>
+                
+                <h3>⚡ Что удаляется при минификации</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>Комментарии</h4>
+                        <p><code>/* comment */</code> → <code></code><br>Полное удаление</p>
+                    </div>
+                    <div class="example">
+                        <h4>Пробелы и переносы</h4>
+                        <p><code>  margin: 10px;  </code> → <code>margin:10px</code><br>Удаление лишних пространств</p>
+                    </div>
+                    <div class="example">
+                        <h4>Ненужные точки с запятой</h4>
+                        <p><code>margin: 0;;</code> → <code>margin:0</code><br>Удаление дубликатов</p>
+                    </div>
+                </div>
+                
+                <h3>🎨 Оптимизации CSS</h3>
+                <ul>
+                    <li><strong>Цвета</strong> - <code>#FF0000</code> → <code>red</code>, <code>#FFFFFF</code> → <code>#FFF</code></li>
+                    <li><strong>Нули</strong> - <code>0px</code> → <code>0</code>, <code>0.5s</code> → <code>.5s</code></li>
+                    <li><strong>Font-weight</strong> - <code>bold</code> → <code>700</code>, <code>normal</code> → <code>400</code></li>
+                    <li><strong>Повторяющиеся свойства</strong> - удаление дубликатов</li>
+                </ul>
+                
+                <h3>📊 Ожидаемая экономия</h3>
+                <table>
+                    <tr>
+                        <th>Тип CSS</th>
+                        <th>Исходный размер</th>
+                        <th>После минификации</th>
+                        <th>Экономия</th>
+                    </tr>
+                    <tr>
+                        <td>Простые стили</td>
+                        <td>10 KB</td>
+                        <td>6-7 KB</td>
+                        <td>30-40%</td>
+                    </tr>
+                    <tr>
+                        <td>Фреймворки (Bootstrap)</td>
+                        <td>200 KB</td>
+                        <td>120-140 KB</td>
+                        <td>30-40%</td>
+                    </tr>
+                    <tr>
+                        <td>Большие проекты</td>
+                        <td>1 MB</td>
+                        <td>600-700 KB</td>
+                        <td>30-40%</td>
+                    </tr>
+                </table>
+                
+                <h3>⚡ Как использовать в production</h3>
+                <ol>
+                    <li>Разрабатывайте с полной версией CSS</li>
+                    <li>Минифицируйте перед запуском в production</li>
+                    <li>Используйте source maps для отладки</li>
+                    <li>Настройте автоматическую минификацию в сборке</li>
+                </ol>
+                
+                <h3>🔧 Интеграция с инструментами</h3>
+                <p>Наш минификатор можно использовать вместе с:</p>
+                <ul>
+                    <li><strong>Webpack</strong> - css-minimizer-webpack-plugin</li>
+                    <li><strong>Gulp</strong> - gulp-clean-css</li>
+                    <li><strong>Grunt</strong> - grunt-contrib-cssmin</li>
+                    <li><strong>NPM скрипты</strong> - clean-css-cli</li>
+                </ul>
+                
+                <h3>⚠️ Важные предупреждения</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>Тестирование</h4>
+                        <p>Всегда тестируйте минифицированный CSS</p>
+                    </div>
+                    <div class="example">
+                        <h4>Резервные копии</h4>
+                        <p>Храните оригинальные версии файлов</p>
+                    </div>
+                    <div class="example">
+                        <h4>Source maps</h4>
+                        <p>Используйте source maps для отладки</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cssInput = document.getElementById('css-input');
+            const cssOutput = document.getElementById('css-output');
+            const inputStats = document.getElementById('input-stats');
+            const outputStats = document.getElementById('output-stats');
+            
+            // Загрузка примера по умолчанию
+            loadExample();
+            
+            // События
+            cssInput.addEventListener('input', updateStats);
+            cssOutput.addEventListener('input', updateStats);
+            
+            // Изменение настроек
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (cssInput.value.trim()) {
+                        minifyCSS();
+                    }
+                });
+            });
+            
+            function updateStats() {
+                const inputLength = cssInput.value.length;
+                const outputLength = cssOutput.value.length;
+                
+                inputStats.textContent = `${formatBytes(inputLength)} (${inputLength} chars)`;
+                outputStats.textContent = `${formatBytes(outputLength)} (${outputLength} chars)`;
+            }
+            
+            function minifyCSS() {
+                const css = cssInput.value;
+                if (!css.trim()) return;
+                
+                const options = getOptions();
+                let minified = css;
+                
+                // Удаление комментариев
+                if (options.removeComments) {
+                    minified = minified.replace(/\/\*[\s\S]*?\*\//g, '');
+                }
+                
+                // Удаление пробелов
+                if (options.removeWhitespace) {
+                    // Удаление пробелов вокруг специальных символов
+                    minified = minified.replace(/\s*([{};:,])\s*/g, '$1');
+                    // Удаление пробелов в селекторах
+                    minified = minified.replace(/>\s+</g, '><');
+                    // Удаление последних точек с запятой
+                    if (options.removeSemicolons) {
+                        minified = minified.replace(/;}/g, '}');
+                    }
+                }
+                
+                // Оптимизация цветов
+                if (options.optimizeColors) {
+                    minified = minified.replace(/#([0-9a-f])\1([0-9a-f])\2([0-9a-f])\3/gi, '#$1$2$3');
+                    // Замена цветов на названия
+                    const colorMap = {
+                        '#f00': 'red', '#ff0000': 'red',
+                        '#0f0': 'lime', '#00ff00': 'lime',
+                        '#00f': 'blue', '#0000ff': 'blue',
+                        '#fff': 'white', '#ffffff': 'white',
+                        '#000': 'black', '#000000': 'black'
+                    };
+                    Object.entries(colorMap).forEach(([hex, name]) => {
+                        minified = minified.replace(new RegExp(hex, 'gi'), name);
+                    });
+                }
+                
+                // Оптимизация нулей
+                if (options.optimizeZeros) {
+                    minified = minified.replace(/(\s|:)0(px|em|rem|%|in|cm|mm|pt|pc)/g, '$10');
+                    minified = minified.replace(/(\s|:)\.0+/g, '$10');
+                }
+                
+                // Оптимизация font-weight
+                if (options.optimizeFontWeight) {
+                    const fontWeightMap = {
+                        'bold': '700',
+                        'normal': '400',
+                        'lighter': '300',
+                        'bolder': '600'
+                    };
+                    Object.entries(fontWeightMap).forEach(([name, value]) => {
+                        minified = minified.replace(new RegExp(`font-weight:\\s*${name}`, 'gi'), `font-weight:${value}`);
+                    });
+                }
+                
+                // Удаление !important
+                if (options.removeImportant) {
+                    minified = minified.replace(/!\s*important/gi, '');
+                }
+                
+                // Сортировка свойств (простая версия)
+                if (options.sortProperties) {
+                    minified = minified.replace(/{([^}]*)}/g, function(match, props) {
+                        const properties = props.split(';')
+                            .filter(p => p.trim())
+                            .map(p => p.trim())
+                            .sort();
+                        return '{' + properties.join(';') + '}';
+                    });
+                }
+                
+                // Минификация селекторов (базовая)
+                if (options.minifySelectors) {
+                    // Простая замена длинных селекторов
+                    minified = minified.replace(/\.([a-zA-Z0-9_-]+)/g, function(match, selector) {
+                        if (selector.length > 8) {
+                            return '.s' + simpleHash(selector);
+                        }
+                        return match;
+                    });
+                }
+                
+                // Удаление лишних переносов и пробелов
+                minified = minified.replace(/\s+/g, ' ').trim();
+                
+                cssOutput.value = minified;
+                updateStats();
+                showResults(css.length, minified.length);
+            }
+            
+            function beautifyCSS() {
+                const css = cssInput.value;
+                if (!css.trim()) return;
+                
+                let beautified = css;
+                
+                // Добавление отступов и переносов
+                let indentLevel = 0;
+                const lines = css.split('}');
+                beautified = lines.map(line => {
+                    line = line.trim();
+                    if (line.includes('{')) {
+                        const parts = line.split('{');
+                        return '  '.repeat(indentLevel) + parts[0] + ' {\n' + 
+                               '  '.repeat(indentLevel + 1) + parts[1].trim();
+                    }
+                    if (line) {
+                        return '  '.repeat(indentLevel) + line;
+                    }
+                    return '';
+                }).join('}\n\n');
+                
+                cssInput.value = beautified + (css.includes('}') ? '}' : '');
+                updateStats();
+            }
+            
+            function compareCSS() {
+                const original = cssInput.value;
+                const minified = cssOutput.value;
+                
+                if (!original || !minified) return;
+                
+                showResults(original.length, minified.length);
+            }
+            
+            function showResults(originalSize, minifiedSize) {
+                const savings = originalSize - minifiedSize;
+                const savingsPercent = ((savings / originalSize) * 100).toFixed(1);
+                
+                document.getElementById('original-size').textContent = formatBytes(originalSize);
+                document.getElementById('minified-size').textContent = formatBytes(minifiedSize);
+                document.getElementById('savings-percent').textContent = savingsPercent + '%';
+                document.getElementById('savings-bytes').textContent = formatBytes(savings);
+                
+                const fillPercent = (minifiedSize / originalSize) * 100;
+                document.getElementById('comparison-fill').style.width = fillPercent + '%';
+                
+                document.getElementById('results-section').style.display = 'block';
+                
+                // Цвет в зависимости от эффективности
+                const percentElement = document.getElementById('savings-percent');
+                if (savingsPercent > 30) {
+                    percentElement.className = 'stat-value savings-positive';
+                } else if (savingsPercent > 15) {
+                    percentElement.className = 'stat-value';
+                } else {
+                    percentElement.className = 'stat-value savings-negative';
+                }
+            }
+            
+            function getOptions() {
+                return {
+                    removeComments: document.getElementById('remove-comments').checked,
+                    removeWhitespace: document.getElementById('remove-whitespace').checked,
+                    removeSemicolons: document.getElementById('remove-semicolons').checked,
+                    optimizeColors: document.getElementById('optimize-colors').checked,
+                    optimizeZeros: document.getElementById('optimize-zeros').checked,
+                    optimizeFontWeight: document.getElementById('optimize-font-weight').checked,
+                    sortProperties: document.getElementById('sort-properties').checked,
+                    removeImportant: document.getElementById('remove-important').checked,
+                    minifySelectors: document.getElementById('minify-selectors').checked
+                };
+            }
+            
+            function clearInput() {
+                cssInput.value = '';
+                cssOutput.value = '';
+                updateStats();
+                document.getElementById('results-section').style.display = 'none';
+            }
+            
+            function loadExample() {
+                const exampleCSS = `/* Main stylesheet */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 1rem 2rem;
+    margin-bottom: 0px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #cc0000;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .header {
+        padding: 0.5rem 1rem;
+    }
+}`;
+
+                cssInput.value = exampleCSS;
+                updateStats();
+                minifyCSS();
+            }
+            
+            function copyOutput() {
+                navigator.clipboard.writeText(cssOutput.value).then(() => {
+                    alert('Минифицированный CSS скопирован в буфер обмена!');
+                }).catch(err => {
+                    console.error('Ошибка копирования:', err);
+                });
+            }
+            
+            function downloadCSS() {
+                const css = cssOutput.value;
+                if (!css) return;
+                
+                const blob = new Blob([css], { type: 'text/css' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                
+                a.href = url;
+                a.download = 'styles.min.css';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+            }
+            
+            function formatBytes(bytes) {
+                if (bytes === 0) return '0 B';
+                
+                const k = 1024;
+                const sizes = ['B', 'KB', 'MB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function simpleHash(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                    hash |= 0;
+                }
+                return Math.abs(hash).toString(36).substring(0, 4);
+            }
+            
+            // Глобальные функции для кнопок
+            window.minifyCSS = minifyCSS;
+            window.beautifyCSS = beautifyCSS;
+            window.compareCSS = compareCSS;
+            window.clearInput = clearInput;
+            window.loadExample = loadExample;
+            window.copyOutput = copyOutput;
+            window.downloadCSS = downloadCSS;
+        });
+    </script>
+</body>
+</html>

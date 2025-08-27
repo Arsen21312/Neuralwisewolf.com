@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор логарифмов | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-калькулятор для вычисления логарифмов по любому основанию. Быстрый и точный расчет.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .log-formula {
+            display: flex;
+            align-items: flex-end;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        .log-formula span {
+            font-size: 0.8em;
+            position: relative;
+            top: 0.2em;
+        }
+        .log-formula .number {
+            font-size: 1.2em;
+        }
+        .result-section {
+            display: none; /* Скрываем по умолчанию */
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.2rem;
+        }
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="log-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор логарифмов</h1>
+                <p class="tool-description">Вычислите логарифм числа по любому основанию. Простой и точный онлайн-инструмент.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-group">
+                    <label for="base-input">Основание (b)</label>
+                    <input type="number" id="base-input" class="input-field" value="10" placeholder="Основание">
+                </div>
+                
+                <div class="input-group">
+                    <label for="number-input">Число (x)</label>
+                    <input type="number" id="number-input" class="input-field" placeholder="Число">
+                </div>
+                
+                <button class="btn btn-primary" id="calculate-btn">
+                    🧮 Рассчитать
+                </button>
+                
+                <div id="result-section" class="result-section">
+                    <p class="result-label">Результат: log<span id="formula-base">10</span>(<span id="formula-number">x</span>) =</p>
+                    <p id="result-value" class="result-value"></p>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>📊 Расчёт по любому основанию</h4>
+                    <p>Вычисляйте логарифмы не только по основанию 10 или e, но и по любому другому.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Простота использования</h4>
+                    <p>Интуитивно понятный интерфейс для быстрых математических вычислений.</p>
+                </div>
+                <div class="feature">
+                    <h4>🚀 Мгновенный результат</h4>
+                    <p>Получите ответ за секунды без сложных формул.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое логарифм?</h2>
+                <p>Логарифм — это математическая операция, обратная возведению в степень. Он отвечает на вопрос: «В какую степень нужно возвести основание, чтобы получить заданное число?»</p>
+                <p>Например, логарифм 1000 по основанию 10 равен 3, потому что $10^3 = 1000$.</p>
+
+                <h3>Формула для вычисления</h3>
+                <p>Для вычисления логарифма по любому основанию используется формула смены основания:</p>
+                <p class="math-formula">log<sub>b</sub>(x) = log<sub>c</sub>(x) / log<sub>c</sub>(b)</p>
+                <p>где `b` — это основание, `x` — число, а `c` — это любое удобное основание, например, 10 или число Эйлера `e`. В большинстве языков программирования, включая JavaScript, для этого используются натуральные логарифмы (`Math.log()`).</p>
+
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>📈 Финансовые расчёты</h4>
+                        <p>Для анализа роста инвестиций и сложных процентов.</p>
+                    </div>
+                    <div class="example">
+                        <h4>🔊 Акустика</h4>
+                        <p>Для измерения уровня громкости в децибелах.</p>
+                    </div>
+                    <div class="example">
+                        <h4>🔬 Наука</h4>
+                        <p>В химии (pH), сейсмологии (шкала Рихтера) и других областях.</p>
+                    </div>
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+    const numberInput = document.getElementById('number-input');
+    const baseInput = document.getElementById('base-input');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const resultSection = document.getElementById('result-section');
+    const resultValueEl = document.getElementById('result-value');
+    const formulaNumberEl = document.getElementById('formula-number');
+    const formulaBaseEl = document.getElementById('formula-base');
+
+    calculateBtn.addEventListener('click', calculateLog);
+
+    function calculateLog() {
+        const number = parseFloat(numberInput.value);
+        const base = parseFloat(baseInput.value);
+
+        if (isNaN(number) || isNaN(base) || number <= 0 || base <= 0 || base === 1) {
+            resultValueEl.textContent = 'Ошибка ввода';
+            resultSection.style.display = 'block';
+            return;
+        }
+
+        // Вычисляем логарифм по формуле смены основания
+        const result = Math.log(number) / Math.log(base);
+
+        formulaNumberEl.textContent = number.toString();
+        formulaBaseEl.textContent = base.toString();
+        resultValueEl.textContent = result.toFixed(6);
+        resultSection.style.display = 'block';
+    }
+});</script>
+</body>
+</html>

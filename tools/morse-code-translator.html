@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переводчик кода Морзе | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-инструмент для перевода текста в код Морзе и обратно. Быстро и легко переводите сообщения для радиолюбителей и для развлечения.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .textarea-group {
+            margin-bottom: 1.5rem;
+        }
+        .textarea-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .textarea-group textarea {
+            width: 100%;
+            height: 150px;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-light);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: monospace;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .copy-btn {
+            position: relative;
+            margin-left: 1rem;
+        }
+        .status-message {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--accent-success);
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="morse-code-translator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Переводчик кода Морзе</h1>
+                <p class="tool-description">Мгновенный перевод текста в азбуку Морзе и обратно. Учитесь или просто развлекайтесь!</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="textarea-group">
+                    <label for="text-input">Текст</label>
+                    <textarea id="text-input" placeholder="Введите текст для перевода..."></textarea>
+                </div>
+                
+                <div class="buttons-container">
+                    <button class="btn btn-primary" id="to-morse-btn">
+                        Перевести в Морзе
+                    </button>
+                    <button class="btn btn-primary" id="to-text-btn">
+                        Перевести в Текст
+                    </button>
+                </div>
+                
+                <div class="textarea-group">
+                    <label for="morse-output">Код Морзе</label>
+                    <textarea id="morse-output" readonly></textarea>
+                </div>
+                
+                <button class="btn btn-secondary" id="copy-text-btn">
+                    📋 Копировать текст
+                </button>
+                <button class="btn btn-secondary" id="copy-morse-btn">
+                    📋 Копировать Морзе
+                </button>
+
+                <div id="status-message" class="status-message"></div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>✨ Двусторонний перевод</h4>
+                    <p>Переводите текст в Морзе и обратно, мгновенно.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Простое копирование</h4>
+                    <p>Копируйте результат одним нажатием кнопки.</p>
+                </div>
+                <div class="feature">
+                    <h4>🚀 Поддержка символов</h4>
+                    <p>Работает с буквами, цифрами и знаками препинания.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое код Морзе?</h2>
+                <p><strong>Азбука Морзе</strong> — это метод кодирования алфавита, цифр и знаков препинания с помощью последовательности коротких (точек) и длинных (тире) сигналов. Она была разработана Сэмюэлом Морзе в 1830-х годах для использования в телеграфе. Каждому символу соответствует уникальная комбинация точек и тире.</p>
+                <p>Наиболее известный пример — сигнал SOS (...---...). Сегодня азбука Морзе используется в основном в любительской радиосвязи, а также в качестве метода аварийной сигнализации.</p>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('text-input');
+            const morseOutput = document.getElementById('morse-output');
+            const toMorseBtn = document.getElementById('to-morse-btn');
+            const toTextBtn = document.getElementById('to-text-btn');
+            const copyTextBtn = document.getElementById('copy-text-btn');
+            const copyMorseBtn = document.getElementById('copy-morse-btn');
+            const statusMessage = document.getElementById('status-message');
+
+            const morseCodeMap = {
+                'А': '.-', 'Б': '-...', 'В': '.--', 'Г': '--.', 'Д': '-..', 'Е': '.', 'Ж': '...-', 'З': '--..', 'И': '..', 'Й': '.---',
+                'К': '-.-', 'Л': '.-..', 'М': '--', 'Н': '-.', 'О': '---', 'П': '.--.', 'Р': '.-.', 'С': '...', 'Т': '-', 'У': '..-',
+                'Ф': '..-.', 'Х': '....', 'Ц': '-.-.', 'Ч': '---.', 'Ш': '----', 'Щ': '--.-', 'Ъ': '--.--', 'Ы': '-.--', 'Ь': '-..-', 'Э': '..-..', 'Ю': '..--', 'Я': '.-.-',
+                '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----',
+                '.': '.-.-.-', ',': '--..--', '?': '..--..', "'": '.----.', '!': '-.-.--', '/': '-..-.', '(': '-.--.', ')': '-.--.-', '&': '.-...',
+                ':': '---...', ';': '-.-.-.', '=': '-...-', '+': '.-.-.', '-': '-....-', '_': '..--.-', '$': '...-..-', '@': '.--.-.', ' ': '/'
+            };
+
+            const reverseMorseCodeMap = {};
+            for (const key in morseCodeMap) {
+                reverseMorseCodeMap[morseCodeMap[key]] = key;
+            }
+
+            function textToMorse() {
+                const text = textInput.value.trim().toUpperCase();
+                if (!text) {
+                    morseOutput.value = '';
+                    return;
+                }
+                let morse = '';
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    if (morseCodeMap[char]) {
+                        morse += morseCodeMap[char] + ' ';
+                    }
+                }
+                morseOutput.value = morse.trim();
+            }
+
+            function morseToText() {
+                const morse = morseOutput.value.trim();
+                if (!morse) {
+                    textInput.value = '';
+                    return;
+                }
+                let text = '';
+                const morseWords = morse.split(' / ');
+                for (const word of morseWords) {
+                    const morseChars = word.split(' ');
+                    for (const morseChar of morseChars) {
+                        if (reverseMorseCodeMap[morseChar]) {
+                            text += reverseMorseCodeMap[morseChar];
+                        }
+                    }
+                    text += ' ';
+                }
+                textInput.value = text.trim();
+            }
+
+            function copyToClipboard(elementId) {
+                const element = document.getElementById(elementId);
+                element.select();
+                element.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(element.value)
+                    .then(() => {
+                        statusMessage.textContent = 'Текст скопирован!';
+                        setTimeout(() => {
+                            statusMessage.textContent = '';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        statusMessage.textContent = 'Не удалось скопировать текст.';
+                    });
+            }
+
+            toMorseBtn.addEventListener('click', textToMorse);
+            toTextBtn.addEventListener('click', morseToText);
+            copyTextBtn.addEventListener('click', () => copyToClipboard('text-input'));
+            copyMorseBtn.addEventListener('click', () => copyToClipboard('morse-output'));
+        });
+    </script>
+</body>
+</html>

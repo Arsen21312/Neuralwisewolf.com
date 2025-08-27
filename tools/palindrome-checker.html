@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка палиндрома | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенная проверка, является ли слово, фраза или число палиндромом. Быстрый и удобный инструмент для работы с текстом.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .palindrome-checker {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .checker-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+            box-sizing: border-box;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            padding: 1rem;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .result-container.is-palindrome {
+            background-color: #10b981;
+            color: #fff;
+        }
+
+        .result-container.not-palindrome {
+            background-color: #ef4444;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .checker-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="palindrome-checker">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Проверка палиндрома</h1>
+                <p class="tool-description">Проверьте, является ли слово, фраза или число палиндромом. Наш инструмент игнорирует регистр, пробелы и знаки препинания.</p>
+            </div>
+
+            <div class="palindrome-checker">
+                <div class="checker-card">
+                    <div class="input-group">
+                        <label for="textInput">Введите текст для проверки:</label>
+                        <input type="text" id="textInput" class="text-input" placeholder="Введите текст...">
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="checkBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-8.82"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        Проверить
+                    </button>
+
+                    <div class="result-container" id="resultContainer"></div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🔍 Умная проверка</h4>
+                        <p>Инструмент игнорирует регистр букв, пробелы и знаки препинания, чтобы дать точный результат.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Проверка происходит в реальном времени, сразу после ввода текста.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📚 Полезно для учебы</h4>
+                        <p>Отличный помощник для изучения литературы, лингвистики или для развлечения.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Что такое палиндром?</h2>
+                    <p>Палиндром — это слово, фраза, число или последовательность символов, которая читается одинаково в обоих направлениях. Самые известные примеры — "топот" и "казак".</p>
+                    
+                    <h3>💡 Как работает проверка?</h3>
+                    <p>Алгоритм очень прост. Сначала мы берем введенный вами текст и "чистим" его: удаляем все символы, кроме букв и цифр, и переводим всё в нижний регистр. Затем мы сравниваем получившуюся строку с её зеркальным отражением. Если они идентичны, то это палиндром!</p>
+                    
+                    <h3>Примеры палиндромов:</h3>
+                    <ul>
+                        <li>"А роза упала на лапу Азора"</li>
+                        <li>"Нажал кабан на баклажан"</li>
+                        <li>"12321"</li>
+                        <li>"Madam, I'm Adam"</li>
+                    </ul>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            const checkBtn = document.getElementById('checkBtn');
+            const resultContainer = document.getElementById('resultContainer');
+
+            checkBtn.addEventListener('click', checkPalindrome);
+            textInput.addEventListener('input', checkPalindrome);
+
+            function checkPalindrome() {
+                const inputText = textInput.value;
+                if (inputText.trim() === '') {
+                    resultContainer.style.display = 'none';
+                    return;
+                }
+
+                // Очищаем строку: оставляем только буквы и цифры, переводим в нижний регистр
+                const cleanedText = inputText.replace(/[^a-zA-Z0-9а-яА-Я]/g, '').toLowerCase();
+
+                // Проверяем, является ли очищенная строка палиндромом
+                const isPalindrome = cleanedText === cleanedText.split('').reverse().join('');
+
+                resultContainer.textContent = isPalindrome ? '✅ Это палиндром!' : '❌ Это не палиндром!';
+                resultContainer.classList.remove('is-palindrome', 'not-palindrome');
+                resultContainer.classList.add(isPalindrome ? 'is-palindrome' : 'not-palindrome');
+                resultContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

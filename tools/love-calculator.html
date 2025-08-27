@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор любви | Neural Wise Wolf</title>
+    <meta name="description" content="Рассчитайте процент совместимости между двумя именами. Узнайте, насколько вы подходите друг другу, с помощью этого забавного инструмента.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .result-section {
+            display: none; /* Скрываем по умолчанию */
+            margin-top: 2rem;
+        }
+        .result-section h3 {
+            margin-bottom: 1rem;
+        }
+        .love-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-danger);
+            margin: 0.5rem 0;
+            transition: transform 0.3s ease;
+        }
+        .love-message {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="fun" data-slug="love-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор любви</h1>
+                <p class="tool-description">Узнайте, насколько вы подходите друг другу! Просто введите два имени и нажмите кнопку.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-group">
+                    <label for="name1">Имя 1</label>
+                    <input type="text" id="name1" class="input-field" placeholder="Введите имя...">
+                </div>
+
+                <div class="input-group">
+                    <label for="name2">Имя 2</label>
+                    <input type="text" id="name2" class="input-field" placeholder="Введите имя...">
+                </div>
+
+                <button class="btn btn-primary" id="calculate-btn">
+                    ❤️ Рассчитать
+                </button>
+
+                <div id="result-section" class="result-section">
+                    <h3>Ваш процент совместимости:</h3>
+                    <p class="love-score" id="love-score">0%</p>
+                    <p class="love-message" id="love-message"></p>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>✨ Быстрый результат</h4>
+                    <p>Мгновенно получите процент совместимости.</p>
+                </div>
+                <div class="feature">
+                    <h4>😂 Просто и весело</h4>
+                    <p>Идеально подходит для развлечения с друзьями.</p>
+                </div>
+                <div class="feature">
+                    <h4>🎁 Неожиданные результаты</h4>
+                    <p>Каждый раз может быть по-разному! 😊</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое «Калькулятор любви»?</h2>
+                <p>«Калькулятор любви» — это популярный развлекательный онлайн-инструмент, который генерирует процент совместимости на основе введённых имён. Важно помнить, что этот инструмент предназначен исключительно для развлечения и не имеет под собой научной основы. Он использует простой алгоритм для генерации случайного или псевдослучайного результата, чтобы подарить пользователям весёлый момент.</p>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+    const name1Input = document.getElementById('name1');
+    const name2Input = document.getElementById('name2');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const resultSection = document.getElementById('result-section');
+    const loveScoreEl = document.getElementById('love-score');
+    const loveMessageEl = document.getElementById('love-message');
+
+    calculateBtn.addEventListener('click', calculateLove);
+
+    function calculateLove() {
+        const name1 = name1Input.value.trim().toLowerCase();
+        const name2 = name2Input.value.trim().toLowerCase();
+
+        if (name1 === '' || name2 === '') {
+            alert('Пожалуйста, введите оба имени.');
+            resultSection.style.display = 'none';
+            return;
+        }
+
+        // Уникальный алгоритм
+        let totalScore = 0;
+        const combinedNames = name1 + name2;
+        
+        for (let i = 0; i < combinedNames.length; i++) {
+            totalScore += combinedNames.charCodeAt(i);
+        }
+
+        // Используем комбинацию имен и случайных чисел для уникальности
+        const seed = name1.length * name2.length + totalScore;
+        const score = (seed % 100) + 1; // Число от 1 до 100
+        
+        let message = '';
+        if (score >= 90) {
+            message = 'Идеальная пара! ❤️';
+        } else if (score >= 70) {
+            message = 'Отличный результат! У вас большое будущее.';
+        } else if (score >= 50) {
+            message = 'Хорошая совместимость, но нужно работать над отношениями.';
+        } else if (score >= 30) {
+            message = 'Интересная комбинация! Может быть, это испытание судьбы?';
+        } else {
+            message = 'Пока не идеально, но все можно изменить!';
+        }
+
+        loveScoreEl.textContent = `${score}%`;
+        loveMessageEl.textContent = message;
+        resultSection.style.display = 'block';
+    }
+});</script>
+</body>
+</html>

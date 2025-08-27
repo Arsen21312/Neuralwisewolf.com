@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор факториала | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенно вычисляйте факториал числа онлайн. Простой и быстрый инструмент для студентов и математиков.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+            text-align: center;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .result-container {
+            margin-top: 1.5rem;
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+        }
+        .result-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            word-break: break-all; /* Для длинных чисел */
+        }
+        .error-text {
+            color: var(--accent-danger);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="factorial-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор факториала</h1>
+                <p class="tool-description">Мгновенно вычисляйте факториал числа онлайн. Простой и быстрый инструмент для студентов и математиков.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-group">
+                    <label for="number-input">Введите целое неотрицательное число:</label>
+                    <input type="number" id="number-input" placeholder="Например, 5" min="0">
+                </div>
+                
+                <button class="btn btn-primary calculate-btn" id="calculate-btn">
+                    🧮 Рассчитать
+                </button>
+                
+                <div id="result-container" class="result-container" style="display: none;">
+                    <p class="result-label">Результат (факториал):</p>
+                    <p class="result-value" id="result-value"></p>
+                </div>
+                <div id="error-message" class="error-text" style="display: none;"></div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Мгновенный расчёт</h4>
+                    <p>Получайте факториал за считанные секунды, без ручных вычислений.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Просто и понятно</h4>
+                    <p>Интерфейс разработан так, чтобы им было легко пользоваться даже тем, кто не является математиком.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для учёбы и работы</h4>
+                    <p>Идеален для студентов, инженеров и всех, кто сталкивается с комбинаторикой.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое факториал?</h2>
+                <p>Факториал числа (обозначается как n!) — это произведение всех натуральных чисел от 1 до самого числа n. Например, факториал числа 5 (5!) равен <code>1 × 2 × 3 × 4 × 5 = 120</code>. По определению, факториал нуля (0!) равен 1.</p>
+                
+                <h3>Принцип работы калькулятора</h3>
+                <p>Наш онлайн-инструмент использует JavaScript для выполнения вычислений. Когда вы вводите число, скрипт последовательно умножает все целые числа от 1 до введенного числа. Это позволяет получить точный результат для любого неотрицательного целого числа, которое может обработать браузер.</p>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✍️ В комбинаторике</h4>
+                        <p>Факториал используется для подсчёта количества способов, которыми можно упорядочить набор элементов. Например, количество способов расставить 5 книг на полке равно 5!.</p>
+                    </div>
+                    <div class="example">
+                        <h4>👨‍💻 В теории вероятности</h4>
+                        <p>Факториал является ключевым элементом в формулах для вычисления перестановок и сочетаний.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📚 В математическом анализе</h4>
+                        <p>Факториал часто встречается в рядах Тейлора и других математических функциях.</p>
+                    </div>
+                </div>
+
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Почему факториал нуля равен 1?</strong><br>
+                Это принято в математике для сохранения логики и согласованности формул в комбинаторике и математическом анализе.</p>
+                <p><strong>Есть ли ограничения на число?</strong><br>
+                Инструмент может обрабатывать большие числа, но после определённого значения (обычно 20) стандартный JavaScript может столкнуться с ограничениями точности. Для очень больших чисел потребуется специальная библиотека для работы с "большими числами".</p>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const numberInput = document.getElementById('number-input');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultContainer = document.getElementById('result-container');
+            const resultValue = document.getElementById('result-value');
+            const errorMessage = document.getElementById('error-message');
+
+            function calculateFactorial() {
+                const num = parseInt(numberInput.value);
+
+                if (isNaN(num) || num < 0 || !Number.isInteger(num)) {
+                    showError('Пожалуйста, введите целое неотрицательное число.');
+                    return;
+                }
+                
+                hideError();
+
+                let result = 1;
+                if (num === 0) {
+                    result = 1;
+                } else {
+                    for (let i = 1; i <= num; i++) {
+                        result *= i;
+                        if (result > Number.MAX_SAFE_INTEGER) {
+                            showError('Число слишком большое для точного вычисления.');
+                            return;
+                        }
+                    }
+                }
+                
+                showResult(result.toLocaleString());
+            }
+
+            function showResult(value) {
+                resultValue.textContent = value;
+                resultContainer.style.display = 'block';
+            }
+
+            function hideResult() {
+                resultContainer.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                hideResult();
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+
+            calculateBtn.addEventListener('click', calculateFactorial);
+            numberInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    calculateFactorial();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+  <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Calculator | Neural Wise Wolf</title>
+  <meta name="description" content="Калькулятор ИМТ: индекс массы тела, категория ВОЗ, здоровый диапазон веса и рекомендации.">
+  <base href="/">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .tool-header{text-align:center;margin-bottom:1.5rem}
+    .tool-header p{max-width:680px;margin:.3rem auto 0;color:var(--text-secondary)}
+    .bmi{max-width:980px;margin:0 auto}
+    .panel{background:var(--bg-primary);border:1px solid var(--border-light);border-radius:20px;box-shadow:var(--shadow-md);padding:1.25rem}
+    .grid{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .field{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;padding:.8rem;display:flex;flex-direction:column;gap:.55rem}
+    .field label{font-weight:700}
+    .row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .text,.select{width:100%;padding:.65rem .75rem;border:1.5px solid var(--border-medium);border-radius:10px;background:var(--bg-primary);color:var(--text-primary)}
+    .text:focus,.select:focus{outline:none;border-color:var(--accent-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent-primary) 20%,transparent)}
+    .mini{padding:.55rem .75rem;border:1px solid var(--border-medium);background:var(--bg-primary);border-radius:10px;cursor:pointer}
+    .mini:hover{background:var(--bg-secondary)}
+    .badge{font-size:.85rem;border:1px dashed var(--border-medium);padding:.15rem .5rem;border-radius:999px}
+    .cards{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:1rem}
+    .card{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:16px;padding:1rem;text-align:center}
+    .big{font-size:1.9rem;font-weight:800;margin:0}
+    .muted{color:var(--text-secondary);font-size:.9rem}
+    .scale{position:relative;height:12px;background:linear-gradient(90deg,#60a5fa 0 18.5%,#22c55e 18.5% 24.9%,#eab308 24.9% 29.9%,#f97316 29.9% 34.9%,#ef4444 34.9% 100%);border-radius:999px;margin-top:.8rem}
+    .needle{position:absolute;top:-6px;width:2px;height:24px;background:var(--text-primary);border-radius:1px;transform:translateX(-1px)}
+    .legend{display:flex;justify-content:space-between;font-size:.8rem;margin-top:.35rem;color:var(--text-secondary)}
+    .tips{margin-top:1rem;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;padding:.9rem}
+    .tips h4{margin:0 0 .5rem}
+  </style>
+</head>
+<body>
+  <div data-include="header"></div>
+  <div data-include="sidebar"></div>
+  <div id="overlay" class="overlay"></div>
+
+  <main class="tool" data-category="life" data-slug="bmi-calculator">
+    <div class="tool-container">
+      <div class="tool-header">
+        <h1>BMI Calculator</h1>
+        <p class="tool-description">Индекс массы тела по формуле ИМТ = вес / рост². Категории по ВОЗ, здоровый вес и рекомендации.</p>
+      </div>
+
+      <div class="bmi">
+        <div class="panel">
+          <div class="grid">
+            <div class="field">
+              <label>Единицы</label>
+              <div class="row">
+                <span id="unitBadge" class="badge">метрическая</span>
+                <button class="mini" id="toggleUnits">⇄ сменить</button>
+              </div>
+              <label>Рост (<span id="hUnit">см</span>)</label>
+              <input id="height" type="number" class="text" value="175" min="50" max="230" step="0.1">
+              <label>Вес (<span id="wUnit">кг</span>)</label>
+              <input id="weight" type="number" class="text" value="70" min="25" max="300" step="0.1">
+            </div>
+
+            <div class="field">
+              <label>Результат</label>
+              <div class="cards">
+                <div class="card">
+                  <p class="big" id="bmiVal">—</p>
+                  <div class="muted">ИМТ</div>
+                </div>
+                <div class="card">
+                  <p class="big" id="bmiCat">—</p>
+                  <div class="muted">Категория</div>
+                </div>
+              </div>
+              <div class="scale">
+                <div id="needle" class="needle" style="left:0%"></div>
+              </div>
+              <div class="legend"><span>Недостат.</span><span>Норма</span><span>Избыточн.</span><span>Ожир. I</span><span>Ожир. II+</span></div>
+            </div>
+
+            <div class="field">
+              <label>Здоровый диапазон веса</label>
+              <div class="cards">
+                <div class="card">
+                  <p class="big" id="minW">—</p>
+                  <div class="muted">минимум, кг</div>
+                </div>
+                <div class="card">
+                  <p class="big" id="maxW">—</p>
+                  <div class="muted">максимум, кг</div>
+                </div>
+              </div>
+              <div class="tips">
+                <h4>Подсказки</h4>
+                <div class="muted" id="tipsText">Введите рост и вес.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="justify-content:space-between;margin-top:.6rem">
+            <div class="row">
+              <button id="recalc" class="mini">пересчитать</button>
+              <button id="reset" class="mini">сброс</button>
+            </div>
+            <span id="status" class="muted">Готово</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-features">
+        <div class="feature"><h4>🎯 Категории ВОЗ</h4><p>Недостаток &lt;18.5, Норма 18.5–24.9, Избыток 25–29.9, Ожирение I 30–34.9, II+ ≥35.</p></div>
+        <div class="feature"><h4>⚡ Удобство</h4><p>Метрика/imperial одним кликом. Быстрый пересчёт при любом изменении.</p></div>
+      </div>
+
+      <div data-include="related"></div>
+    </div>
+  </main>
+
+  <div data-include="footer"></div>
+
+  <script src="js/loader.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const h = document.getElementById('height');
+    const w = document.getElementById('weight');
+    const unitBadge = document.getElementById('unitBadge');
+    const hUnit = document.getElementById('hUnit');
+    const wUnit = document.getElementById('wUnit');
+    const toggle = document.getElementById('toggleUnits');
+
+    const bmiVal = document.getElementById('bmiVal');
+    const bmiCat = document.getElementById('bmiCat');
+    const minW = document.getElementById('minW');
+    const maxW = document.getElementById('maxW');
+    const tipsText = document.getElementById('tipsText');
+    const needle = document.getElementById('needle');
+    const status = document.getElementById('status');
+
+    let metric = true;
+
+    function toNum(el){ return parseFloat((el.value||'').toString().replace(',', '.')) || 0; }
+    function clamp(x,min,max){ return Math.min(max, Math.max(min,x)); }
+
+    function toMetric(){
+      if(!metric){
+        h.value = (toNum(h)*2.54).toFixed(1);   // in -> cm
+        w.value = (toNum(w)*0.45359237).toFixed(1); // lb -> kg
+        metric = true; unitBadge.textContent='метрическая'; hUnit.textContent='см'; wUnit.textContent='кг';
+      }
+    }
+    function toImperial(){
+      if(metric){
+        h.value = (toNum(h)/2.54).toFixed(1);   // cm -> in
+        w.value = (toNum(w)/0.45359237).toFixed(1); // kg -> lb
+        metric = false; unitBadge.textContent='imperial'; hUnit.textContent='in'; wUnit.textContent='lb';
+      }
+    }
+    toggle.addEventListener('click', () => { metric ? toImperial() : toMetric(); calc(); });
+
+    function category(bmi){
+      if(bmi < 18.5) return 'Недостаток';
+      if(bmi < 25) return 'Норма';
+      if(bmi < 30) return 'Избыточный';
+      if(bmi < 35) return 'Ожирение I';
+      return 'Ожирение II+';
+    }
+
+    function calc(){
+      let cm = toNum(h);
+      let kg = toNum(w);
+      if(!metric){ cm *= 2.54; kg *= 0.45359237; }
+
+      if(cm<=0 || kg<=0){ status.textContent='Введите рост и вес'; return; }
+
+      const m = cm/100;
+      const bmi = kg/(m*m);
+      const bmiRounded = Math.round(bmi*10)/10;
+
+      bmiVal.textContent = bmiRounded.toFixed(1);
+      bmiCat.textContent = category(bmi);
+
+      const min = 18.5*m*m;
+      const max = 24.9*m*m;
+      minW.textContent = Math.round(min).toString();
+      maxW.textContent = Math.round(max).toString();
+
+      const pos = clamp(((bmi-16)/(35-16))*100, 0, 100); // шкала ~16..35+
+      needle.style.left = pos + '%';
+
+      if(bmi < 18.5) tipsText.textContent = 'Масса ниже нормы. Проверь калораж и белок, обсуди план набора с врачом/тренером.';
+      else if(bmi < 25) tipsText.textContent = 'Нормальный ИМТ. Поддерживай активность и сбалансированное питание.';
+      else if(bmi < 30) tipsText.textContent = 'Избыточный вес. Рассмотри дефицит калорий и увеличение активности.';
+      else tipsText.textContent = 'Ожирение. Желательна консультация врача и постепенная коррекция рациона.';
+      status.textContent = metric ? 'метрика' : 'imperial';
+    }
+
+    document.getElementById('recalc').addEventListener('click', calc);
+    document.getElementById('reset').addEventListener('click', () => { toMetric(); h.value=175; w.value=70; calc(); });
+    [h,w].forEach(el=>el.addEventListener('input', calc));
+
+    // URL: ?h=175&w=70&units=imperial
+    const q = new URLSearchParams(location.search);
+    if(q.has('h')) h.value = q.get('h');
+    if(q.has('w')) w.value = q.get('w');
+    if(q.get('units')==='imperial') toImperial();
+
+    calc();
+  });
+  </script>
+</body>
+</html>

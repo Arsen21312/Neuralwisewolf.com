@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор никнеймов | Neural Wise Wolf</title>
+    <meta name="description" content="Создание уникальных никнеймов для игр, соцсетей и стриминга. Генерация крутых имен по различным тематикам и стилям.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .nickname-generator {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input, .unit-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .value-input:focus, .unit-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-primary);
+        }
+
+        .option-item label {
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 500;
+            flex: 1;
+            margin: 0;
+        }
+
+        .option-item.selected {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .results-container {
+            margin-top: 1.5rem;
+        }
+
+        .nicknames-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nickname-card {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nickname-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nickname-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .nickname-category {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0.5rem 0 0;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .nickname-card:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .favorites-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .favorite-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid var(--accent-warning);
+            text-align: center;
+            position: relative;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem;
+            background: var(--accent-danger);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-btn {
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .category-btn:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .category-btn.active {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .stats {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin: 0.25rem 0 0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .nicknames-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nicknames-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            opacity: 0.6;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-light);
+            border-top: 2px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="fun" data-slug="nickname-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор никнеймов</h1>
+                <p class="tool-description">Создание уникальных никнеймов для игр, соцсетей и стриминга. Генерация крутых имен по различным тематикам и стилям.</p>
+            </div>
+
+            <div class="nickname-generator">
+                <div class="generator-card">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="nameInput">Ваше имя (опционально):</label>
+                            <input type="text" id="nameInput" class="value-input" placeholder="Введите ваше имя для персонализации">
+                        </div>
+                        <div class="input-group">
+                            <label for="nicknameCount">Количество никнеймов:</label>
+                            <input type="number" id="nicknameCount" class="value-input" value="12" min="1" max="50">
+                        </div>
+                        <div class="input-group">
+                            <label for="nicknameLength">Длина никнейма:</label>
+                            <select id="nicknameLength" class="unit-select">
+                                <option value="short">Короткий (3-6 символов)</option>
+                                <option value="medium" selected>Средний (7-12 символов)</option>
+                                <option value="long">Длинный (13-20 символов)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>🎯 Категории никнеймов:</h4>
+                    <div class="categories-grid">
+                        <div class="category-btn active" data-category="gaming">🎮 Игровые</div>
+                        <div class="category-btn" data-category="cool">😎 Крутые</div>
+                        <div class="category-btn" data-category="fantasy">🐉 Фэнтези</div>
+                        <div class="category-btn" data-category="tech">💻 Техно</div>
+                        <div class="category-btn" data-category="animal">🐾 Животные</div>
+                        <div class="category-btn" data-category="mythology">⚡ Мифология</div>
+                    </div>
+
+                    <h4>⚙️ Дополнительные опции:</h4>
+                    <div class="options-grid">
+                        <div class="option-item" data-option="numbers">
+                            <input type="checkbox" id="addNumbers" checked>
+                            <label for="addNumbers">Добавлять цифры</label>
+                        </div>
+                        <div class="option-item" data-option="special">
+                            <input type="checkbox" id="addSpecial">
+                            <label for="addSpecial">Спецсимволы</label>
+                        </div>
+                        <div class="option-item" data-option="capitalize">
+                            <input type="checkbox" id="capitalize" checked>
+                            <label for="capitalize">Заглавные буквы</label>
+                        </div>
+                        <div class="option-item" data-option="unique">
+                            <input type="checkbox" id="uniqueOnly" checked>
+                            <label for="uniqueOnly">Только уникальные</label>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-full" id="generateBtn">
+                            🎲 Сгенерировать никнеймы
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="saveFavoritesBtn">
+                            ⭐ Сохранить избранные
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="clearAllBtn">
+                            🧹 Очистить всё
+                        </button>
+                    </div>
+
+                    <div class="results-container">
+                        <h4>✨ Сгенерированные никнеймы:</h4>
+                        <div class="nicknames-grid" id="nicknamesGrid">
+                            <div class="empty-state">
+                                Нажмите "Сгенерировать" чтобы создать никнеймы
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="favorites-section">
+                        <h4>⭐ Избранные никнеймы:</h4>
+                        <div class="favorites-grid" id="favoritesGrid">
+                            <div class="empty-state">
+                                Здесь появятся ваши избранные никнеймы
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <p class="stat-value" id="totalGenerated">0</p>
+                                <p class="stat-label">Всего сгенерировано</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="favoritesCount">0</p>
+                                <p class="stat-label">В избранном</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="uniqueCount">0</p>
+                                <p class="stat-label">Уникальных</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Особенности -->
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🎮 Для геймеров</h4>
+                        <p>Уникальные игровые никнеймы для Steam, Xbox, PlayStation и других платформ</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎨 Разные стили</h4>
+                        <p>От крутых и современных до мифических и фэнтезийных никнеймов</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⭐ Избранное</h4>
+                        <p>Сохраняйте понравившиеся никнеймы для дальнейшего использования</p>
+                    </div>
+                </div>
+
+                <!-- SEO контент -->
+                <div class="article">
+                    <h2>Как выбрать идеальный никнейм: полное руководство</h2>
+                    <p>Никнейм — это ваше цифровое alter ego, которое представляет вас в онлайн-мире. Хороший никнейм должен быть запоминающимся, уникальным и отражать вашу личность.</p>
+                    
+                    <h3>🎯 Ключевые принципы выбора никнейма</h3>
+                    <ul>
+                        <li><strong>Уникальность</strong> — имя должно выделяться среди других</li>
+                        <li><strong>Запоминаемость</strong> — легко произносить и запоминать</li>
+                        <li><strong>Релевантность</strong> — отражает ваши интересы или личность</li>
+                        <li><strong>Краткость</strong> — оптимальная длина 6-12 символов</li>
+                        <li><strong>Универсальность</strong> — подходит для разных платформ</li>
+                    </ul>
+                    
+                    <h3>🎮 Популярные категории никнеймов</h3>
+                    
+                    <h4>Игровые никнеймы</h4>
+                    <p>Агрессивные, технологичные или мистические имена для игровых платформ. Примеры: ShadowHunter, CyberKiller, DragonSlayer.</p>
+                    
+                    <h4>Крутые и современные</h4>
+                    <p>Стильные и модные никнеймы для соцсетей. Примеры: NeoVision, Quantum, Zenith.</p>
+                    
+                    <h4>Фэнтези и мифология</h4>
+                    <p>Вдохновленные мифами, легендами и фэнтези-мирами. Примеры: PhoenixRise, Titanium, Valkyrie.</p>
+
+                    <h4>Техно и киберпанк</h4>
+                    <p>Технологичные и футуристические имена. Примеры: ByteLord, CyberNova, TechPhantom.</p>
+                    
+                    <h3>💡 Советы по созданию идеального никнейма</h3>
+                    <div class="example-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🔤 Комбинируйте слова</h4>
+                            <p>Объединяйте разные слова для создания уникальных комбинаций</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🔢 Добавляйте цифры</h4>
+                            <p>Используйте значимые цифры (год рождения, lucky numbers)</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🎭 Отражайте характер</h4>
+                            <p>Выбирайте имя, которое соответствует вашей личности</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Как проверить доступность никнейма?</strong><br>
+                    Используйте поиск по платформам (Steam, Xbox Live, PSN) чтобы проверить занятость имени.</p>
+                    
+                    <p><strong>Можно ли использовать реальное имя?</strong><br>
+                    Не рекомендуется из соображений безопасности и конфиденциальности.</p>
+                    
+                    <p><strong>Как часто менять никнейм?</strong><br>
+                    Лучше выбрать постоянный никнейм для узнаваемости, но иногда можно менять для разнообразия.</p>
+                    
+                    <p><strong>Что делать если никнейм занят?</strong><br>
+                    Добавьте цифры, спецсимволы или немного измените написание.</p>
+                    
+                    <p><strong>Какие символы можно использовать?</strong><br>
+                    Большинство платформ разрешает буквы, цифры и некоторые спецсимволы like _ и -.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const generateBtn = document.getElementById('generateBtn');
+            const saveFavoritesBtn = document.getElementById('saveFavoritesBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const nameInput = document.getElementById('nameInput');
+            const nicknameCount = document.getElementById('nicknameCount');
+            const nicknameLength = document.getElementById('nicknameLength');
+            const nicknamesGrid = document.getElementById('nicknamesGrid');
+            const favoritesGrid = document.getElementById('favoritesGrid');
+            const totalGenerated = document.getElementById('totalGenerated');
+            const favoritesCount = document.getElementById('favoritesCount');
+            const uniqueCount = document.getElementById('uniqueCount');
+
+            // Категории и опции
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const optionItems = document.querySelectorAll('.option-item');
+            let selectedCategory = 'gaming';
+            let favorites = JSON.parse(localStorage.getItem('nicknameFavorites')) || [];
+            let generatedNicknames = new Set();
+
+            // Базы данных никнеймов по категориям
+            const nicknameTemplates = {
+                gaming: [
+                    'Shadow', 'Cyber', 'Dark', 'Steel', 'Iron', 'Blood', 'Ghost', 'Phantom',
+                    'Dragon', 'Wolf', 'Hunter', 'Killer', 'Slayer', 'Warrior', 'Master', 'Lord',
+                    'King', 'Queen', 'Sniper', 'Rogue', 'Ninja', 'Samurai', 'Viking', 'Gladiator'
+                ],
+                cool: [
+                    'Neo', 'Quantum', 'Zenith', 'Nova', 'Vortex', 'Epic', 'Ultra', 'Mega',
+                    'Alpha', 'Omega', 'Sigma', 'Delta', 'Cosmic', 'Galactic', 'Atomic', 'Digital',
+                    'Virtual', 'Cyber', 'Tech', 'Future', 'Modern', 'Elite', 'Prime', 'Supreme'
+                ],
+                fantasy: [
+                    'Dragon', 'Phoenix', 'Griffin', 'Unicorn', 'Pegasus', 'Wizard', 'Sorcerer',
+                    'Mage', 'Warlock', 'Druid', 'Paladin', 'Knight', 'Elf', 'Dwarf', 'Orc',
+                    'Troll', 'Goblin', 'Fairy', 'Demon', 'Angel', 'Titan', 'Valkyrie', 'Centaur'
+                ],
+                tech: [
+                    'Byte', 'Code', 'Data', 'Pixel', 'Matrix', 'Cyber', 'Tech', 'Digital',
+                    'Virtual', 'AI', 'Robot', 'Drone', 'Chip', 'Circuit', 'Node', 'Cloud',
+                    'Server', 'Network', 'Protocol', 'Algorithm', 'Firewall', 'Router', 'Switch'
+                ],
+                animal: [
+                    'Lion', 'Tiger', 'Wolf', 'Fox', 'Bear', 'Eagle', 'Hawk', 'Falcon',
+                    'Shark', 'Python', 'Cobra', 'Panther', 'Leopard', 'Jaguar', 'Falcon', 'Raven',
+                    'Owl', 'Hawk', 'Falcon', 'Scorpion', 'Spider', 'Rhino', 'Gorilla', 'Elephant'
+                ],
+                mythology: [
+                    'Zeus', 'Apollo', 'Ares', 'Hades', 'Poseidon', 'Athena', 'Artemis', 'Hera',
+                    'Odin', 'Thor', 'Loki', 'Freya', 'Tyr', 'Hel', 'Fenrir', 'Jormungandr',
+                    'Anubis', 'Ra', 'Horus', 'Osiris', 'Isis', 'Set', 'Bastet', 'Sobek'
+                ]
+            };
+
+            const suffixes = [
+                'X', 'Z', 'Pro', 'Max', 'Ultra', 'Prime', 'Elite', 'Master',
+                'Lord', 'King', 'Queen', 'Warrior', 'Hunter', 'Slayer', 'Killer',
+                'Rider', 'Walker', 'Maker', 'Breaker', 'Destroyer', 'Creator'
+            ];
+
+            const specialChars = ['_', '-', '.', 'x', 'X', '0', '1', '2', '3'];
+            const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+            // Инициализация опций
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedCategory = btn.dataset.category;
+                });
+            });
+
+            optionItems.forEach(item => {
+                const checkbox = item.querySelector('input');
+                checkbox.addEventListener('change', () => {
+                    item.classList.toggle('selected', checkbox.checked);
+                });
+                // Изначально добавляем класс selected для отмеченных опций
+                if (checkbox.checked) {
+                    item.classList.add('selected');
+                }
+            });
+
+            // Генерация никнеймов
+            generateBtn.addEventListener('click', generateNicknames);
+            saveFavoritesBtn.addEventListener('click', saveFavorites);
+            clearAllBtn.addEventListener('click', clearAll);
+
+            function generateNicknames() {
+                const count = parseInt(nicknameCount.value);
+                const userName = nameInput.value.trim();
+                const lengthType = nicknameLength.value;
+                const addNumbers = document.getElementById('addNumbers').checked;
+                const addSpecial = document.getElementById('addSpecial').checked;
+                const capitalize = document.getElementById('capitalize').checked;
+                const uniqueOnly = document.getElementById('uniqueOnly').checked;
+
+                const nicknames = [];
+                const templates = nicknameTemplates[selectedCategory];
+
+                for (let i = 0; i < count * 2; i++) { // Генерируем больше для уникальности
+                    let nickname = '';
+
+                    // Базовый шаблон
+                    const base = templates[Math.floor(Math.random() * templates.length)];
+                    const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+
+                    // Комбинируем элементы
+                    if (Math.random() > 0.5) {
+                        nickname = base + suffix;
+                    } else {
+                        nickname = suffix + base;
+                    }
+
+                    // Добавляем имя пользователя если указано
+                    if (userName && Math.random() > 0.7) {
+                        nickname = userName + nickname.slice(0, 3);
+                    }
+
+                    // Добавляем цифры
+                    if (addNumbers && Math.random() > 0.5) {
+                        const randomNum = Math.floor(Math.random() * 1000);
+                        nickname += randomNum;
+                    }
+
+                    // Добавляем спецсимволы
+                    if (addSpecial && Math.random() > 0.7) {
+                        const specialChar = specialChars[Math.floor(Math.random() * specialChars.length)];
+                        nickname += specialChar;
+                    }
+
+                    // Приводим к нужному регистру
+                    if (capitalize) {
+                        nickname = nickname.charAt(0).toUpperCase() + nickname.slice(1);
+                    }
+
+                    // Проверяем длину
+                    if (isValidLength(nickname, lengthType) && (!uniqueOnly || !generatedNicknames.has(nickname))) {
+                        nicknames.push(nickname);
+                        generatedNicknames.add(nickname);
+                    }
+
+                    if (nicknames.length >= count) break;
+                }
+
+                displayNicknames(nicknames);
+                updateStats();
+            }
+
+            function isValidLength(nickname, lengthType) {
+                const length = nickname.length;
+                switch (lengthType) {
+                    case 'short': return length >= 3 && length <= 6;
+                    case 'medium': return length >= 7 && length <= 12;
+                    case 'long': return length >= 13 && length <= 20;
+                    default: return true;
+                }
+            }
+
+            function displayNicknames(nicknames) {
+                if (nicknames.length === 0) {
+                    nicknamesGrid.innerHTML = '<div class="empty-state">Не удалось сгенерировать никнеймы. Попробуйте другие настройки.</div>';
+                    return;
+                }
+
+                nicknamesGrid.innerHTML = '';
+                nicknames.forEach(nickname => {
+                    const card = document.createElement('div');
+                    card.className = 'nickname-card';
+                    card.innerHTML = `
+                        <div class="nickname-text">${nickname}</div>
+                        <div class="nickname-category">${getCategoryName(selectedCategory)}</div>
+                        <button class="copy-btn" onclick="copyNickname('${nickname}')">📋</button>
+                    `;
+                    card.addEventListener('click', () => addToFavorites(nickname));
+                    nicknamesGrid.appendChild(card);
+                });
+            }
+
+            function getCategoryName(category) {
+                const names = {
+                    gaming: '🎮 Игровой',
+                    cool: '😎 Крутой',
+                    fantasy: '🐉 Фэнтези',
+                    tech: '💻 Техно',
+                    animal: '🐾 Животное',
+                    mythology: '⚡ Мифология'
+                };
+                return names[category] || category;
+            }
+
+            function addToFavorites(nickname) {
+                if (!favorites.includes(nickname)) {
+                    favorites.push(nickname);
+                    localStorage.setItem('nicknameFavorites', JSON.stringify(favorites));
+                    displayFavorites();
+                    updateStats();
+                    
+                    // Визуальная обратная связь
+                    const event = new CustomEvent('showToast', {
+                        detail: { message: 'Добавлено в избранное!', type: 'success' }
+                    });
+                    document.dispatchEvent(event);
+                }
+            }
+
+            function saveFavorites() {
+                const nicknameCards = nicknamesGrid.querySelectorAll('.nickname-card');
+                let addedCount = 0;
+                
+                nicknameCards.forEach(card => {
+                    const nickname = card.querySelector('.nickname-text').textContent;
+                    if (!favorites.includes(nickname)) {
+                        favorites.push(nickname);
+                        addedCount++;
+                    }
+                });
+                
+                localStorage.setItem('nicknameFavorites', JSON.stringify(favorites));
+                displayFavorites();
+                updateStats();
+                
+                const event = new CustomEvent('showToast', {
+                    detail: { message: `Добавлено ${addedCount} никнеймов в избранное!`, type: 'success' }
+                });
+                document.dispatchEvent(event);
+            }
+
+            function displayFavorites() {
+                if (favorites.length === 0) {
+                    favoritesGrid.innerHTML = '<div class="empty-state">Здесь появятся ваши избранные никнеймы</div>';
+                    return;
+                }
+
+                favoritesGrid.innerHTML = '';
+                favorites.forEach(nickname => {
+                    const card = document.createElement('div');
+                    card.className = 'favorite-card';
+                    card.innerHTML = `
+                        <div class="nickname-text">${nickname}</div>
+                        <button class="remove-btn" onclick="removeFavorite('${nickname}')">×</button>
+                    `;
+                    favoritesGrid.appendChild(card);
+                });
+            }
+
+            function removeFavorite(nickname) {
+                favorites = favorites.filter(n => n !== nickname);
+                localStorage.setItem('nicknameFavorites', JSON.stringify(favorites));
+                displayFavorites();
+                updateStats();
+            }
+
+            function clearAll() {
+                if (confirm('Очистить все сгенерированные никнеймы и избранное?')) {
+                    generatedNicknames.clear();
+                    favorites = [];
+                    localStorage.removeItem('nicknameFavorites');
+                    nicknamesGrid.innerHTML = '<div class="empty-state">Нажмите "Сгенерировать" чтобы создать никнеймы</div>';
+                    favoritesGrid.innerHTML = '<div class="empty-state">Здесь появятся ваши избранные никнеймы</div>';
+                    updateStats();
+                }
+            }
+
+            function updateStats() {
+                totalGenerated.textContent = generatedNicknames.size;
+                favoritesCount.textContent = favorites.length;
+                uniqueCount.textContent = generatedNicknames.size;
+            }
+
+            // Глобальные функции
+            window.copyNickname = function(nickname) {
+                navigator.clipboard.writeText(nickname)
+                    .then(() => {
+                        const event = new CustomEvent('showToast', {
+                            detail: { message: 'Никнейм скопирован!', type: 'success' }
+                        });
+                        document.dispatchEvent(event);
+                    })
+                    .catch(err => {
+                        console.error('Ошибка при копировании:', err);
+                    });
+            };
+
+            window.removeFavorite = function(nickname) {
+                removeFavorite(nickname);
+            };
+
+            // Инициализация
+            displayFavorites();
+            updateStats();
+        });
+    </script>
+</body>
+</html>

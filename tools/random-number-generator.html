@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор случайных чисел | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-генератор случайных чисел в заданном диапазоне. Идеально подходит для розыгрышей, игр и принятия решений.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .random-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .input-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input {
+            width: 120px;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+            text-align: center;
+        }
+        
+        .value-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            word-wrap: break-word;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            line-height: 1;
+        }
+        
+        .result-value.visible {
+            opacity: 1;
+        }
+        
+        .error-message {
+            color: var(--accent-danger);
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-number-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор случайных чисел</h1>
+                <p class="tool-description">Получите случайное число в заданном диапазоне. Идеально подходит для игр, принятия решений или розыгрышей.</p>
+            </div>
+
+            <div class="random-generator">
+                <div class="generator-card">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="minInput">Минимум:</label>
+                            <input type="number" id="minInput" class="value-input" step="1" value="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="maxInput">Максимум:</label>
+                            <input type="number" id="maxInput" class="value-input" step="1" value="100">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="generateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Сгенерировать число
+                    </button>
+                    
+                    <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+                    <div class="result-container">
+                        <span class="result-title" id="resultLabel">Ваше случайное число:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🔢 Настраиваемый диапазон</h4>
+                        <p>Вы можете задать любой диапазон, от простых чисел до огромных.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Число генерируется за доли секунды, готовое к использованию.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎲 Полезно для игр</h4>
+                        <p>Используйте этот инструмент для настольных игр, розыгрышей или принятия решений, когда нужен случайный выбор.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Зачем нужен генератор случайных чисел?</h2>
+                    <p>Случайные числа — основа многих игр и алгоритмов. Вам нужно выбрать победителя в розыгрыше? Кинуть "виртуальный кубик" для настольной игры? Или просто сделать выбор, когда не можете определиться? Наш генератор сделает это за вас.</p>
+                    
+                    <h3>💡 Как работает генератор?</h3>
+                    <p>Наш инструмент использует метод `Math.random()`, который возвращает псевдослучайное число от 0 до 1. Затем мы масштабируем это число так, чтобы оно попало в ваш диапазон от минимума до максимума, и округляем до целого числа. Это обеспечивает равномерное распределение вероятности для каждого числа в заданном диапазоне.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const minInput = document.getElementById('minInput');
+            const maxInput = document.getElementById('maxInput');
+            const generateBtn = document.getElementById('generateBtn');
+            const resultLabel = document.getElementById('resultLabel');
+            const resultValue = document.getElementById('resultValue');
+            const errorMessage = document.getElementById('errorMessage');
+
+            generateBtn.addEventListener('click', generateRandomNumber);
+            [minInput, maxInput].forEach(input => {
+                input.addEventListener('input', generateRandomNumber);
+            });
+
+            function generateRandomNumber() {
+                const min = parseInt(minInput.value);
+                const max = parseInt(maxInput.value);
+
+                if (isNaN(min) || isNaN(max) || min > max) {
+                    errorMessage.textContent = 'Введите корректный диапазон.';
+                    errorMessage.style.display = 'block';
+                    resultLabel.style.display = 'none';
+                    resultValue.classList.remove('visible');
+                    return;
+                }
+                
+                errorMessage.style.display = 'none';
+                resultLabel.style.display = 'block';
+
+                const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                
+                resultValue.classList.remove('visible');
+                setTimeout(() => {
+                    resultValue.textContent = randomNumber;
+                    resultValue.classList.add('visible');
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

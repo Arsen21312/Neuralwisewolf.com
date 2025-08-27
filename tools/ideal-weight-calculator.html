@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор идеального веса | Neural Wise Wolf</title>
+    <meta name="description" content="Рассчитайте свой идеальный вес по различным формулам (Брока, Лоренца, Девина) с учетом роста, пола и возраста.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .result-section {
+            display: none; /* Скрываем по умолчанию */
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+        .result-section h3 {
+            margin-bottom: 1rem;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .result-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .gender-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .gender-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-light);
+            background: var(--bg-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .gender-btn.active {
+            background: var(--accent-primary);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="life" data-slug="ideal-weight-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор идеального веса</h1>
+                <p class="tool-description">Рассчитайте свой идеальный вес по различным формулам с учетом роста, пола и возраста.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-group">
+                    <label>Пол</label>
+                    <div class="gender-options">
+                        <button class="gender-btn" data-gender="male">Мужской</button>
+                        <button class="gender-btn" data-gender="female">Женский</button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="height">Рост (см)</label>
+                    <input type="number" id="height" class="input-field" min="100" max="250" placeholder="Введите ваш рост...">
+                </div>
+
+                <div class="input-group">
+                    <label for="age">Возраст (лет)</label>
+                    <input type="number" id="age" class="input-field" min="10" max="120" placeholder="Введите ваш возраст...">
+                </div>
+
+                <button class="btn btn-primary" id="calculate-btn">
+                    ⚖️ Рассчитать
+                </button>
+
+                <div id="result-section" class="result-section">
+                    <h3>Ваш идеальный вес</h3>
+                    <div id="results"></div>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🎯 Разные формулы</h4>
+                    <p>Используем самые популярные формулы для точного расчета.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Простой интерфейс</h4>
+                    <p>Просто введите данные и получите результат мгновенно.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Диапазон ИМТ</h4>
+                    <p>Показываем здоровый диапазон веса на основе индекса массы тела.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое идеальный вес и как он рассчитывается?</h2>
+                <p>Идеальный вес — это приблизительный показатель оптимального веса человека, который позволяет ему жить дольше и здоровее. Он зависит от множества факторов, включая рост, возраст, пол, тип телосложения и генетику. Из-за этого не существует одной универсальной формулы, и разные методы могут давать разные результаты.</p>
+                
+                <h3>Самые популярные формулы</h3>
+                <ul>
+                    <li><strong>Формула Брока:</strong> Самый простой и старый метод. Для мужчин: (рост в см - 100). Для женщин: (рост в см - 110).</li>
+                    <li><strong>Формула Лоренца:</strong> Улучшенная версия формулы Брока. Для мужчин: рост (см) - 100 - (рост - 150) / 4. Для женщин: рост (см) - 100 - (рост - 150) / 2.</li>
+                    <li><strong>Формула Хамви (Hamwi):</strong> Учитывает рост. Для мужчин: 48 кг + 2.7 кг на каждый дюйм роста выше 152.4 см. Для женщин: 45.5 кг + 2.2 кг на каждый дюйм роста выше 152.4 см.</li>
+                    <li><strong>Формула Робинсона:</strong> Учитывает рост и пол. Для мужчин: 52 кг + 1.9 кг на каждый дюйм роста выше 152.4 см. Для женщин: 49 кг + 1.7 кг на каждый дюйм роста выше 152.4 см.</li>
+                </ul>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>🏃‍♂️ Для спортсменов</h4>
+                        <p>Определите свой оптимальный вес для достижения лучших результатов.</p>
+                    </div>
+                    <div class="example">
+                        <h4>🌱 Для здорового образа жизни</h4>
+                        <p>Используйте калькулятор как ориентир в своем пути к здоровому весу.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📊 Для оценки прогресса</h4>
+                        <p>Отслеживайте свой прогресс, сравнивая текущий вес с идеальным.</p>
+                    </div>
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heightInput = document.getElementById('height');
+            const ageInput = document.getElementById('age');
+            const genderBtns = document.querySelectorAll('.gender-btn');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultSection = document.getElementById('result-section');
+            const resultsDiv = document.getElementById('results');
+            
+            let selectedGender = null;
+
+            genderBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    genderBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedGender = btn.dataset.gender;
+                });
+            });
+
+            calculateBtn.addEventListener('click', calculateIdealWeight);
+
+            function calculateIdealWeight() {
+                const height = parseFloat(heightInput.value);
+                const age = parseFloat(ageInput.value);
+
+                if (!height || !selectedGender) {
+                    alert('Пожалуйста, введите рост и выберите пол.');
+                    return;
+                }
+                
+                // Перевод см в дюймы
+                const heightInInches = height * 0.393701;
+                
+                let resultsHtml = '';
+                
+                // Расчет по формулам
+                
+                // Формула Брока (Broca)
+                const brocaWeight = selectedGender === 'male' 
+                    ? (height - 100)
+                    : (height - 110);
+                resultsHtml += createResultItem('Формула Брока', `${brocaWeight.toFixed(1)} кг`);
+
+                // Формула Лоренца (Lorentz)
+                const lorentzWeight = selectedGender === 'male'
+                    ? height - 100 - (height - 150) / 4
+                    : height - 100 - (height - 150) / 2;
+                resultsHtml += createResultItem('Формула Лоренца', `${lorentzWeight.toFixed(1)} кг`);
+
+                // Формула Хамви (Hamwi)
+                const hamwiWeight = selectedGender === 'male'
+                    ? 48 + 2.7 * (heightInInches - 60)
+                    : 45.5 + 2.2 * (heightInInches - 60);
+                resultsHtml += createResultItem('Формула Хамви', `${hamwiWeight.toFixed(1)} кг`);
+                
+                // Формула Робинсона (Robinson)
+                const robinsonWeight = selectedGender === 'male'
+                    ? 52 + 1.9 * (heightInInches - 60)
+                    : 49 + 1.7 * (heightInInches - 60);
+                resultsHtml += createResultItem('Формула Робинсона', `${robinsonWeight.toFixed(1)} кг`);
+                
+                // Расчет ИМТ (BMI)
+                const minBmi = 18.5;
+                const maxBmi = 24.9;
+                const heightInMeters = height / 100;
+                const minIdealWeight = minBmi * (heightInMeters * heightInMeters);
+                const maxIdealWeight = maxBmi * (heightInMeters * heightInMeters);
+                resultsHtml += createResultItem('Диапазон ИМТ (18.5 - 24.9)', `${minIdealWeight.toFixed(1)} - ${maxIdealWeight.toFixed(1)} кг`);
+
+                resultsDiv.innerHTML = resultsHtml;
+                resultSection.style.display = 'block';
+            }
+
+            function createResultItem(label, value) {
+                return `
+                    <div class="result-item">
+                        <span class="result-label">${label}</span>
+                        <span class="result-value">${value}</span>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

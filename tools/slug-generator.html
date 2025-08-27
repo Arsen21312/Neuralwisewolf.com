@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор Slug | Neural Wise Wolf</title>
+    <meta name="description" content="Создайте идеальные SEO-friendly URL slugs из любого текста. Поддержка кириллицы, транслитерация, настройка формата.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        
+        .slug-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .text-input, .slug-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: var(--font-sans);
+        }
+        
+        .text-input:focus, .slug-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .text-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .option-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-primary);
+        }
+        
+        .option-item label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .slug-preview {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            border: 2px solid var(--border-light);
+        }
+        
+        .slug-preview h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .slug-result {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .slug-text {
+            flex: 1;
+            padding: 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .copy-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-medium);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .slug-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .slug-stats {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="slug-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор Slug</h1>
+                <p class="tool-description">Создайте идеальные SEO-friendly URL slugs из любого текста</p>
+            </div>
+
+            <div class="slug-generator">
+                <div class="generator-card">
+                    <div class="input-group">
+                        <label for="input-text">Исходный текст:</label>
+                        <textarea id="input-text" class="text-input" placeholder="Введите текст для преобразования в slug..."></textarea>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-item">
+                            <input type="checkbox" id="option-lowercase" checked>
+                            <label for="option-lowercase">Нижний регистр</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-translit" checked>
+                            <label for="option-translit">Транслитерация кириллицы</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-remove-special" checked>
+                            <label for="option-remove-special">Удалить специальные символы</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-replace-spaces" checked>
+                            <label for="option-replace-spaces">Заменять пробелы дефисами</label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary generate-btn" id="generate-btn">
+                        🚀 Сгенерировать Slug
+                    </button>
+                    
+                    <div class="slug-preview">
+                        <h3>📝 Результат</h3>
+                        <div class="slug-result">
+                            <div class="slug-text" id="slug-result">slug-будет-здесь</div>
+                            <button class="copy-btn" id="copy-btn">Копировать</button>
+                        </div>
+                        
+                        <div class="slug-stats">
+                            <div class="stat-item">
+                                <p class="stat-value" id="length-stat">0</p>
+                                <p class="stat-label">символов</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="words-stat">0</p>
+                                <p class="stat-label">слов</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="readability-stat">-</p>
+                                <p class="stat-label">читаемость</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🌐 Поддержка кириллицы</h4>
+                    <p>Автоматическая транслитерация русского текста в латиницу</p>
+                </div>
+                <div class="feature">
+                    <h4>⚙️ Гибкая настройка</h4>
+                    <p>Настройте параметры генерации под свои потребности</p>
+                </div>
+                <div class="feature">
+                    <h4>📊 SEO-аналитика</h4>
+                    <p>Статистика длины, количества слов и читаемости slug</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>Что такое Slug и зачем он нужен?</h2>
+                <p>Slug — это часть URL-адреса, которая идентифицирует конкретную страницу на сайте в удобочитаемой форме. Правильно сформированные slugs важны для SEO и пользовательского опыта.</p>
+                
+                <h3>📈 Преимущества хороших slugs</h3>
+                <ul>
+                    <li><strong>Улучшение SEO:</strong> Поисковые системы используют slugs для понимания содержания страницы</li>
+                    <li><strong>Удобство пользователей:</strong> Читаемые URLs помогают пользователям ориентироваться на сайте</li>
+                    <li><strong>Повышение кликабельности:</strong> Осмысленные URLs чаще кликают в результатах поиска</li>
+                    <li><strong>Социальные сети:</strong> Хорошие slugs лучше выглядят при расшаривании в соцсетях</li>
+                </ul>
+                
+                <h3>🎯 Лучшие практики создания slugs</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✅ Короткие и описательные</h4>
+                        <p>Используйте 3-5 слов, точно описывающих содержание страницы</p>
+                    </div>
+                    <div class="example">
+                        <h4>✅ Используйте ключевые слова</h4>
+                        <p>Включайте релевантные ключевые слова в начало slug</p>
+                    </div>
+                    <div class="example">
+                        <h4>✅ Разделяйте дефисами</h4>
+                        <p>Используйте дефисы вместо подчеркиваний или пробелов</p>
+                    </div>
+                    <div class="example">
+                        <h4>❌ Избегайте стоп-слов</h4>
+                        <p>Удаляйте артикли, предлоги и союзы (a, an, the, и, в, на)</p>
+                    </div>
+                </div>
+                
+                <h3>💡 Примеры хороших и плохих slugs</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Плохой slug</th>
+                            <th>Хороший slug</th>
+                            <th>Причина</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>post.php?id=123</code></td>
+                            <td><code>optimizaciya-sajta</code></td>
+                            <td>Описательный вместо численного ID</td>
+                        </tr>
+                        <tr>
+                            <td><code>kak_vybrat_noutbuk</code></td>
+                            <td><code>kak-vybrat-noutbuk</code></td>
+                            <td>Дефисы вместо подчеркиваний</td>
+                        </tr>
+                        <tr>
+                            <td><code>luchshie-smartfony-2023-goda-dlya-igr-i-multimediya</code></td>
+                            <td><code>luchshie-smartfony-2023</code></td>
+                            <td>Слишком длинный, сокращен до essentials</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Какой длины должен быть slug?</strong><br>
+                Идеальная длина - 3-5 слов или 30-60 символов. Слишком длинные URLs могут быть обрезаны в результатах поиска.</p>
+                
+                <p><strong>Нужно ли включать даты в slugs?</strong><br>
+                Только если контент действительно зависит от даты (новости, события). Для evergreen контента даты лучше не использовать.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputText = document.getElementById('input-text');
+            const generateBtn = document.getElementById('generate-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const slugResult = document.getElementById('slug-result');
+            const lengthStat = document.getElementById('length-stat');
+            const wordsStat = document.getElementById('words-stat');
+            const readabilityStat = document.getElementById('readability-stat');
+            
+            // Опции
+            const optionLowercase = document.getElementById('option-lowercase');
+            const optionTranslit = document.getElementById('option-translit');
+            const optionRemoveSpecial = document.getElementById('option-remove-special');
+            const optionReplaceSpaces = document.getElementById('option-replace-spaces');
+            
+            // Таблица транслитерации
+            const translitMap = {
+                'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+                'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+                'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+                'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+                'я': 'ya',
+                'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+                'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+                'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts',
+                'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+                'Я': 'Ya'
+            };
+            
+            generateBtn.addEventListener('click', generateSlug);
+            
+            // Автогенерация при вводе
+            inputText.addEventListener('input', generateSlug);
+            
+            // Изменение опций также запускает генерацию
+            const options = document.querySelectorAll('input[type="checkbox"]');
+            options.forEach(option => {
+                option.addEventListener('change', generateSlug);
+            });
+            
+            // Копирование в буфер обмена
+            copyBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(slugResult.textContent).then(() => {
+                    copyBtn.textContent = 'Скопировано!';
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Копировать';
+                    }, 2000);
+                });
+            });
+            
+            function generateSlug() {
+                let text = inputText.value.trim();
+                
+                if (!text) {
+                    slugResult.textContent = 'slug-будет-здесь';
+                    updateStats('', 0, 0, '-');
+                    return;
+                }
+                
+                // Применяем выбранные опции
+                if (optionTranslit.checked) {
+                    text = transliterate(text);
+                }
+                
+                if (optionLowercase.checked) {
+                    text = text.toLowerCase();
+                }
+                
+                if (optionRemoveSpecial.checked) {
+                    text = removeSpecialChars(text);
+                }
+                
+                if (optionReplaceSpaces.checked) {
+                    text = replaceSpaces(text);
+                } else {
+                    // Все равно заменяем пробелы на дефисы, но оставляем другие разделители
+                    text = text.replace(/\s+/g, '-');
+                }
+                
+                // Убираем множественные дефисы
+                text = text.replace(/-+/g, '-');
+                
+                // Убираем дефисы в начале и конце
+                text = text.replace(/^-+|-+$/g, '');
+                
+                slugResult.textContent = text;
+                
+                // Обновляем статистику
+                const wordCount = countWords(text);
+                const readability = evaluateReadability(text, wordCount);
+                updateStats(text, text.length, wordCount, readability);
+            }
+            
+            function transliterate(text) {
+                return text.split('').map(char => {
+                    return translitMap[char] || char;
+                }).join('');
+            }
+            
+            function removeSpecialChars(text) {
+                // Разрешаем буквы, цифры, пробелы и дефисы
+                return text.replace(/[^\w\s-а-яА-Я]/g, '');
+            }
+            
+            function replaceSpaces(text) {
+                // Заменяем все не-буквенно-цифровые символы на дефисы
+                return text.replace(/[^\wа-яА-Я]+/g, '-');
+            }
+            
+            function countWords(text) {
+                const words = text.split(/[-_\s]+/).filter(word => word.length > 0);
+                return words.length;
+            }
+            
+            function evaluateReadability(text, wordCount) {
+                if (wordCount === 0) return '-';
+                
+                const length = text.length;
+                const avgWordLength = length / wordCount;
+                
+                if (wordCount <= 2) return 'Короткий';
+                if (wordCount <= 5 && avgWordLength <= 8) return 'Идеальный';
+                if (wordCount > 7 || length > 70) return 'Длинный';
+                if (avgWordLength > 10) return 'Сложный';
+                
+                return 'Хороший';
+            }
+            
+            function updateStats(text, length, words, readability) {
+                lengthStat.textContent = length;
+                wordsStat.textContent = words;
+                readabilityStat.textContent = readability;
+                
+                // Подсветка статистики в зависимости от качества
+                readabilityStat.className = '';
+                if (readability === 'Идеальный') {
+                    readabilityStat.classList.add('success');
+                } else if (readability === 'Длинный' || readability === 'Сложный') {
+                    readabilityStat.classList.add('error');
+                }
+            }
+            
+            // Автогенерация при загрузке, если есть текст
+            if (inputText.value) {
+                generateSlug();
+            }
+        });
+    </script>
+</body>
+</html>

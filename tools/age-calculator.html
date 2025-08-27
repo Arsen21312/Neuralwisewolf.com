@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+<link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор возраста | Neural Wise Wolf</title>
+    <meta name="description" content="Точный расчет возраста в годах, месяцах, неделях, днях и даже секундах. Узнайте сколько вам лет, месяцев, дней и секунд!">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+.tool-header {
+  text-align: center;
+  margin-bottom: 1.5rem; /* чтобы отступ вниз был аккуратный */
+}
+.tool-header h1 {
+  margin-bottom: .5rem;
+}
+.tool-header p {
+  max-width: 600px; /* ограничим ширину */
+  margin: 0 auto;
+  color: var(--text-secondary);
+}
+
+
+        .tool-features{
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-light);
+}
+.tool-features .feature{
+  margin-bottom: 1rem;
+}
+        
+        .age-calculator {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .calculator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .date-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .date-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .result-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-primary);
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+        
+        .age-details {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .next-birthday {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .next-birthday h3 {
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .calculator-card {
+                padding: 1.5rem;
+            }
+            
+            .result-value {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="life" data-slug="age-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор возраста</h1>
+                <p class="tool-description">Точный расчет возраста в годах, месяцах, неделях, днях и даже секундах</p>
+            </div>
+
+            <div class="age-calculator">
+                <div class="calculator-card">
+                    <div class="input-group">
+                        <label for="birthdate">Дата рождения:</label>
+                        <input type="date" id="birthdate" class="date-input" max="2024-12-31">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="comparedate">Дата для сравнения (опционально):</label>
+                        <input type="date" id="comparedate" class="date-input">
+                        <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+                            Оставьте пустым для использования текущей даты
+                        </small>
+                    </div>
+                    
+                    <button class="btn btn-primary calculate-btn" id="calculate-btn">
+                        🎂 Рассчитать возраст
+                    </button>
+                    
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <p class="result-value" id="years">0</p>
+                            <p class="result-label">лет</p>
+                        </div>
+                        <div class="result-card">
+                            <p class="result-value" id="months">0</p>
+                            <p class="result-label">месяцев</p>
+                        </div>
+                        <div class="result-card">
+                            <p class="result-value" id="weeks">0</p>
+                            <p class="result-label">недель</p>
+                        </div>
+                        <div class="result-card">
+                            <p class="result-value" id="days">0</p>
+                            <p class="result-label">дней</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="age-details">
+                    <h3>📊 Детальный расчет</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Всего дней:</span>
+                        <span class="detail-value" id="total-days">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Всего часов:</span>
+                        <span class="detail-value" id="total-hours">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Всего минут:</span>
+                        <span class="detail-value" id="total-minutes">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Всего секунд:</span>
+                        <span class="detail-value" id="total-seconds">0</span>
+                    </div>
+                </div>
+                
+                <div class="next-birthday" id="next-birthday" style="display: none;">
+                    <h3>🎁 До следующего дня рождения</h3>
+                    <p class="result-value" id="next-birthday-days">0 дней</p>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🎯 Точный расчет</h4>
+                    <p>Учитываем високосные годы и разное количество дней в месяцах</p>
+                </div>
+                <div class="feature">
+                    <h4>📅 Разные форматы</h4>
+                    <p>Возраст в годах, месяцах, неделях, днях, часах, минутах и секундах</p>
+                </div>
+                <div class="feature">
+                    <h4>🎂 Дни рождения</h4>
+                    <p>Показываем сколько дней осталось до следующего дня рождения</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>Как работает калькулятор возраста</h2>
+                <p>Наш калькулятор использует точные алгоритмы для расчета возраста, учитывая все nuances календарной системы:</p>
+                
+                <h3>📅 Учет високосных годов</h3>
+                <p>Калькулятор автоматически учитывает високосные годы (год, divisible на 4, но не на 100, кроме тех, что divisible на 400).</p>
+                
+                <h3>📊 Разное количество дней в месяцах</h3>
+                <p>Точный расчет учитывает разное количество дней в месяцах: 28-31 день.</p>
+                
+                <h3>🎯 Формулы расчета</h3>
+                <ul>
+                    <li><strong>Годы:</strong> Полные годы между датами</li>
+                    <li><strong>Месяцы:</strong> Полные месяцы после последнего дня рождения</li>
+                    <li><strong>Дни:</strong> Оставшиеся дни после полных месяцев</li>
+                    <li><strong>Недели:</strong> Общее количество дней ÷ 7</li>
+                </ul>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>👶 Возраст ребенка</h4>
+                        <p>Точный возраст в годах, месяцах и днях для малышей</p>
+                    </div>
+                    <div class="example">
+                        <h4>📅 Стаж работы</h4>
+                        <p>Расчет трудового стажа и опыта работы</p>
+                    </div>
+                    <div class="example">
+                        <h4>🎂 Планирование мероприятий</h4>
+                        <p>Подсчет дней до юбилеев и важных дат</p>
+                    </div>
+                </div>
+                
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Почему расчет может отличаться от других калькуляторов?</strong><br>
+                Некоторые калькуляторы используют упрощенные формулы (например, 365 дней в году), наш калькулятор учитывает реальные календарные особенности.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const birthdateInput = document.getElementById('birthdate');
+            const comparedateInput = document.getElementById('comparedate');
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            // Устанавливаем максимальную дату как сегодня
+            const today = new Date().toISOString().split('T')[0];
+            birthdateInput.max = today;
+            comparedateInput.max = today;
+            
+            // Устанавливаем разумную минимальную дату (1900 год)
+            birthdateInput.min = '1900-01-01';
+            
+            calculateBtn.addEventListener('click', calculateAge);
+            
+            // Авторасчет при изменении дат
+            birthdateInput.addEventListener('change', calculateAge);
+            comparedateInput.addEventListener('change', calculateAge);
+            
+            function calculateAge() {
+                const birthdate = new Date(birthdateInput.value);
+                let compareDate = new Date();
+                
+                // Если указана дата для сравнения
+                if (comparedateInput.value) {
+                    compareDate = new Date(comparedateInput.value);
+                }
+                
+                // Валидация
+                if (!birthdateInput.value) {
+                    alert('Пожалуйста, введите дату рождения');
+                    return;
+                }
+                
+                if (birthdate > compareDate) {
+                    alert('Дата рождения не может быть в будущем!');
+                    return;
+                }
+                
+                // Расчет возраста
+                const ageDetails = calculateAgeDetails(birthdate, compareDate);
+                
+                // Обновление UI
+                updateResults(ageDetails);
+            }
+            
+            function calculateAgeDetails(birthdate, compareDate) {
+                // Основной расчет
+                let years = compareDate.getFullYear() - birthdate.getFullYear();
+                let months = compareDate.getMonth() - birthdate.getMonth();
+                let days = compareDate.getDate() - birthdate.getDate();
+                
+                // Корректировка месяцев и дней
+                if (days < 0) {
+                    months--;
+                    // Получаем количество дней в предыдущем месяце
+                    const lastMonth = new Date(compareDate.getFullYear(), compareDate.getMonth(), 0);
+                    days += lastMonth.getDate();
+                }
+                
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                // Расчет общего количества дней
+                const diffTime = compareDate - birthdate;
+                const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const totalHours = Math.floor(diffTime / (1000 * 60 * 60));
+                const totalMinutes = Math.floor(diffTime / (1000 * 60));
+                const totalSeconds = Math.floor(diffTime / 1000);
+                
+                // Расчет до следующего дня рождения
+                const nextBirthday = new Date(compareDate.getFullYear(), birthdate.getMonth(), birthdate.getDate());
+                if (nextBirthday < compareDate) {
+                    nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+                }
+                const daysUntilBirthday = Math.ceil((nextBirthday - compareDate) / (1000 * 60 * 60 * 24));
+                
+                return {
+                    years,
+                    months,
+                    weeks: Math.floor(totalDays / 7),
+                    days: days,
+                    totalDays,
+                    totalHours,
+                    totalMinutes,
+                    totalSeconds,
+                    daysUntilBirthday
+                };
+            }
+            
+            function updateResults(details) {
+                // Основные результаты
+                document.getElementById('years').textContent = details.years;
+                document.getElementById('months').textContent = details.months;
+                document.getElementById('weeks').textContent = details.weeks;
+                document.getElementById('days').textContent = details.days;
+                
+                // Детальные результаты
+                document.getElementById('total-days').textContent = details.totalDays.toLocaleString();
+                document.getElementById('total-hours').textContent = details.totalHours.toLocaleString();
+                document.getElementById('total-minutes').textContent = details.totalMinutes.toLocaleString();
+                document.getElementById('total-seconds').textContent = details.totalSeconds.toLocaleString();
+                
+                // Следующий день рождения
+                const nextBirthdayElement = document.getElementById('next-birthday');
+                const nextBirthdayDays = document.getElementById('next-birthday-days');
+                
+                if (details.daysUntilBirthday > 0) {
+                    nextBirthdayDays.textContent = `${details.daysUntilBirthday} ${declOfNum(details.daysUntilBirthday, ['день', 'дня', 'дней'])}`;
+                    nextBirthdayElement.style.display = 'block';
+                } else {
+                    nextBirthdayElement.style.display = 'none';
+                }
+            }
+            
+            // Функция для склонения числительных
+            function declOfNum(number, titles) {
+                const cases = [2, 0, 1, 1, 1, 2];
+                return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+            }
+            
+            // Автоматический расчет при загрузке, если есть дата рождения
+            if (birthdateInput.value) {
+                calculateAge();
+            }
+        });
+    </script>
+</body>
+</html>

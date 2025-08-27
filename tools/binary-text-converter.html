@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+  <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Text Converter | Neural Wise Wolf</title>
+  <meta name="description" content="Конвертер Текст ↔ Бинарный, Текст ↔ HEX. UTF-8, группировка, разделители, копирование.">
+  <base href="/">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .tool-header{ text-align:center; margin-bottom:1.5rem; }
+    .tool-header p{ max-width:640px; margin:.25rem auto 0; color:var(--text-secondary); }
+    .btc{ max-width:980px; margin:0 auto; }
+    .panel{ background:var(--bg-primary); border:1px solid var(--border-light); border-radius:20px; box-shadow:var(--shadow-md); padding:1.25rem; }
+    .grid{ display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
+    .card{ background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:12px; padding:.75rem; display:flex; flex-direction:column; gap:.5rem; }
+    .card label{ font-weight:700; }
+    .area{ width:100%; min-height:180px; padding:.75rem; border:1.5px solid var(--border-medium); border-radius:10px; background:var(--bg-primary); color:var(--text-primary); font-family:ui-monospace,Consolas,Menlo,monospace; font-size:.95rem; }
+    .area:focus{ outline:none; border-color:var(--accent-primary); box-shadow:0 0 0 3px color-mix(in srgb,var(--accent-primary) 20%, transparent); }
+    .row{ display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+    .select,.text{ padding:.55rem .7rem; border:1.5px solid var(--border-medium); border-radius:10px; background:var(--bg-primary); color:var(--text-primary); }
+    .mini{ padding:.55rem .75rem; border:1px solid var(--border-medium); background:var(--bg-primary); border-radius:10px; cursor:pointer; }
+    .mini:hover{ background:var(--bg-secondary); }
+    .opts{ display:grid; gap:.5rem; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+    .hint{ color:var(--text-secondary); font-size:.9rem; }
+    .status{ margin-top:.5rem; color:var(--text-secondary); }
+    .tool-features{ margin-top:28px; padding-top:18px; border-top:1px solid var(--border-light); }
+    .tool-features .feature{ margin-bottom:1rem; }
+    .check{ display:flex; align-items:center; gap:.5rem; }
+    .check input[type="checkbox"]{ width:16px; height:16px; accent-color:var(--accent-primary); }
+  </style>
+</head>
+<body>
+  <div data-include="header"></div>
+  <div data-include="sidebar"></div>
+  <div id="overlay" class="overlay"></div>
+
+  <main class="tool" data-category="dev" data-slug="binary-text-converter">
+    <div class="tool-container">
+      <div class="tool-header">
+        <h1>Binary Text Converter</h1>
+        <p class="tool-description">Текст ↔ Бинарный, Текст ↔ HEX. Используется UTF-8. Настраивай группировку битов и разделители, копируй результат одним кликом.</p>
+      </div>
+
+      <div class="btc">
+        <div class="panel">
+          <div class="row" style="justify-content:space-between;">
+            <div class="row">
+              <label>Режим:</label>
+              <select id="mode" class="select">
+                <option value="text2bin">Текст → Бинарный</option>
+                <option value="bin2text">Бинарный → Текст</option>
+                <option value="text2hex">Текст → HEX</option>
+                <option value="hex2text">HEX → Текст</option>
+              </select>
+            </div>
+            <div class="row">
+              <button class="mini" id="swap">⇄ Поменять направление</button>
+              <button class="mini" id="clear">очистить</button>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:.75rem;">
+            <div class="card">
+              <label for="src">Вход</label>
+              <textarea id="src" class="area" placeholder="Например: Привет волки 🐺"></textarea>
+              <div class="row">
+                <button class="mini" id="copySrc">копировать</button>
+                <span class="hint" id="lenInfo">0 символов</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <label for="dst">Выход</label>
+              <textarea id="dst" class="area" placeholder="Результат появится здесь" readonly></textarea>
+              <div class="row">
+                <button class="mini" id="copyDst">копировать</button>
+                <span class="hint" id="bytesInfo">0 байт</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="opts" style="margin-top:1rem;">
+            <div class="card">
+              <label>Форматирование</label>
+              <div class="row">
+                <label class="check"><input type="checkbox" id="groupBits" checked> группировать по</label>
+                <input id="groupSize" type="number" class="text" value="8" min="1" max="16" style="width:84px">
+                <label class="check"><input type="checkbox" id="padBytes" checked> дополнять до группы нулями</label>
+              </div>
+              <div class="row">
+                <span class="hint">Разделитель</span>
+                <input id="sep" class="text" value=" " style="width:120px" title="Пробел, запятая, дефис и т.п.">
+                <button class="mini" data-sep=" ">пробел</button>
+                <button class="mini" data-sep="">без</button>
+                <button class="mini" data-sep=",">,</button>
+                <button class="mini" data-sep="-">-</button>
+              </div>
+              <div class="check"><input type="checkbox" id="upperHex" checked> HEX верхним регистром</div>
+            </div>
+
+            <div class="card">
+              <label>Очистка входа</label>
+              <div class="check"><input type="checkbox" id="stripSpaces" checked> убрать пробелы</div>
+              <div class="check"><input type="checkbox" id="stripNonBin"> убрать не 0/1 (для бинарного)</div>
+              <div class="check"><input type="checkbox" id="stripNonHex"> убрать не HEX (для HEX)</div>
+              <p class="hint">Для режимов «…→Текст» вход очищается перед парсингом.</p>
+            </div>
+          </div>
+
+          <div class="status" id="status">Готово</div>
+        </div>
+      </div>
+
+      <div class="tool-features">
+        <div class="feature"><h4>🎯 Режимы</h4><p>Текст↔Бинарный, Текст↔HEX. Кодировка UTF-8 через TextEncoder/TextDecoder.</p></div>
+        <div class="feature"><h4>⚡ Живой пересчёт</h4><p>Конвертация на лету при вводе. Настрой группировку и разделители.</p></div>
+        <div class="feature"><h4>📋 Копирование</h4><p>Быстро копируй исходные данные и результат.</p></div>
+      </div>
+
+      <div data-include="related"></div>
+    </div>
+  </main>
+
+  <div data-include="footer"></div>
+
+  <script src="js/loader.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mode = document.getElementById('mode');
+    const src = document.getElementById('src');
+    const dst = document.getElementById('dst');
+    const sep = document.getElementById('sep');
+    const groupBits = document.getElementById('groupBits');
+    const groupSize = document.getElementById('groupSize');
+    const padBytes = document.getElementById('padBytes');
+    const upperHex = document.getElementById('upperHex');
+
+    const stripSpaces = document.getElementById('stripSpaces');
+    const stripNonBin = document.getElementById('stripNonBin');
+    const stripNonHex = document.getElementById('stripNonHex');
+
+    const status = document.getElementById('status');
+    const lenInfo = document.getElementById('lenInfo');
+    const bytesInfo = document.getElementById('bytesInfo');
+
+    const te = new TextEncoder();
+    const td = new TextDecoder();
+
+    function setStatus(t){ status.textContent = t; }
+
+    function bytesToBin(bytes){
+      const g = Math.max(1, Math.min(16, parseInt(groupSize.value||'8',10)));
+      const chunks = [];
+      for(const b of bytes){
+        let s = b.toString(2).padStart(8, '0');
+        if(groupBits.checked){
+          // разбиваем внутри байта по g
+          const parts = s.match(new RegExp(`.{1,${g}}`, 'g')) || [s];
+          s = parts.join(sep.value);
+        }
+        chunks.push(s);
+      }
+      return chunks.join(sep.value);
+    }
+
+    function binToBytes(binStr){
+      let s = binStr;
+      if(stripSpaces.checked) s = s.replace(/\s+/g,'');
+      if(stripNonBin.checked) s = s.replace(/[^01]/g,'');
+      if(s.length === 0) return new Uint8Array();
+      // добиваем до байта (8)
+      const pad = (8 - (s.length % 8)) % 8;
+      s = s.padEnd(s.length + pad, '0');
+      const out = new Uint8Array(s.length/8);
+      for(let i=0;i<s.length;i+=8){
+        out[i/8] = parseInt(s.slice(i,i+8), 2);
+      }
+      return out;
+    }
+
+    function bytesToHex(bytes){
+      const hex = [...bytes].map(b => b.toString(16).padStart(2,'0'));
+      const h = upperHex.checked ? hex.map(x=>x.toUpperCase()) : hex;
+      return groupBits.checked ? h.join(sep.value) : h.join('');
+    }
+
+    function hexToBytes(hexStr){
+      let s = hexStr;
+      if(stripSpaces.checked) s = s.replace(/\s+/g,'');
+      if(stripNonHex.checked) s = s.replace(/[^0-9a-fA-F]/g,'');
+      if(s.length===0) return new Uint8Array();
+      if(s.length % 2 === 1) s = s + '0'; // добиваем до пары
+      const out = new Uint8Array(s.length/2);
+      for(let i=0;i<s.length;i+=2){
+        out[i/2] = parseInt(s.slice(i,i+2), 16);
+      }
+      return out;
+    }
+
+    function convert(){
+      try{
+        const m = mode.value;
+        const input = src.value;
+        lenInfo.textContent = `${input.length} символов`;
+
+        if(m === 'text2bin'){
+          const bytes = te.encode(input);
+          bytesInfo.textContent = `${bytes.length} байт`;
+          dst.value = bytesToBin(bytes);
+          setStatus('OK: Текст → Бинарный');
+        } else if(m === 'bin2text'){
+          const bytes = binToBytes(input);
+          bytesInfo.textContent = `${bytes.length} байт`;
+          dst.value = td.decode(bytes);
+          setStatus('OK: Бинарный → Текст');
+        } else if(m === 'text2hex'){
+          const bytes = te.encode(input);
+          bytesInfo.textContent = `${bytes.length} байт`;
+          dst.value = bytesToHex(bytes);
+          setStatus('OK: Текст → HEX');
+        } else if(m === 'hex2text'){
+          const bytes = hexToBytes(input);
+          bytesInfo.textContent = `${bytes.length} байт`;
+          dst.value = td.decode(bytes);
+          setStatus('OK: HEX → Текст');
+        }
+      } catch(e){
+        dst.value = '';
+        setStatus('Ошибка: ' + (e.message||e));
+      }
+    }
+
+    // события
+    [mode, sep, groupBits, groupSize, padBytes, upperHex,
+     stripSpaces, stripNonBin, stripNonHex].forEach(el => el.addEventListener('input', convert));
+    src.addEventListener('input', convert);
+
+    document.getElementById('swap').addEventListener('click', () => {
+      const map = { text2bin:'bin2text', bin2text:'text2bin', text2hex:'hex2text', hex2text:'text2hex' };
+      mode.value = map[mode.value] || 'text2bin';
+      convert();
+    });
+    document.getElementById('clear').addEventListener('click', () => { src.value=''; dst.value=''; convert(); });
+    document.getElementById('copySrc').addEventListener('click', () => navigator.clipboard.writeText(src.value||''));
+    document.getElementById('copyDst').addEventListener('click', () => navigator.clipboard.writeText(dst.value||''));
+
+    // быстрые сепараторы
+    document.querySelectorAll('[data-sep]').forEach(b => b.addEventListener('click', () => { sep.value = b.dataset.sep; convert(); }));
+
+    // URL-параметры: ?mode=text2hex&sep=%20
+    const q = new URLSearchParams(location.search);
+    if(q.has('mode')) mode.value = q.get('mode');
+    if(q.has('sep')) sep.value = q.get('sep');
+    convert();
+  });
+  </script>
+</body>
+</html>

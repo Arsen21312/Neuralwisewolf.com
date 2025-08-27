@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Найди свой знак зодиака | Neural Wise Wolf</title>
+    <meta name="description" content="Узнайте свой знак зодиака по дате рождения. Характеристики, совместимость, гороскоп и интересные факты о каждом знаке.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .zodiac-finder {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .input-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .date-input-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .find-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        .result-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .zodiac-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .zodiac-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .zodiac-info h2 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .zodiac-dates {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .zodiac-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+        }
+
+        .detail-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-card p {
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .compatibility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .compat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s ease;
+        }
+
+        .compat-item.good {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--accent-success);
+        }
+
+        .compat-item.average {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--accent-warning);
+        }
+
+        .compat-item.poor {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--accent-danger);
+        }
+
+        .compat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .compat-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .compat-score {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .share-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin: 0 0.5rem;
+        }
+
+        .share-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .zodiac-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .zodiac-item {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .zodiac-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-primary);
+        }
+
+        .zodiac-item-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .zodiac-item-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .zodiac-item-dates {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .date-input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .zodiac-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .zodiac-details {
+                grid-template-columns: 1fr;
+            }
+
+            .compatibility-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .zodiac-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .input-card,
+            .result-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .compatibility-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .zodiac-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .share-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .share-btn {
+                width: 100%;
+                justify-content: center;
+                margin: 0;
+            }
+        }
+
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .copy-notification.show {
+            opacity: 1;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="life" data-slug="zodiac-finder">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Найди свой знак зодиака</h1>
+                <p class="tool-description">Узнайте свой знак зодиака по дате рождения и получите подробную характеристику, совместимость и интересные факты</p>
+            </div>
+
+            <div class="zodiac-finder">
+                <div class="input-card">
+                    <h3>📅 Введите дату рождения</h3>
+                    <div class="date-input-group">
+                        <div class="input-group">
+                            <label for="day">День</label>
+                            <select id="day">
+                                <option value="">День</option>
+                                </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="month">Месяц</label>
+                            <select id="month">
+                                <option value="">Месяц</option>
+                                <option value="1">Январь</option>
+                                <option value="2">Февраль</option>
+                                <option value="3">Март</option>
+                                <option value="4">Апрель</option>
+                                <option value="5">Май</option>
+                                <option value="6">Июнь</option>
+                                <option value="7">Июль</option>
+                                <option value="8">Август</option>
+                                <option value="9">Сентябрь</option>
+                                <option value="10">Октябрь</option>
+                                <option value="11">Ноябрь</option>
+                                <option value="12">Декабрь</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="year">Год</label>
+                            <select id="year">
+                                <option value="">Год</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary find-btn" id="find-btn">
+                        ✨ Узнать знак зодиака
+                    </button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Анализируем вашу дату рождения...</p>
+                </div>
+
+                <div class="result-card" id="result-card">
+                    <div class="zodiac-header">
+                        <div class="zodiac-icon" id="zodiac-icon">♈</div>
+                        <div class="zodiac-info">
+                            <h2 id="zodiac-name">Овен</h2>
+                            <p class="zodiac-dates" id="zodiac-dates">21 марта - 19 апреля</p>
+                        </div>
+                    </div>
+
+                    <div class="zodiac-details">
+                        <div class="detail-card">
+                            <h4>⭐ Характеристика</h4>
+                            <p id="zodiac-description">Энергичный, уверенный в себе, импульсивный, целеустремленный...</p>
+                        </div>
+
+                        <div class="detail-card">
+                            <h4>🪐 Планета-покровитель</h4>
+                            <p id="zodiac-planet">Марс</p>
+                        </div>
+
+                        <div class="detail-card">
+                            <h4>🌈 Стихия</h4>
+                            <p id="zodiac-element">Огонь</p>
+                        </div>
+
+                        <div class="detail-card">
+                            <h4>💎 Камни</h4>
+                            <p id="zodiac-stones">Алмаз, рубин, гранат</p>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>❤️ Совместимость</h4>
+                        <div class="compatibility-grid" id="compatibility-grid">
+                            </div>
+                    </div>
+
+                    <div class="share-section">
+                        <p>Поделитесь своим знаком зодиака:</p>
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn" id="share-vk">
+                                <span>VK</span>
+                            </a>
+                            <a href="#" class="share-btn" id="share-tg">
+                                <span>Telegram</span>
+                            </a>
+                            <a href="#" class="share-btn" id="copy-link">
+                                <span>Скопировать ссылку</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="all-zodiacs">
+                    <h3>🌌 Все знаки зодиака</h3>
+                    <div class="zodiac-grid" id="zodiac-grid">
+                        </div>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🎯 Точное определение</h4>
+                    <p>Учитываем точные даты перехода между знаками зодиака</p>
+                </div>
+                <div class="feature">
+                    <h4>⭐ Полная характеристика</h4>
+                    <p>Подробное описание личности, совместимости и особенностей знака</p>
+                </div>
+                <div class="feature">
+                    <h4>❤️ Совместимость</h4>
+                    <p>Узнайте, какие знаки лучше всего подходят для отношений и дружбы</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое знаки зодиака?</h2>
+                <p>Знаки зодиака — это 12 секторов эклиптики, каждый из которых соответствует определенному созвездию. Они образуют зодиакальный круг, который используется в астрологии для определения характера человека, его судьбы и совместимости с другими людьми.</p>
+
+                <h3>📜 История зодиака</h3>
+                <p>Зодиакальная система зародилась в древнем Вавилоне около 3000 лет назад. Древние астрономы разделили эклиптику на 12 равных частей по 30 градусов, каждой из которых присвоили название ближайшего созвездия.</p>
+
+                <h3>♈ 12 знаков зодиака</h3>
+                <div class="zodiac-list">
+                    <div class="zodiac-item">
+                        <strong>Овен</strong> (21 марта - 19 апреля) - огненный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Телец</strong> (20 апреля - 20 мая) - земной знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Близнецы</strong> (21 мая - 20 июня) - воздушный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Рак</strong> (21 июня - 22 июля) - водный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Лев</strong> (23 июля - 22 августа) - огненный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Дева</strong> (23 августа - 22 сентября) - земной знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Весы</strong> (23 сентября - 22 октября) - воздушный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Скорпион</strong> (23 октября - 21 ноября) - водный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Стрелец</strong> (22 ноября - 21 декабря) - огненный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Козерог</strong> (22 декабря - 19 января) - земной знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Водолей</strong> (20 января - 18 февраля) - воздушный знак
+                    </div>
+                    <div class="zodiac-item">
+                        <strong>Рыбы</strong> (19 февраля - 20 марта) - водный знак
+                    </div>
+                </div>
+
+                <h3>🌌 Стихии знаков зодиака</h3>
+                <p>Каждый знак зодиака принадлежит к одной из четырех стихий:</p>
+                <ul>
+                    <li><strong>🔥 Огонь</strong> (Овен, Лев, Стрелец) - энергичные, страстные, импульсивные</li>
+                    <li><strong>🌍 Земля</strong> (Телец, Дева, Козерог) - практичные, надежные, стабильные</li>
+                    <li><strong>💨 Воздух</strong> (Близнецы, Весы, Водолей) - интеллектуальные, общительные, свободолюбивые</li>
+                    <li><strong>💧 Вода</strong> (Рак, Скорпион, Рыбы) - эмоциональные, интуитивные, чувствительные</li>
+                </ul>
+
+                <h3>❤️ Совместимость знаков</h3>
+                <p>Совместимость знаков зодиака определяется их стихиями и качествами. Наиболее совместимы знаки одной стихии или дополняющих друг друга стихий (огонь-воздух, земля-вода).</p>
+            </div>
+
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script src="js/zodiac-finder.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер давления | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенно конвертируйте единицы давления: Паскали, Бары, PSI, Атмосферы, мм ртутного столба и другие.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .pressure-converter {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .converter-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .input-field-wrapper {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .value-input, .unit-select {
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+        }
+        
+        .value-input {
+            flex-grow: 1;
+        }
+
+        .value-input:focus, .unit-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-top: 0.5rem;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 768px) {
+            .converter-card {
+                padding: 1.5rem;
+            }
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="convert" data-slug="pressure-converter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Конвертер давления</h1>
+                <p class="tool-description">Универсальный онлайн-калькулятор для перевода единиц давления. Конвертируйте Паскали, Бары, PSI, Атмосферы и многие другие.</p>
+            </div>
+
+            <div class="pressure-converter">
+                <div class="converter-card">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="inputValue">Значение:</label>
+                            <input type="number" id="inputValue" class="value-input" step="any" placeholder="Введите значение">
+                        </div>
+                        <div class="input-group">
+                            <label for="fromUnit">Из:</label>
+                            <select id="fromUnit" class="unit-select">
+                                <option value="pa">Паскаль (Pa)</option>
+                                <option value="kpa">Килопаскаль (kPa)</option>
+                                <option value="mpa">Мегапаскаль (MPa)</option>
+                                <option value="bar" selected>Бар (bar)</option>
+                                <option value="psi">Фунт/кв.дюйм (psi)</option>
+                                <option value="atm">Атмосфера (atm)</option>
+                                <option value="mmhg">мм рт.ст. (Torr)</option>
+                                <option value="kgfcm2">кгс/см²</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="toUnit">В:</label>
+                            <select id="toUnit" class="unit-select">
+                                <option value="pa">Паскаль (Pa)</option>
+                                <option value="kpa">Килопаскаль (kPa)</option>
+                                <option value="mpa">Мегапаскаль (MPa)</option>
+                                <option value="bar">Бар (bar)</option>
+                                <option value="psi" selected>Фунт/кв.дюйм (psi)</option>
+                                <option value="atm">Атмосфера (atm)</option>
+                                <option value="mmhg">мм рт.ст. (Torr)</option>
+                                <option value="kgfcm2">кгс/см²</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="convertBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M21 5H3a2 2 0 0 0-2 2v1"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M3 19h18a2 2 0 0 0 2-2v-1"></path></svg>
+                        Конвертировать
+                    </button>
+
+                    <div class="result-container" id="resultContainer" style="display: none;">
+                        <span class="result-label">Результат:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🔄 Поддержка 8+ единиц</h4>
+                        <p>Конвертируйте между Паскалями, Барами, PSI, Атмосферами и другими популярными единицами.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Расчеты выполняются в реальном времени, обеспечивая быстрый и точный результат.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎓 Полезно для учебы и работы</h4>
+                        <p>Инструмент незаменим для инженеров, студентов, физиков и всех, кто работает с давлением.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Что такое давление и как его конвертировать?</h2>
+                    <p><strong>Давление</strong> — это физическая величина, равная силе, действующей на единицу площади поверхности перпендикулярно этой поверхности. Единица измерения давления в Международной системе единиц (СИ) — Паскаль (Па).</p>
+                    
+                    <h3>💡 Как работает конвертер?</h3>
+                    <p>Наш конвертер использует стандартные коэффициенты пересчета. Вся логика основана на преобразовании введенного значения в базовую единицу — **Паскаль**, а затем из Паскалей в выбранную конечную единицу. Это обеспечивает высокую точность и надежность вычислений.</p>
+                    
+                    <h3>Таблица основных единиц давления:</h3>
+                    <ul>
+                        <li>**1 Паскаль (Pa)** = 1 Н/м² (Ньютон на квадратный метр)</li>
+                        <li>**1 Бар (bar)** = 100 000 Па</li>
+                        <li>**1 PSI (фунт на кв. дюйм)** = 6 894,76 Па</li>
+                        <li>**1 Стандартная атмосфера (atm)** = 101 325 Па</li>
+                        <li>**1 мм рт. ст. (Torr)** = 133,322 Па</li>
+                        <li>**1 кгс/см²** = 98 066,5 Па</li>
+                    </ul>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputValue = document.getElementById('inputValue');
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const convertBtn = document.getElementById('convertBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultValue = document.getElementById('resultValue');
+
+            const conversionFactors = {
+                'pa': 1,
+                'kpa': 1000,
+                'mpa': 1000000,
+                'bar': 100000,
+                'psi': 6894.76,
+                'atm': 101325,
+                'mmhg': 133.322,
+                'kgfcm2': 98066.5
+            };
+
+            convertBtn.addEventListener('click', convertPressure);
+            [inputValue, fromUnit, toUnit].forEach(el => {
+                el.addEventListener('input', convertPressure);
+            });
+
+            function convertPressure() {
+                const value = parseFloat(inputValue.value);
+                const from = fromUnit.value;
+                const to = toUnit.value;
+
+                if (isNaN(value)) {
+                    resultContainer.style.display = 'none';
+                    return;
+                }
+
+                // Конвертируем в Паскали (базовая единица)
+                const valueInPa = value * conversionFactors[from];
+
+                // Конвертируем из Паскалей в целевую единицу
+                const result = valueInPa / conversionFactors[to];
+
+                resultValue.textContent = result.toFixed(6);
+                resultContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

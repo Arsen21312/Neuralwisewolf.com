@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бросок монеты | Neural Wise Wolf</title>
+    <meta name="description" content="Принимайте быстрые решения, бросив виртуальную монету. Орел или решка — мгновенный результат!">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .coin-flip-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .coin-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--accent-primary); /* Это будет фоном, если нет картинки */
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 3rem;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--accent-secondary);
+            box-shadow: 0 0 0 10px rgba(59, 130, 246, 0.2);
+            perspective: 1000px; /* Для 3D-эффекта */
+        }
+        #coin-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            transition: transform 0.3s ease;
+            box-sizing: border-box; /* Чтобы padding не выходил за границы */
+        }
+        #coin-face img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Чтобы изображение полностью помещалось */
+            border-radius: 50%; /* Для круглых изображений */
+        }
+        /* Стили для начального знака вопроса */
+        .coin-initial-state {
+            background-color: var(--accent-primary);
+            color: #fff;
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin-container.flip {
+            animation: flip-animation 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes flip-animation {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(3600deg); }
+        }
+        
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            min-height: 2.5rem;
+        }
+        #flip-btn {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="coin-flip">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Бросок монеты</h1>
+                <p class="tool-description">Принимайте быстрые решения, бросив виртуальную монету. Орел или решка — мгновенный результат!</p>
+            </div>
+
+            <div class="coin-flip-card">
+                <div id="coin" class="coin-container">
+                    <div id="coin-face" class="coin-initial-state">?</div>
+                </div>
+                <div id="coin-result" class="result-text">Нажмите кнопку, чтобы подбросить монету!</div>
+                <button class="btn btn-primary calculate-btn" id="flip-btn">
+                    🪙 Подбросить монету
+                </button>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Мгновенный результат</h4>
+                    <p>Не нужно искать монету — просто нажмите кнопку и получите результат за доли секунды.</p>
+                </div>
+                <div class="feature">
+                    <h4>⚖️ Случайность</h4>
+                    <p>Наш алгоритм основан на криптографически безопасном генераторе случайных чисел, что гарантирует честный результат.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для любых задач</h4>
+                    <p>Идеально подходит для принятия решений, игр или разрешения споров.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Для чего нужен виртуальный бросок монеты?</h2>
+                <p>Виртуальный бросок монеты — это простой и надёжный способ получить случайный результат. В отличие от реальной монеты, здесь исключён человеческий фактор, что делает результат абсолютно честным.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Наш инструмент использует язык программирования JavaScript. При нажатии на кнопку "Подбросить монету" скрипт генерирует случайное число от 0 до 1. Если число меньше 0.5, выпадает "Решка", если больше или равно 0.5 — "Орёл". Результат мгновенно отображается на экране.</p>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✍️ Решение споров</h4>
+                        <p>Два друга не могут решить, кто первым пойдет за кофе? Бросьте монету! Это быстро и объективно.</p>
+                    </div>
+                    <div class="example">
+                        <h4>👨‍💻 Принятие решений</h4>
+                        <p>Не можете выбрать, какой фильм посмотреть или куда пойти на ужин? Пусть монета решит за вас.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📚 Игры и развлечения</h4>
+                        <p>Добавьте элемент случайности в свои настольные или словесные игры.</p>
+                    </div>
+                </div>
+                
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Можно ли доверять этому броску?</strong><br>
+                Да, наш инструмент использует стандартные функции браузера для генерации случайных чисел. Результат непредсказуем и честен.</p>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flipBtn = document.getElementById('flip-btn');
+            const coin = document.getElementById('coin');
+            const coinFace = document.getElementById('coin-face');
+            const resultText = document.getElementById('coin-result');
+            
+            // Изначальное состояние монеты (знак вопроса)
+            coinFace.innerHTML = '?';
+            coinFace.classList.add('coin-initial-state');
+
+            flipBtn.addEventListener('click', () => {
+                const isHeads = Math.random() < 0.5; // true для орла, false для решки
+                
+                flipBtn.disabled = true;
+                resultText.textContent = 'Подбрасываем монету...';
+                
+                // Удаляем начальное состояние, если оно есть
+                coinFace.classList.remove('coin-initial-state');
+                
+                // Сброс анимации и содержимого
+                coin.classList.remove('flip');
+                coinFace.innerHTML = ''; // Очищаем содержимое перед анимацией
+                void coin.offsetWidth; // Force reflow для перезапуска анимации
+                
+                // Запуск анимации
+                coin.classList.add('flip');
+                
+                setTimeout(() => {
+                    // После анимации, устанавливаем изображение
+                    const img = document.createElement('img');
+                    if (isHeads) {
+                        img.src = '/assets/heads.png'; // Путь к твоей картинке Орла
+                        resultText.textContent = `Выпало: Орёл!`;
+                    } else {
+                        img.src = '/assets/tails.png'; // Путь к твоей картинке Решки
+                        resultText.textContent = `Выпало: Решка!`;
+                    }
+                    coinFace.appendChild(img);
+                    flipBtn.disabled = false;
+                }, 1500); // 1.5s, чтобы совпадало с анимацией
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор НОД и НОК | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенно вычисляйте наибольший общий делитель (НОД) и наименьшее общее кратное (НОК) для двух или трех чисел.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .input-grid input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+            text-align: center;
+        }
+        .input-grid input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .result-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.3;
+        }
+        .error-text {
+            color: var(--accent-danger);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="gcd-lcm-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор НОД и НОК</h1>
+                <p class="tool-description">Мгновенно вычисляйте наибольший общий делитель (НОД) и наименьшее общее кратное (НОК) для двух или трех чисел.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-grid">
+                    <input type="number" id="number1" placeholder="Число 1" step="1">
+                    <input type="number" id="number2" placeholder="Число 2" step="1">
+                    <input type="number" id="number3" placeholder="Число 3 (опционально)" step="1">
+                </div>
+                
+                <button class="btn btn-primary calculate-btn" id="calculate-btn">
+                    🧮 Рассчитать
+                </button>
+                
+                <div id="result-container" class="results-grid" style="display: none;">
+                    <div class="result-card">
+                        <p class="result-label">НОД (GCD)</p>
+                        <p class="result-value" id="gcd-result"></p>
+                    </div>
+                    <div class="result-card">
+                        <p class="result-label">НОК (LCM)</p>
+                        <p class="result-value" id="lcm-result"></p>
+                    </div>
+                </div>
+                <div id="error-message" class="error-text" style="display: none;"></div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Мгновенный расчёт</h4>
+                    <p>Получайте НОД и НОК за считанные секунды, без ручных вычислений.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Просто и понятно</h4>
+                    <p>Интерфейс разработан так, чтобы им было легко пользоваться даже тем, кто не является математиком.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для учёбы и работы</h4>
+                    <p>Идеален для студентов, инженеров и всех, кто сталкивается с задачами по теории чисел.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое НОД и НОК?</h2>
+                <p><strong>Наибольший общий делитель (НОД)</strong> двух или более чисел — это самое большое целое число, на которое эти числа делятся без остатка. Например, НОД для 12 и 18 равен 6, так как это самое большое число, которое является делителем для обоих.</p>
+                
+                <p><strong>Наименьшее общее кратное (НОК)</strong> двух или более чисел — это наименьшее положительное целое число, которое делится на каждое из этих чисел без остатка. Например, НОК для 4 и 6 равно 12, так как это наименьшее число, которое делится на 4 и на 6.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Для вычисления НОД мы используем **алгоритм Евклида**, который является очень эффективным методом. Для нахождения НОК мы используем формулу, которая связывает НОК и НОД: <code>НОК(a, b) = |a * b| / НОД(a, b)</code>. Это позволяет нам быстро получить оба значения.</p>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✍️ В математике</h4>
+                        <p>НОД и НОК используются для сокращения дробей и приведения их к общему знаменателю.</p>
+                    </div>
+                    <div class="example">
+                        <h4>👨‍💻 В программировании</h4>
+                        <p>НОД и НОК находят применение в криптографии и алгоритмах, связанных с теорией чисел.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📚 В реальной жизни</h4>
+                        <p>Помогают решать задачи, связанные с расписаниями, циклами и пропорциями.</p>
+                    </div>
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateBtn = document.getElementById('calculate-btn');
+            const numberInputs = [
+                document.getElementById('number1'),
+                document.getElementById('number2'),
+                document.getElementById('number3')
+            ];
+            const resultContainer = document.getElementById('result-container');
+            const gcdResult = document.getElementById('gcd-result');
+            const lcmResult = document.getElementById('lcm-result');
+            const errorMessage = document.getElementById('error-message');
+
+            // Функция для нахождения НОД
+            function gcd(a, b) {
+                return b === 0 ? a : gcd(b, a % b);
+            }
+
+            // Функция для нахождения НОК
+            function lcm(a, b) {
+                if (a === 0 || b === 0) return 0;
+                return Math.abs(a * b) / gcd(a, b);
+            }
+
+            calculateBtn.addEventListener('click', () => {
+                const numbers = numberInputs.map(input => {
+                    if (input.value === '') return null;
+                    return parseInt(input.value);
+                }).filter(num => num !== null && !isNaN(num) && num > 0);
+
+                if (numbers.length < 2) {
+                    showError('Пожалуйста, введите как минимум два положительных целых числа.');
+                    return;
+                }
+
+                hideError();
+
+                let currentGcd = numbers[0];
+                let currentLcm = numbers[0];
+
+                for (let i = 1; i < numbers.length; i++) {
+                    currentGcd = gcd(currentGcd, numbers[i]);
+                    currentLcm = lcm(currentLcm, numbers[i]);
+                }
+                
+                gcdResult.textContent = currentGcd;
+                lcmResult.textContent = currentLcm;
+                resultContainer.style.display = 'grid';
+            });
+            
+            function showResult() {
+                resultContainer.style.display = 'grid';
+            }
+
+            function hideResult() {
+                resultContainer.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                hideResult();
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+
+            numberInputs.forEach(input => {
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        calculateBtn.click();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

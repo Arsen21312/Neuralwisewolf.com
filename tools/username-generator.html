@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор никнеймов | Neural Wise Wolf</title>
+    <meta name="description" content="Создайте уникальный и запоминающийся никнейм или имя пользователя. Рандомный генератор для игр, соцсетей и любых проектов.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .generator-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .result-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .username-display {
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            word-wrap: break-word;
+            padding: 1rem;
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="username-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор никнеймов</h1>
+                <p class="tool-description">Создайте уникальный и запоминающийся никнейм для игр, социальных сетей или форумов.</p>
+            </div>
+
+            <div class="generator-container">
+                <div class="result-box">
+                    <p class="field-label">Сгенерированный никнейм</p>
+                    <div id="username-result" class="username-display"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="generate-btn">
+                        🎲 Сгенерировать
+                    </button>
+                    <button class="btn btn-secondary" id="copy-btn">
+                        Скопировать
+                    </button>
+                </div>
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Генерируем...</p>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>✨ Креативные идеи</h4>
+                    <p>Генерирует имена, сочетая разные слова и концепции для уникального результата.</p>
+                </div>
+                <div class="feature">
+                    <h4>🚀 Мгновенная работа</h4>
+                    <p>Создает новый никнейм за доли секунды, сколько бы раз вы ни нажали.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Вся генерация происходит на вашей стороне, в браузере, без отправки данных.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Зачем нужен генератор никнеймов?</h2>
+                <p>Выбор имени пользователя — это важный шаг. Никнейм — это ваша цифровая визитная карточка, которая должна быть уникальной, запоминающейся и отражать вашу индивидуальность. Наш генератор помогает найти вдохновение и создать имя, которое еще не занято, особенно в играх и популярных социальных сетях.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Инструмент использует списки слов (прилагательные, существительные, глаголы), а затем случайным образом комбинирует их, чтобы получить уникальную фразу. К получившемуся имени могут добавляться числа, что увеличивает количество возможных комбинаций до бесконечности.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultBox = document.getElementById('username-result');
+            const generateBtn = document.getElementById('generate-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const loadingIndicator = document.getElementById('loading');
+
+            const adjectives = ['Быстрый', 'Умный', 'Темный', 'Яркий', 'Скрытный', 'Веселый', 'Могучий', 'Смелый', 'Тихий', 'Ловкий'];
+            const nouns = ['Волк', 'Лис', 'Енот', 'Дракон', 'Феникс', 'Сокол', 'Герой', 'Мастер', 'Рыцарь', 'Воин'];
+            const verbs = ['Бегущий', 'Кричащий', 'Летающий', 'Прыгающий', 'Спящий', 'Прячущийся', 'Охотник', 'Защитник'];
+
+            function getRandomElement(arr) {
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+
+            function generateUsername() {
+                const usernameType = Math.floor(Math.random() * 3);
+                let username;
+
+                if (usernameType === 0) {
+                    username = getRandomElement(adjectives) + getRandomElement(nouns);
+                } else if (usernameType === 1) {
+                    username = getRandomElement(nouns) + getRandomElement(verbs);
+                } else {
+                    username = getRandomElement(nouns) + (Math.floor(Math.random() * 90) + 10);
+                }
+                
+                return username;
+            }
+
+            function generateAndDisplayUsername() {
+                loadingIndicator.style.display = 'block';
+                setTimeout(() => {
+                    resultBox.textContent = generateUsername();
+                    loadingIndicator.style.display = 'none';
+                }, 100);
+            }
+
+            generateBtn.addEventListener('click', generateAndDisplayUsername);
+
+            copyBtn.addEventListener('click', () => {
+                const username = resultBox.textContent;
+                if (username) {
+                    navigator.clipboard.writeText(username).then(() => {
+                        alert('Никнейм скопирован в буфер обмена!');
+                    }).catch(err => {
+                        console.error('Не удалось скопировать текст: ', err);
+                        alert('Не удалось скопировать никнейм. Пожалуйста, скопируйте вручную.');
+                    });
+                }
+            });
+
+            generateAndDisplayUsername(); // Generate a username on page load
+        });
+    </script>
+</body>
+
+</html>

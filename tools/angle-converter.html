@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+  <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Конвертер углов | Neural Wise Wolf</title>
+  <meta name="description" content="Быстрый конвертер углов: градусы ↔ радианы ↔ градианы ↔ обороты. Формулы, примеры, точность.">
+  <base href="/">
+  <link rel="stylesheet" href="assets/styles.css">
+
+  <style>
+    .tool-header{ text-align:center; margin-bottom:1.5rem; }
+    .tool-header p{ max-width:640px; margin:.25rem auto 0; color:var(--text-secondary); }
+
+    .angle-tool{ max-width:880px; margin:0 auto; }
+    .panel{
+      background:var(--bg-primary); border:1px solid var(--border-light);
+      border-radius:20px; box-shadow:var(--shadow-md); padding:1.25rem; margin-bottom:1rem;
+    }
+    .inputs-grid{
+      display:grid; gap:.75rem;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    }
+    .field{ background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:12px; padding:.75rem; }
+    .field label{ display:block; font-weight:700; font-size:.9rem; margin-bottom:.35rem; color:var(--text-primary); }
+    .field .row{ display:flex; gap:.5rem; align-items:center; }
+    .field input{
+      flex:1; padding:.65rem .75rem; border:1.5px solid var(--border-medium);
+      border-radius:10px; background:var(--bg-primary); color:var(--text-primary); font-size:1rem;
+    }
+    .field input:focus{ outline:none; border-color:var(--accent-primary); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent); }
+    .mini-btn{ padding:.5rem .7rem; border:1px solid var(--border-medium); background:var(--bg-primary); border-radius:8px; cursor:pointer; }
+    .mini-btn:hover{ background:var(--bg-secondary); }
+
+    .controls{ display:flex; gap:.5rem; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-top:.5rem; }
+    .controls .left{ display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+    .select{
+      padding:.55rem .7rem; border:1.5px solid var(--border-medium); background:var(--bg-secondary);
+      color:var(--text-primary); border-radius:10px;
+    }
+
+    .result-card{
+      border:2px solid var(--accent-primary); background:var(--bg-secondary);
+      border-radius:16px; padding:1rem; text-align:center; margin-top:.75rem;
+    }
+    .result-value{ font-size:1.6rem; font-weight:800; color:var(--accent-primary); margin:0; }
+    .result-sub{ color:var(--text-secondary); margin:.25rem 0 0; }
+
+    .tips{ margin-top:1rem; display:grid; gap:.75rem; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+    .tip{ background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:12px; padding:.9rem; }
+    .tip h4{ margin:.1rem 0 .35rem; font-size:.95rem; }
+    .tip p{ margin:0; color:var(--text-secondary); font-size:.9rem; }
+
+    .tool-features{ margin-top:28px; padding-top:18px; border-top:1px solid var(--border-light); }
+    .tool-features .feature{ margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+  <div data-include="header"></div>
+  <div data-include="sidebar"></div>
+  <div id="overlay" class="overlay"></div>
+
+  <main class="tool" data-category="convert" data-slug="angle-converter">
+    <div class="tool-container">
+      <div class="tool-header">
+        <h1>Конвертер углов</h1>
+        <p class="tool-description">Переводи градусы, радианы, градианы и обороты за секунду. Вводи любое поле — остальные посчитаются.</p>
+      </div>
+
+      <div class="angle-tool">
+        <div class="panel">
+          <div class="inputs-grid">
+            <div class="field">
+              <label>Градусы (°)</label>
+              <div class="row">
+                <input id="deg" inputmode="decimal" placeholder="например 180">
+                <button class="mini-btn" data-copy="deg">копия</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Радианы (rad)</label>
+              <div class="row">
+                <input id="rad" inputmode="decimal" placeholder="π ≈ 3.14159">
+                <button class="mini-btn" data-copy="rad">копия</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Градианы (gon)</label>
+              <div class="row">
+                <input id="gon" inputmode="decimal" placeholder="например 200">
+                <button class="mini-btn" data-copy="gon">копия</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Обороты (turn)</label>
+              <div class="row">
+                <input id="turn" inputmode="decimal" placeholder="например 0.5">
+                <button class="mini-btn" data-copy="turn">копия</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="left">
+              <label for="prec">Точность:</label>
+              <select id="prec" class="select">
+                <option value="0">0 знаков</option>
+                <option value="2" selected>2 знака</option>
+                <option value="4">4 знака</option>
+                <option value="6">6 знаков</option>
+              </select>
+
+              <label for="piFmt">π-формат радиан:</label>
+              <select id="piFmt" class="select">
+                <option value="auto" selected>авто (k·π)</option>
+                <option value="decimal">десятичный</option>
+              </select>
+            </div>
+
+            <div class="left">
+              <button class="mini-btn" id="swapDegRad">⇄ градусы ↔ радианы</button>
+              <button class="mini-btn" id="clearAll">очистить</button>
+            </div>
+          </div>
+
+          <div class="result-card">
+            <p class="result-value" id="headline">—</p>
+            <p class="result-sub" id="headlineSub">Введите любое значение</p>
+          </div>
+        </div>
+
+        <div class="tips">
+          <div class="tip">
+            <h4>Формулы</h4>
+            <p>rad = deg × π / 180 ·· deg = rad × 180 / π</p>
+            <p>gon = deg × 10 / 9 ·· deg = gon × 0.9</p>
+            <p>turn = deg / 360 ·· deg = turn × 360</p>
+          </div>
+          <div class="tip">
+            <h4>Частые значения</h4>
+            <p>90° = π/2 rad = 100 gon = 0.25 turn</p>
+            <p>180° = π rad = 200 gon = 0.5 turn</p>
+          </div>
+          <div class="tip">
+            <h4>Советы</h4>
+            <p>Включи “авто (k·π)”, чтобы радианы показывались как кратные π при близких значениях.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-features">
+        <div class="feature">
+          <h4>🎯 Точная конвертация</h4>
+          <p>Градусы, радианы, градианы, обороты. Управление точностью и формат π.</p>
+        </div>
+        <div class="feature">
+          <h4>⚡ Живой пересчёт</h4>
+          <p>Считаем при вводе любого поля. Кнопка копирования рядом.</p>
+        </div>
+        <div class="feature">
+          <h4>🧮 Полезные формулы</h4>
+          <p>Под рукой стандартные связи между единицами и готовые примеры.</p>
+        </div>
+      </div>
+
+      <div data-include="related"></div>
+    </div>
+  </main>
+
+  <div data-include="footer"></div>
+
+  <script src="js/loader.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const deg = document.getElementById('deg');
+      const rad = document.getElementById('rad');
+      const gon = document.getElementById('gon');
+      const turn = document.getElementById('turn');
+      const prec = document.getElementById('prec');
+      const piFmt = document.getElementById('piFmt');
+      const headline = document.getElementById('headline');
+      const headlineSub = document.getElementById('headlineSub');
+
+      const inputs = {deg, rad, gon, turn};
+
+      const clampNum = v => {
+        if (v === '' || v === null || v === undefined) return null;
+        const n = Number(String(v).replace(',', '.'));
+        return Number.isFinite(n) ? n : null;
+      };
+
+      function format(n){
+        const p = parseInt(prec.value,10);
+        return (Number.isFinite(n)) ? n.toFixed(p) : '—';
+      }
+
+      function toPiForm(x){
+        if (piFmt.value !== 'auto') return format(x);
+        const p = parseInt(prec.value,10);
+        const k = x / Math.PI;
+        const r = Math.round(k*10**p)/10**p;
+        if (Math.abs(k - r) < 10**(-(p+1))) {
+          if (Math.abs(r) < 1e-12) return '0';
+          if (Math.abs(r - 1) < 1e-12) return 'π';
+          if (Math.abs(r + 1) < 1e-12) return '-π';
+          return r + '·π';
+        }
+        return x.toFixed(p);
+      }
+
+      function fromDeg(d){
+        return {
+          deg: d,
+          rad: d * Math.PI / 180,
+          gon: d * 10 / 9,
+          turn: d / 360
+        };
+      }
+      function fromRad(r){
+        return fromDeg(r * 180 / Math.PI);
+      }
+      function fromGon(g){
+        return fromDeg(g * 0.9);
+      }
+      function fromTurn(t){
+        return fromDeg(t * 360);
+      }
+
+      function updateFrom(source){
+        const val = clampNum(inputs[source].value);
+        if (val === null){ headline.textContent = '—'; headlineSub.textContent='Введите значение'; return; }
+
+        let res;
+        if (source==='deg') res = fromDeg(val);
+        if (source==='rad') res = fromRad(val);
+        if (source==='gon') res = fromGon(val);
+        if (source==='turn') res = fromTurn(val);
+
+        deg.value  = format(res.deg);
+        rad.value  = (piFmt.value==='auto') ? toPiForm(res.rad) : format(res.rad);
+        gon.value  = format(res.gon);
+        turn.value = format(res.turn);
+
+        headline.textContent = `${format(res.deg)}° ⇄ ${piFmt.value==='auto' ? toPiForm(res.rad) : format(res.rad)} rad`;
+        headlineSub.textContent = `${format(res.deg)}° = ${format(res.gon)} gon = ${format(res.turn)} turn`;
+      }
+
+      // events
+      Object.keys(inputs).forEach(k=>{
+        inputs[k].addEventListener('input', () => updateFrom(k));
+        inputs[k].addEventListener('focus', e => e.target.select());
+      });
+      prec.addEventListener('change', ()=>{
+        // пересчитать из текущего приоритета: берем не пустое поле по очереди
+        const src = ['deg','rad','gon','turn'].find(k => clampNum(inputs[k].value)!==null) || 'deg';
+        updateFrom(src);
+      });
+      piFmt.addEventListener('change', ()=> {
+        const src = ['deg','rad','gon','turn'].find(k => clampNum(inputs[k].value)!==null) || 'deg';
+        updateFrom(src);
+      });
+
+      document.getElementById('swapDegRad').addEventListener('click', ()=>{
+        const d = clampNum(deg.value); const r = clampNum(rad.value);
+        if (d!==null){ rad.value = (d*Math.PI/180).toString(); updateFrom('rad'); }
+        else if (r!==null){ deg.value = (r*180/Math.PI).toString(); updateFrom('deg'); }
+      });
+      document.getElementById('clearAll').addEventListener('click', ()=>{
+        Object.values(inputs).forEach(i=>i.value='');
+        headline.textContent='—'; headlineSub.textContent='Введите любое значение';
+      });
+
+      // copy buttons
+      document.querySelectorAll('[data-copy]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = btn.getAttribute('data-copy');
+          const el = document.getElementById(id);
+          navigator.clipboard.writeText(el.value || '').catch(()=>{});
+        });
+      });
+
+      // URL ?deg=90 etc.
+      const q = new URLSearchParams(location.search);
+      if (q.has('deg')) { deg.value = q.get('deg'); updateFrom('deg'); }
+      else if (q.has('rad')) { rad.value = q.get('rad'); updateFrom('rad'); }
+      else if (q.has('gon')) { gon.value = q.get('gon'); updateFrom('gon'); }
+      else if (q.has('turn')) { turn.value = q.get('turn'); updateFrom('turn'); }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор случайных промптов | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенный генератор идей для историй, рисунков или любого творческого проекта. Получите уникальный промпт одним нажатием кнопки.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .random-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            word-wrap: break-word;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            line-height: 1.5;
+        }
+        
+        .result-value.visible {
+            opacity: 1;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-prompt-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор случайных промптов</h1>
+                <p class="tool-description">Получите случайную идею для своего следующего творческого проекта. Отлично подходит для писателей, художников и всех, кому нужно вдохновение!</p>
+            </div>
+
+            <div class="random-generator">
+                <div class="generator-card">
+                    <button class="btn btn-primary btn-full" id="generateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Сгенерировать промпт
+                    </button>
+
+                    <div class="result-container">
+                        <span class="result-title" id="resultLabel">Ваша идея:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>💡 Неожиданные идеи</h4>
+                        <p>Генерирует уникальные комбинации, которые помогут вам выйти за рамки привычного мышления.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенное вдохновение</h4>
+                        <p>Получите новую идею за доли секунды.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>✍️ Полезно для творчества</h4>
+                        <p>Идеально подходит для писателей, художников, гейм-дизайнеров и всех, кто работает над творческими проектами.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Что такое творческий промпт?</h2>
+                    <p><strong>Промпт</strong> — это короткое описание, которое служит отправной точкой для творческого проекта. Он может задавать персонажа, место, ситуацию или конфликт, оставляя остальное на волю вашего воображения.</p>
+                    
+                    <h3>💡 Как работает генератор?</h3>
+                    <p>Наш генератор работает по принципу случайной комбинации элементов. Он выбирает один элемент из каждой категории:</p>
+                    <ul>
+                        <li>**Персонаж:** "Одинокий робот", "Старый моряк", "Молодой волшебник".</li>
+                        <li>**Действие:** "пытается найти потерянный артефакт", "должен разгадать древнюю загадку", "сражается с собственными страхами".</li>
+                        <li>**Ситуация:** "в заброшенном городе", "на краю света", "в волшебном лесу".</li>
+                    </ul>
+                    <p>Объединяя эти части, генератор создает свежие и интересные идеи. Например: "Одинокий робот в волшебном лесу должен разгадать древнюю загадку".</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const resultLabel = document.getElementById('resultLabel');
+            const resultValue = document.getElementById('resultValue');
+
+            const characters = [
+                "Молодой волшебник", "Древний воин", "Космический пират", "Одинокий робот",
+                "Девочка с говорящей собакой", "Старый детектив", "Путешественник во времени",
+                "Медиум, который боится призраков", "Шеф-повар-кунг-фу мастер"
+            ];
+
+            const actions = [
+                "пытается найти потерянный артефакт", "должен разгадать древнюю загадку", "сражается с собственными страхами",
+                "ищет способ вернуться домой", "должен спасти мир от катастрофы", "пытается найти лекарство",
+                "ищет своего пропавшего учителя", "пытается понять своё предназначение"
+            ];
+            
+            const settings = [
+                "в заброшенном городе", "на краю света", "в волшебном лесу", "на борту старого корабля",
+                "в мире, где магия — это технология", "на футуристической станции", "в мире, где исчезли все цвета",
+                "в городе, где никто не спит"
+            ];
+            
+            const fullPrompts = [
+                "Напиши историю о последнем драконе, который прячется в современном мегаполисе.",
+                "Опиши мир, где люди общаются только с помощью музыки.",
+                "Придумай персонажа, который может видеть прошлое предметов, к которым прикасается.",
+                "Что произойдет, если исчезнет гравитация, но только для одного человека?",
+                "Создай историю о дружбе между призраком и человеком, который может его видеть."
+            ];
+
+            generateBtn.addEventListener('click', generateRandomPrompt);
+
+            function generateRandomPrompt() {
+                let prompt = '';
+                const format = Math.floor(Math.random() * 3);
+                
+                if (format === 0) {
+                    // Формат: Персонаж + Действие + Ситуация
+                    const character = characters[Math.floor(Math.random() * characters.length)];
+                    const action = actions[Math.floor(Math.random() * actions.length)];
+                    const setting = settings[Math.floor(Math.random() * settings.length)];
+                    prompt = `${character} ${action} ${setting}.`;
+                } else if (format === 1) {
+                    // Формат: Полный промпт
+                    prompt = fullPrompts[Math.floor(Math.random() * fullPrompts.length)];
+                } else {
+                    // Формат: Персонаж + Ситуация
+                    const character = characters[Math.floor(Math.random() * characters.length)];
+                    const setting = settings[Math.floor(Math.random() * settings.length)];
+                    prompt = `${character} ${setting}.`;
+                }
+
+                resultValue.classList.remove('visible');
+                resultLabel.style.display = 'block';
+
+                setTimeout(() => {
+                    resultValue.textContent = prompt;
+                    resultValue.classList.add('visible');
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

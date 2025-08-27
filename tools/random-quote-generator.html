@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор случайных цитат | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенный генератор случайных вдохновляющих и мудрых цитат. Идеально подходит для вдохновения, размышлений и постов в соцсетях.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .random-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .quote-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .quote-value.visible {
+            opacity: 1;
+        }
+        
+        .quote-author {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-align: right;
+            width: 100%;
+            margin-top: 1rem;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .quote-author.visible {
+            opacity: 1;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-quote-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор случайных цитат</h1>
+                <p class="tool-description">Получите дозу вдохновения или мудрости с помощью случайной цитаты из известных книг, фильмов и от великих личностей.</p>
+            </div>
+
+            <div class="random-generator">
+                <div class="generator-card">
+                    <button class="btn btn-primary btn-full" id="generateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        Сгенерировать цитату
+                    </button>
+
+                    <div class="result-container">
+                        <blockquote class="quote-value" id="quoteValue"></blockquote>
+                        <span class="quote-author" id="quoteAuthor"></span>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🧠 Мудрость и вдохновение</h4>
+                        <p>Наш генератор выбирает цитаты, которые заставляют задуматься и вдохновляют.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Цитата появляется за доли секунды, готовая к использованию.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📚 Полезно для творчества</h4>
+                        <p>Идеально подходит для постов в социальных сетях, написания эссе или просто для размышлений.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Зачем нужен генератор случайных цитат?</h2>
+                    <p>Цитаты — это сжатая мудрость и опыт, которые могут стать источником вдохновения. Наш генератор помогает быстро найти новую идею для размышления, добавить цитату в свой блог или просто получить заряд мотивации. Иногда всего одна фраза может изменить ваш взгляд на вещи.</p>
+                    
+                    <h3>💡 Как работает генератор?</h3>
+                    <p>В коде есть заранее подготовленный массив объектов. Каждый объект содержит саму цитату и её автора. Когда вы нажимаете кнопку, JavaScript выбирает случайный объект из этого массива и отображает его на странице. Этот метод обеспечивает случайный и интересный результат при каждом нажатии.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const quoteValue = document.getElementById('quoteValue');
+            const quoteAuthor = document.getElementById('quoteAuthor');
+
+            const quotes = [
+                {
+                    quote: "Единственный способ делать великие дела — любить то, что ты делаешь.",
+                    author: "Стив Джобс"
+                },
+                {
+                    quote: "Будьте собой; все остальные роли уже заняты.",
+                    author: "Оскар Уайльд"
+                },
+                {
+                    quote: "Воображение важнее знаний, ибо знание ограничено, а воображение охватывает весь мир.",
+                    author: "Альберт Эйнштейн"
+                },
+                {
+                    quote: "Не спрашивай, что твоя страна может сделать для тебя, спроси, что ты можешь сделать для своей страны.",
+                    author: "Джон Ф. Кеннеди"
+                },
+                {
+                    quote: "Никогда не сдавайся. Сегодня тяжело, завтра будет ещё хуже, но послезавтра взойдёт солнце.",
+                    author: "Джек Ма"
+                },
+                {
+                    quote: "Самый большой секрет успеха — это отсутствие секрета. Просто делайте то, что вам нужно, пока у вас не получится.",
+                    author: "Колин Пауэлл"
+                },
+                {
+                    quote: "Жизнь — это то, что с вами происходит, пока вы строите другие планы.",
+                    author: "Джон Леннон"
+                },
+                {
+                    quote: "Успех — это сумма небольших усилий, повторяющихся изо дня в день.",
+                    author: "Роберт Кольер"
+                },
+                {
+                    quote: "Не тот велик, кто никогда не падал, а тот велик — кто падал и вставал.",
+                    author: "Конфуций"
+                },
+                {
+                    quote: "Ошибки — это доказательство того, что ты пытался.",
+                    author: "Неизвестный автор"
+                },
+                {
+                    quote: "Если ты можешь что-то представить, ты можешь этого добиться.",
+                    author: "Зиг Зиглар"
+                },
+                {
+                    quote: "Счастье не в том, чтобы иметь все, а в том, чтобы быть довольным тем, что имеешь.",
+                    author: "Неизвестный автор"
+                },
+                {
+                    quote: "Всегда выбирай самый трудный путь — на нем ты не встретишь конкурентов.",
+                    author: "Шарль де Голль"
+                },
+                {
+                    quote: "Неважно, как медленно ты движешься, главное — не останавливайся.",
+                    author: "Конфуций"
+                },
+                {
+                    quote: "Лучший способ предсказать будущее — создать его.",
+                    author: "Питер Друкер"
+                },
+                {
+                    quote: "Каждый может быть великим, потому что каждый может служить.",
+                    author: "Мартин Лютер Кинг-младший"
+                }
+            ];
+
+            generateBtn.addEventListener('click', generateRandomQuote);
+
+            function generateRandomQuote() {
+                const randomIndex = Math.floor(Math.random() * quotes.length);
+                const randomQuote = quotes[randomIndex];
+                
+                quoteValue.classList.remove('visible');
+                quoteAuthor.classList.remove('visible');
+
+                setTimeout(() => {
+                    quoteValue.textContent = randomQuote.quote;
+                    quoteAuthor.textContent = `- ${randomQuote.author}`;
+                    quoteValue.classList.add('visible');
+                    quoteAuthor.classList.add('visible');
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

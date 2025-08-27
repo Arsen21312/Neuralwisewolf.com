@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бросок кубиков | Neural Wise Wolf</title>
+    <meta name="description" content="Виртуальный бросок кубиков для настольных и ролевых игр. Подбросьте любой тип кубика и получите мгновенный результат.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .input-group select, .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        .input-group select:focus, .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .dice-results {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .dice-result-item {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 2px solid var(--border-light);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .dice-total {
+            margin-top: 1rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+        .dice-total span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="dice-roller">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Бросок кубиков</h1>
+                <p class="tool-description">Виртуальный бросок кубиков для настольных и ролевых игр. Подбросьте любой тип кубика и получите мгновенный результат.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-group">
+                    <label for="dice-count">Количество кубиков (1-10):</label>
+                    <input type="number" id="dice-count" value="1" min="1" max="10">
+                </div>
+                <div class="input-group">
+                    <label for="dice-type">Тип кубика:</label>
+                    <select id="dice-type">
+                        <option value="4">d4 (4-гранный)</option>
+                        <option value="6" selected>d6 (6-гранный)</option>
+                        <option value="8">d8 (8-гранный)</option>
+                        <option value="10">d10 (10-гранный)</option>
+                        <option value="12">d12 (12-гранный)</option>
+                        <option value="20">d20 (20-гранный)</option>
+                        <option value="100">d100 (100-гранный)</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary calculate-btn" id="roll-btn">
+                    🎲 Бросить кубики
+                </button>
+
+                <div class="dice-results">
+                    <div id="dice-output"></div>
+                    <div id="total-result" class="dice-total" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Полная случайность</h4>
+                    <p>Наш алгоритм основан на криптографически безопасном генераторе случайных чисел, что обеспечивает честный результат.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Поддержка разных кубиков</h4>
+                    <p>Используйте d4, d6, d8, d10, d12, d20 или d100 для любой игры.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для любых задач</h4>
+                    <p>Идеально подходит для D&D, Pathfinder или любой другой игры, где нужны кубики.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое виртуальный бросок кубиков?</h2>
+                <p>Виртуальный бросок кубиков — это удобная онлайн-альтернатива физическим кубикам. Вам больше не нужно носить с собой набор D&D-кубиков или искать замену, если один из них потерялся.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Наш инструмент использует генератор случайных чисел. Когда вы нажимаете кнопку "Бросить", скрипт генерирует нужное количество случайных чисел в заданном диапазоне. Например, для d20 он выбирает число от 1 до 20, а для d6 — от 1 до 6. Результаты каждого броска и их сумма отображаются на экране.</p>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✍️ Для настольных игр</h4>
+                        <p>Быстрый способ заменить потерянные или забытые кубики в любой игре.</p>
+                    </div>
+                    <div class="example">
+                        <h4>👨‍💻 Для ролевых игр</h4>
+                        <p>Идеально подходит для D&D, Pathfinder и других настольных ролевых игр, где часто используются разные типы кубиков.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📚 Для тренировок</h4>
+                        <p>Используйте инструмент, чтобы научиться быстро считать результаты бросков и улучшить свои навыки в играх.</p>
+                    </div>
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rollBtn = document.getElementById('roll-btn');
+            const diceCountInput = document.getElementById('dice-count');
+            const diceTypeInput = document.getElementById('dice-type');
+            const diceOutput = document.getElementById('dice-output');
+            const totalResult = document.getElementById('total-result');
+
+            rollBtn.addEventListener('click', () => {
+                const count = parseInt(diceCountInput.value);
+                const type = parseInt(diceTypeInput.value);
+
+                if (isNaN(count) || count < 1 || count > 10) {
+                    alert('Пожалуйста, введите количество кубиков от 1 до 10.');
+                    return;
+                }
+
+                diceOutput.innerHTML = '';
+                let total = 0;
+                
+                for (let i = 0; i < count; i++) {
+                    const result = Math.floor(Math.random() * type) + 1;
+                    total += result;
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'dice-result-item';
+                    resultItem.textContent = result;
+                    diceOutput.appendChild(resultItem);
+                }
+
+                totalResult.textContent = `Сумма: ${total}`;
+                totalResult.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

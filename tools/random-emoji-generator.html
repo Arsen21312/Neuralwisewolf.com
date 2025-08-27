@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор случайных эмодзи | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенный генератор случайных эмодзи. Идеально подходит для общения, игр и просто для поднятия настроения.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .random-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+
+        .result-value {
+            font-size: 5rem;
+            font-weight: 700;
+            word-wrap: break-word;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            line-height: 1;
+        }
+        
+        .result-value.visible {
+            opacity: 1;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-emoji-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор случайных эмодзи</h1>
+                <p class="tool-description">Получите случайный эмодзи одним нажатием кнопки. Идеально подходит для игр, чатов и просто для веселья.</p>
+            </div>
+
+            <div class="random-generator">
+                <div class="generator-card">
+                    <button class="btn btn-primary btn-full" id="generateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                        Сгенерировать эмодзи
+                    </button>
+
+                    <div class="result-container">
+                        <span class="result-title" id="resultLabel">Ваш случайный эмодзи:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>😂 Большой выбор</h4>
+                        <p>Генератор выбирает из большого и разнообразного списка популярных эмодзи.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Эмодзи появляется на экране за доли секунды, готовый к копированию и использованию.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🕹️ Полезно для развлечения</h4>
+                        <p>Используйте этот инструмент для игр, поднятия настроения или добавления случайного элемента в свои сообщения.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Зачем нужен генератор случайных эмодзи?</h2>
+                    <p>Эмодзи — это отличный способ выразить эмоции и добавить красок в общение. Наш генератор помогает, когда вы не можете решить, какой эмодзи использовать. Просто нажмите кнопку и позвольте ему выбрать за вас! Это весёлый способ найти вдохновение или просто посмеяться.</p>
+                    
+                    <h3>💡 Как работает генератор?</h3>
+                    <p>В коде есть заранее подготовленный массив с символами эмодзи. Когда вы нажимаете кнопку, JavaScript выбирает случайный элемент из этого массива и отображает его на странице. Этот метод гарантирует абсолютно случайный и интересный результат при каждом нажатии.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const resultLabel = document.getElementById('resultLabel');
+            const resultValue = document.getElementById('resultValue');
+
+            const emojis = [
+                '😂', '🤣', '😭', '😊', '😇', '😍', '🤩', '😘', '😋', '😜', '🤪', '😎', '🤓', '🥳', '😩', '🥺', '😢', '😤', '😡', '🤬',
+                '🤯', '😳', '🤔', '🤫', '😶', '🤨', '😐', '😏', '😒', '🙄', '😬', '😮', '😵', '🤒', '🤕', '😴', '🤤', '😷', '💩', '👻',
+                '👽', '🤖', '👾', '🙈', '🙉', '🙊', '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸',
+                '🦄', '🐴', '🦅', '🦉', '🦋', '🐞', '🐢', '🦀', '🦞', '🦐', '🦑', '🐙', '🐠', '🐬', '🐳', '🦈', '🦓', '🦒', '🐘', '🦏',
+                '🐑', '🐐', '🐪', '🦘', '🐓', '🦃', '🦜', '🦚', '🦢', '🕊️', '🐧', '🐉', '🦖', '🦕', '🎄', '🎁', '🎈', '🎉', '🎊', '🎁',
+                '🎂', '🎃', '✨', '⚡️', '🔥', '💧', '🌈', '☀️', '🌕', '🌟', '❄️', '☃️', '🌸', '🌹', '🌺', '🌻', '🍓', '🍇', '🍉', '🍌',
+                '🍍', '🍎', '🍔', '🍟', '🍕', '🌮', '🍣', '🍜', '🍩', '🍫', '🍬', '🥂', '🍻', '☕️', '🍵', '✈️', '🚗', '🚂', '🚲', '🚀',
+                '💡', '⏰', '📱', '💻', '🎮', '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '‼️', '💯', '✔️', '✅',
+                '❓', '❕', '❤️‍🔥', '🤯', '🥳', '🚀'
+            ];
+
+            generateBtn.addEventListener('click', generateRandomEmoji);
+
+            function generateRandomEmoji() {
+                const randomIndex = Math.floor(Math.random() * emojis.length);
+                const randomEmoji = emojis[randomIndex];
+                
+                resultValue.classList.remove('visible');
+                resultLabel.style.display = 'block';
+
+                setTimeout(() => {
+                    resultValue.textContent = randomEmoji;
+                    resultValue.classList.add('visible');
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

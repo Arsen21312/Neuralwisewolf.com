@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор вероятностей | Neural Wise Wolf</title>
+    <meta name="description" content="Быстрый калькулятор для определения вероятности события. Идеально подходит для учебы, статистики и решения задач.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .probability-calculator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+            box-sizing: border-box;
+        }
+
+        .value-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-top: 0.5rem;
+            word-wrap: break-word;
+        }
+        
+        .result-value.percent {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-top: 0;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="probability-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор вероятностей</h1>
+                <p class="tool-description">Быстро и точно рассчитайте вероятность события. Отличный инструмент для учебы, игр и статистики.</p>
+            </div>
+
+            <div class="probability-calculator">
+                <div class="calculator-card">
+                    <div class="input-group">
+                        <label for="favorableInput">Количество благоприятных исходов:</label>
+                        <input type="number" id="favorableInput" class="value-input" step="1" min="0" placeholder="Например, 1">
+                    </div>
+                    <div class="input-group">
+                        <label for="totalInput">Общее количество исходов:</label>
+                        <input type="number" id="totalInput" class="value-input" step="1" min="1" placeholder="Например, 6">
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="calculateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Рассчитать
+                    </button>
+
+                    <div class="result-container" id="resultContainer">
+                        <span class="result-label">Вероятность:</span>
+                        <div class="result-value" id="resultValue"></div>
+                        <div class="result-value percent" id="resultPercent"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>📈 Простые расчеты</h4>
+                        <p>Вычисляйте вероятность простых событий всего в два шага: введите количество исходов и получите результат.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Результат выводится в реальном времени, без задержек.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎓 Полезно для учебы</h4>
+                        <p>Отличный помощник для студентов и школьников при изучении основ теории вероятностей.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Основы теории вероятностей</h2>
+                    <p><strong>Вероятность</strong> — это мера возможности наступления некоторого события. Она выражается числом от 0 до 1, где 0 означает невозможное событие, а 1 — достоверное.</p>
+                    <p>Самый простой способ рассчитать вероятность — это разделить количество благоприятных исходов на общее количество всех возможных исходов.</p>
+                    
+                    <h3>💡 Как использовать калькулятор?</h3>
+                    <p>Представьте, что вы бросаете игральную кость. Какова вероятность, что выпадет число 4?</p>
+                    <ul>
+                        <li>**Благоприятный исход:** Есть только один вариант, когда выпадает 4. Значит, в поле **"Благоприятные исходы"** введите `1`.</li>
+                        <li>**Общее количество исходов:** У игральной кости 6 граней. Значит, в поле **"Общее количество исходов"** введите `6`.</li>
+                    </ul>
+                    <p>Наш калькулятор покажет результат: **0.1667** (или **16.67%**). Именно так легко можно решать задачи на вероятность!</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const favorableInput = document.getElementById('favorableInput');
+            const totalInput = document.getElementById('totalInput');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultValue = document.getElementById('resultValue');
+            const resultPercent = document.getElementById('resultPercent');
+
+            calculateBtn.addEventListener('click', calculateProbability);
+            [favorableInput, totalInput].forEach(input => {
+                input.addEventListener('input', calculateProbability);
+            });
+
+            function calculateProbability() {
+                const favorable = parseInt(favorableInput.value);
+                const total = parseInt(totalInput.value);
+
+                if (isNaN(favorable) || isNaN(total) || total <= 0 || favorable < 0 || favorable > total) {
+                    resultContainer.style.display = 'none';
+                    return;
+                }
+
+                const probability = favorable / total;
+
+                resultValue.textContent = probability.toFixed(4);
+                resultPercent.textContent = `(${ (probability * 100).toFixed(2) }%)`;
+                resultContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

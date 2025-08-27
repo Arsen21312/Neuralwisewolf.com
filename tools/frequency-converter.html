@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер частоты | Neural Wise Wolf</title>
+    <meta name="description" content="Преобразуйте единицы частоты: герцы, килогерцы, мегагерцы, гигагерцы и другие. Точный расчет для радио, электроники и физики.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .frequency-converter {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .converter-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .input-group, .output-group {
+            margin-bottom: 0;
+        }
+
+        .input-group label, .output-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input, .unit-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .value-input:focus, .unit-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .swap-button {
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.15rem;
+        }
+
+        .swap-button:hover {
+            background: var(--border-light);
+            transform: rotate(180deg);
+        }
+
+        .convert-btn {
+            grid-column: 1 / -1;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        .results-container {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-item {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+
+        .frequency-examples {
+            margin-top: 2rem;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .example-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-primary);
+        }
+
+        .example-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .example-frequency {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .period-wavelength {
+            margin-top: 2rem;
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .period-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .swap-button {
+                margin: 0 auto;
+                transform: rotate(90deg);
+                width: fit-content;
+                padding: 0.5rem;
+            }
+            .swap-button:hover {
+                transform: rotate(270deg);
+            }
+
+            .converter-card {
+                padding: 1.5rem;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .period-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="convert" data-slug="frequency-converter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Конвертер частоты</h1>
+                <p class="tool-description">Мгновенное преобразование между единицами измерения частоты и расчет периода</p>
+            </div>
+
+            <div class="frequency-converter">
+                <div class="converter-card">
+                    <div class="converter-grid">
+                        <div class="input-group">
+                            <label for="inputValue">Значение частоты:</label>
+                            <input type="number" id="inputValue" class="value-input" placeholder="Введите значение" step="any" value="1000">
+                        </div>
+
+                        <button class="swap-button" id="swapButton" title="Поменять единицы местами">
+                            ⇄
+                        </button>
+
+                        <div class="input-group">
+                            <label for="inputUnit">Из:</label>
+                            <select id="inputUnit" class="unit-select">
+                                <option value="Hz">Герц (Hz)</option>
+                                <option value="kHz">Килогерц (kHz)</option>
+                                <option value="MHz">Мегагерц (MHz)</option>
+                                <option value="GHz">Гигагерц (GHz)</option>
+                                <option value="THz">Терагерц (THz)</option>
+                                <option value="rpm">Оборотов в минуту (rpm)</option>
+                                <option value="rad/s">Радиан в секунду (rad/s)</option>
+                            </select>
+                        </div>
+
+                        <div class="output-group">
+                            <label for="outputUnit">В:</label>
+                            <select id="outputUnit" class="unit-select">
+                                <option value="Hz" selected>Герц (Hz)</option>
+                                <option value="kHz">Килогерц (kHz)</option>
+                                <option value="MHz">Мегагерц (MHz)</option>
+                                <option value="GHz">Гигагерц (GHz)</option>
+                                <option value="THz">Терагерц (THz)</option>
+                                <option value="rpm">Оборотов в минуту (rpm)</option>
+                                <option value="rad/s">Радиан в секунду (rad/s)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary convert-btn" id="convertButton">
+                        🔄 Конвертировать
+                    </button>
+
+                    <div class="results-container">
+                        <h3 style="margin-bottom: 1rem; text-align: center;">Результат</h3>
+                        <div class="results-grid">
+                            <div class="result-item">
+                                <p class="result-value" id="resultValue">1000</p>
+                                <p class="result-label" id="resultLabel">Герц (Hz)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="period-wavelength">
+                        <h3>📐 Связанные величины</h3>
+                        <div class="period-grid">
+                            <div class="result-item">
+                                <p class="result-value" id="periodValue">0.001</p>
+                                <p class="result-label">Период (секунды)</p>
+                            </div>
+                            <div class="result-item">
+                                <p class="result-value" id="angularValue">6283.185</p>
+                                <p class="result-label">Угловая частота (rad/s)</p>
+                            </div>
+                            <div class="result-item">
+                                <p class="result-value" id="wavelengthValue">299.792</p>
+                                <p class="result-label">Длина волны (м, для света)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="frequency-examples">
+                    <h3>📡 Примеры частот в природе и технике</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Нажмите на пример, чтобы использовать его для конвертации</p>
+                    
+                    <div class="examples-grid" id="examplesGrid">
+                        <!-- Примеры будут добавлены через JS -->
+                    </div>
+                </div>
+
+                <!-- Особенности -->
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🎯 Точный расчет</h4>
+                        <p>Используются точные коэффициенты преобразования между единицами измерения</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📊 Множество единиц</h4>
+                        <p>Работа с метрическими и специальными единицами частоты</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📐 Дополнительные расчеты</h4>
+                        <p>Автоматический расчет периода, угловой частоты и длины волны</p>
+                    </div>
+                </div>
+
+                <!-- SEO контент -->
+                <div class="article">
+                    <h2>Конвертер частоты: принципы работы и применение</h2>
+                    <p>Частота — физическая величина, характеризующая количество повторений периодического процесса в единицу времени. Наш конвертер использует точные математические формулы для преобразования между различными единицами измерения частоты.</p>
+                    
+                    <h3>📐 Основные единицы измерения частоты</h3>
+                    <ul>
+                        <li><strong>Герц (Hz)</strong> — основная единица частоты в системе СИ, 1 колебание в секунду</li>
+                        <li><strong>Килогерц (kHz)</strong> — 1000 герц, используется в радиосвязи</li>
+                        <li><strong>Мегагерц (MHz)</strong> — 1 000 000 герц, используется в радио и телевидении</li>
+                        <li><strong>Гигагерц (GHz)</strong> — 1 000 000 000 герц, используется в микроволновой технике и процессорах</li>
+                        <li><strong>Обороты в минуту (rpm)</strong> — единица измерения частоты вращения</li>
+                        <li><strong>Радиан в секунду (rad/s)</strong> — угловая частота</li>
+                    </ul>
+                    
+                    <h3>🧮 Формулы преобразования</h3>
+                    <p>Основные соотношения между единицами частоты:</p>
+                    <pre>1 kHz = 1000 Hz
+1 MHz = 1000 kHz = 1 000 000 Hz
+1 GHz = 1000 MHz = 1 000 000 000 Hz
+1 THz = 1000 GHz = 1 000 000 000 000 Hz
+1 rpm = 1/60 Hz ≈ 0.01667 Hz
+1 rad/s = 1/(2π) Hz ≈ 0.15915 Hz</pre>
+
+                    <h3>📐 Связанные величины</h3>
+                    <pre>Период T = 1/f
+Угловая частота ω = 2πf
+Длина волны λ = c/f (где c = 299792458 м/с - скорость света)</pre>
+                    
+                    <h3>💡 Практическое применение</h3>
+                    <div class="example-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>📻 Радиосвязь</h4>
+                            <p>Настройка частот радиопередатчиков и приемников</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>💻 Электроника</h4>
+                            <p>Расчет частот процессоров и тактовых генераторов</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🔊 Акустика</h4>
+                            <p>Работа со звуковыми частотами и музыкальными нотами</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Как перевести герцы в обороты в минуту?</strong><br>
+                    Умножить значение в герцах на 60. Например: 50 Hz × 60 = 3000 rpm.</p>
+                    
+                    <p><strong>Что такое угловая частота?</strong><br>
+                    Угловая частота показывает, на какой угол поворачивается вектор за единицу времени при круговом движении.</p>
+                    
+                    <p><strong>Как связаны частота и длина волны?</strong><br>
+                    Для электромагнитных волн: длина волны = скорость света / частота. Чем выше частота, тем короче длина волны.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const inputValueEl = document.getElementById('inputValue');
+            const inputUnitEl = document.getElementById('inputUnit');
+            const outputUnitEl = document.getElementById('outputUnit');
+            const convertButton = document.getElementById('convertButton');
+            const swapButton = document.getElementById('swapButton');
+            const resultValueEl = document.getElementById('resultValue');
+            const resultLabelEl = document.getElementById('resultLabel');
+            const periodValueEl = document.getElementById('periodValue');
+            const angularValueEl = document.getElementById('angularValue');
+            const wavelengthValueEl = document.getElementById('wavelengthValue');
+            const examplesGrid = document.getElementById('examplesGrid');
+
+            // Коэффициенты преобразования (базовая единица: Герц)
+            const conversionFactors = {
+                'Hz': 1,
+                'kHz': 1000,
+                'MHz': 1000000,
+                'GHz': 1000000000,
+                'THz': 1000000000000,
+                'rpm': 1/60,
+                'rad/s': 1/(2*Math.PI)
+            };
+
+            // Практические примеры частот
+            const frequencyExamples = [
+                { name: '🎵 Человеческое ухо', frequency: 20, unit: 'Hz', max: 20000, description: 'Диапазон слуха' },
+                { name: '🎼 Ля первой октавы', frequency: 440, unit: 'Hz', description: 'Стандартный камертон' },
+                { name: '📻 AM радио', frequency: 1000, unit: 'kHz', description: 'Средние волны' },
+                { name: '📻 FM радио', frequency: 100, unit: 'MHz', description: 'Ультракороткие волны' },
+                { name: '📱 Мобильная связь', frequency: 2.4, unit: 'GHz', description: '4G/LTE' },
+                { name: '🛰️ GPS спутники', frequency: 1.575, unit: 'GHz', description: 'L1 частота' },
+                { name: '🍽️ Микроволновка', frequency: 2.45, unit: 'GHz', description: 'Нагрев воды' },
+                { name: '💻 Процессор', frequency: 3.5, unit: 'GHz', description: 'Тактовая частота' },
+                { name: '🚗 Двигатель', frequency: 3000, unit: 'rpm', description: 'Холостой ход' }
+            ];
+
+            // Функция конвертации
+            function convertFrequency() {
+                const inputValue = parseFloat(inputValueEl.value);
+                const inputUnit = inputUnitEl.value;
+                const outputUnit = outputUnitEl.value;
+
+                if (isNaN(inputValue)) {
+                    alert('Пожалуйста, введите корректное числовое значение.');
+                    return;
+                }
+
+                // Конвертируем входное значение в базовые единицы (Герцы)
+                const valueInBaseUnit = inputValue * conversionFactors[inputUnit];
+                // Конвертируем из базовых единиц в desired единицы
+                const result = valueInBaseUnit / conversionFactors[outputUnit];
+
+                // Форматируем результат
+                let formattedResult;
+                if (result < 0.001) {
+                    formattedResult = result.toExponential(6);
+                } else if (result < 1) {
+                    formattedResult = result.toFixed(6);
+                } else if (result < 1000) {
+                    formattedResult = result.toFixed(3);
+                } else if (result < 1000000) {
+                    formattedResult = result.toFixed(1);
+                } else {
+                    formattedResult = result.toExponential(4);
+                }
+
+                // Обновляем UI
+                resultValueEl.textContent = formattedResult;
+                resultLabelEl.textContent = outputUnitEl.options[outputUnitEl.selectedIndex].text;
+
+                // Расчет дополнительных величин
+                calculateRelatedValues(valueInBaseUnit);
+            }
+
+            // Расчет связанных величин
+            function calculateRelatedValues(frequencyHz) {
+                // Период (секунды)
+                const period = frequencyHz > 0 ? 1 / frequencyHz : 0;
+                periodValueEl.textContent = period.toExponential(6);
+
+                // Угловая частота (радиан/секунду)
+                const angularFrequency = 2 * Math.PI * frequencyHz;
+                angularValueEl.textContent = angularFrequency.toExponential(6);
+
+                // Длина волны для света (метры)
+                const speedOfLight = 299792458; // м/с
+                const wavelength = frequencyHz > 0 ? speedOfLight / frequencyHz : 0;
+                wavelengthValueEl.textContent = wavelength.toExponential(6);
+            }
+
+            // Функция смены единиц местами
+            function swapUnits() {
+                const tempUnit = inputUnitEl.value;
+                inputUnitEl.value = outputUnitEl.value;
+                outputUnitEl.value = tempUnit;
+                convertFrequency();
+            }
+
+            // Заполняем сетку примеров
+            function populateExamples() {
+                examplesGrid.innerHTML = '';
+                frequencyExamples.forEach(example => {
+                    const card = document.createElement('div');
+                    card.className = 'example-card';
+                    
+                    let frequencyText = example.frequency + ' ' + example.unit;
+                    if (example.max) {
+                        frequencyText = example.frequency + '-' + example.max + ' ' + example.unit;
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="example-name">${example.name}</div>
+                        <div class="example-frequency">${frequencyText}</div>
+                        <div class="example-description" style="font-size: 0.8em; color: var(--text-muted); margin-top: 0.5rem;">${example.description}</div>
+                    `;
+                    card.addEventListener('click', () => {
+                        inputValueEl.value = example.frequency;
+                        inputUnitEl.value = example.unit;
+                        convertFrequency();
+                    });
+                    examplesGrid.appendChild(card);
+                });
+            }
+
+            // События
+            convertButton.addEventListener('click', convertFrequency);
+            swapButton.addEventListener('click', swapUnits);
+            inputValueEl.addEventListener('input', convertFrequency);
+            inputUnitEl.addEventListener('change', convertFrequency);
+            outputUnitEl.addEventListener('change', convertFrequency);
+
+            // Инициализация
+            populateExamples();
+            convertFrequency();
+        });
+    </script>
+</body>
+</html>

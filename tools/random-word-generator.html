@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор случайных слов | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-генератор случайных слов. Идеально подходит для игр, креативного письма, изучения языка и развития словарного запаса.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .generator-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .result-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .word-display {
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            word-wrap: break-word;
+            padding: 1rem;
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+            text-transform: capitalize;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-word-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор случайных слов</h1>
+                <p class="tool-description">Получите случайное слово для творческих задач, игр или изучения языка. Просто нажмите кнопку, чтобы сгенерировать новое.</p>
+            </div>
+
+            <div class="generator-container">
+                <div class="result-box">
+                    <p class="field-label">Случайное слово</p>
+                    <div id="word-result" class="word-display"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="generate-btn">
+                        🎲 Сгенерировать
+                    </button>
+                    <button class="btn btn-secondary" id="copy-btn">
+                        Скопировать
+                    </button>
+                </div>
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Генерируем...</p>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>✨ Креативный помощник</h4>
+                    <p>Идеально подходит для писателей, художников и всех, кому нужно вдохновение.</p>
+                </div>
+                <div class="feature">
+                    <h4>🚀 Мгновенная генерация</h4>
+                    <p>Создает новое слово за доли секунды, без задержек.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Вся генерация происходит на вашей стороне, без отправки данных на сервер.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Зачем нужен генератор случайных слов?</h2>
+                <p>Генератор случайных слов — это простой, но мощный инструмент для множества задач. Он может помочь преодолеть творческий кризис, стать основой для игры в ассоциации, или просто быть веселым способом расширить свой словарный запас, изучая новые слова.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Этот инструмент использует обширный список слов, а затем с помощью алгоритма случайного выбора выдает одно из них. Слова подобраны так, чтобы быть интересными и полезными, от простых существительных до более сложных прилагательных и глаголов.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultBox = document.getElementById('word-result');
+            const generateBtn = document.getElementById('generate-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const loadingIndicator = document.getElementById('loading');
+
+            const words = [
+                'Солнце', 'Дождь', 'Гора', 'Океан', 'Лес', 'Радость', 'Счастье', 'Свобода', 'Мечта', 'Небо',
+                'Ветер', 'Звезда', 'Снег', 'Огонь', 'Цветок', 'Музыка', 'Тишина', 'Путешествие', 'История', 'Фантазия',
+                'Улыбка', 'Книга', 'Друг', 'Тайна', 'Вода', 'Дерево', 'Правда', 'Удача', 'Любовь', 'Надежда',
+                'Кофе', 'Сон', 'Пробуждение', 'Идея', 'Магия', 'Приключение', 'Открытие', 'Эхо', 'Город', 'Свет',
+                'Тепло', 'Уют', 'Шепот', 'Закат', 'Рассвет', 'Радуга', 'Облако', 'Песня', 'Смех', 'Сказка'
+            ];
+
+            function getRandomWord() {
+                return words[Math.floor(Math.random() * words.length)];
+            }
+
+            function generateAndDisplayWord() {
+                loadingIndicator.style.display = 'block';
+                setTimeout(() => {
+                    resultBox.textContent = getRandomWord();
+                    loadingIndicator.style.display = 'none';
+                }, 100);
+            }
+
+            generateBtn.addEventListener('click', generateAndDisplayWord);
+
+            copyBtn.addEventListener('click', () => {
+                const word = resultBox.textContent;
+                if (word) {
+                    navigator.clipboard.writeText(word).then(() => {
+                        alert('Слово скопировано в буфер обмена!');
+                    }).catch(err => {
+                        console.error('Не удалось скопировать текст: ', err);
+                        alert('Не удалось скопировать слово. Пожалуйста, скопируйте вручную.');
+                    });
+                }
+            });
+
+            generateAndDisplayWord(); // Generate a word on page load
+        });
+    </script>
+</body>
+
+</html>

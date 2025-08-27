@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Generator | Neural Wise Wolf</title>
+    <meta name="description" content="Генератор лабиринтов различных размеров и сложности. Визуализация алгоритмов создания и решения лабиринтов.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .maze-generator {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input, .unit-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .value-input:focus, .unit-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .algorithm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .algorithm-btn {
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .algorithm-btn:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .algorithm-btn.active {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .maze-container {
+            position: relative;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .maze-canvas {
+            background: white;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stats {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin: 0.25rem 0 0;
+            font-size: 0.85rem;
+        }
+
+        .solution-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .speed-slider {
+            width: 100px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid var(--border-light);
+        }
+
+        .wall {
+            background: #1a202c;
+        }
+
+        .path {
+            background: white;
+        }
+
+        .start {
+            background: #10b981;
+        }
+
+        .end {
+            background: #ef4444;
+        }
+
+        .solution {
+            background: #3b82f6;
+        }
+
+        .visited {
+            background: #93c5fd;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .algorithm-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .algorithm-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            opacity: 0.6;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-light);
+            border-top: 2px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .cell {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="fun" data-slug="maze-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Maze Generator</h1>
+                <p class="tool-description">Генератор и визуализатор лабиринтов. Создавайте и решайте лабиринты различных размеров и сложности.</p>
+            </div>
+
+            <div class="maze-generator">
+                <div class="generator-card">
+                    <div class="controls-grid">
+                        <div class="input-group">
+                            <label for="mazeWidth">Ширина лабиринта:</label>
+                            <input type="number" id="mazeWidth" class="value-input" min="5" max="100" value="20">
+                        </div>
+                        <div class="input-group">
+                            <label for="mazeHeight">Высота лабиринта:</label>
+                            <input type="number" id="mazeHeight" class="value-input" min="5" max="100" value="20">
+                        </div>
+                        <div class="input-group">
+                            <label for="cellSize">Размер клетки (px):</label>
+                            <input type="number" id="cellSize" class="value-input" min="10" max="50" value="20">
+                        </div>
+                        <div class="input-group">
+                            <label for="mazeDifficulty">Сложность:</label>
+                            <select id="mazeDifficulty" class="unit-select">
+                                <option value="easy">Легкая</option>
+                                <option value="medium" selected>Средняя</option>
+                                <option value="hard">Сложная</option>
+                                <option value="expert">Эксперт</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h4>🎯 Алгоритм генерации:</h4>
+                    <div class="algorithm-grid">
+                        <div class="algorithm-btn active" data-algorithm="dfs">
+                            Depth-First Search
+                        </div>
+                        <div class="algorithm-btn" data-algorithm="prim">
+                            Prim's Algorithm
+                        </div>
+                        <div class="algorithm-btn" data-algorithm="kruskal">
+                            Kruskal's Algorithm
+                        </div>
+                        <div class="algorithm-btn" data-algorithm="recursive">
+                            Recursive Division
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-full" id="generateBtn">
+                            🌀 Сгенерировать лабиринт
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="solveBtn">
+                            🧩 Решить лабиринт
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="clearBtn">
+                            🧹 Очистить решение
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="downloadBtn">
+                            💾 Скачать лабиринт
+                        </button>
+                    </div>
+
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color wall"></div>
+                            <span>Стена</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color path"></div>
+                            <span>Путь</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color start"></div>
+                            <span>Старт</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color end"></div>
+                            <span>Финиш</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color solution"></div>
+                            <span>Решение</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color visited"></div>
+                            <span>Посещено</span>
+                        </div>
+                    </div>
+
+                    <div class="maze-container" id="mazeContainer">
+                        <canvas id="mazeCanvas" class="maze-canvas"></canvas>
+                    </div>
+
+                    <div class="solution-controls">
+                        <div class="speed-control">
+                            <label for="animationSpeed">Скорость анимации:</label>
+                            <input type="range" id="animationSpeed" class="speed-slider" min="1" max="100" value="50">
+                        </div>
+                        <button class="btn btn-secondary" id="pauseBtn">
+                            ⏸️ Пауза
+                        </button>
+                        <button class="btn btn-secondary" id="stepBtn">
+                            ⏭️ Шаг
+                        </button>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <p class="stat-value" id="mazeSize">20×20</p>
+                                <p class="stat-label">Размер</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="pathLength">0</p>
+                                <p class="stat-label">Длина пути</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="solutionLength">0</p>
+                                <p class="stat-label">Решение</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="generationTime">0ms</p>
+                                <p class="stat-label">Время генерации</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🌀 Разные алгоритмы</h4>
+                        <p>4 различных алгоритма генерации лабиринтов с уникальными характеристиками</p>
+                    </div>
+                    <div class="feature">
+                        <h4>👁️ Визуализация</h4>
+                        <p>Анимация процесса генерации и решения в реальном времени</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎮 Интерактивность</h4>
+                        <p>Настройка размера, сложности и скорости анимации</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Генератор лабиринтов: алгоритмы и математика</h2>
+                    <p>Лабиринты — это не только увлекательные головоломки, но и интересные математические объекты. Наш генератор использует различные алгоритмы для создания perfect лабиринтов (с единственным решением).</p>
+                    
+                    <h3>🎯 Алгоритмы генерации лабиринтов</h3>
+                    
+                    <h4>1. Depth-First Search (DFS)</h4>
+                    <p>Рекурсивный алгоритм, который "прокапывает" пути, удаляя стены. Создает лабиринты с длинными коридорами.</p>
+                    
+                    <h4>2. Prim's Algorithm</h4>
+                    <p>Алгоритм минимального остовного дерева. Создает более равномерные и сбалансированные лабиринты.</p>
+                    
+                    <h4>3. Kruskal's Algorithm</h4>
+                    <p>Также основан на теории графов. Создает лабиринты с множеством коротких тупиков.</p>
+                    
+                    <h4>4. Recursive Division</h4>
+                    <p>Алгоритм "сверху вниз", который рекурсивно делит пространство стенами. Очень эффективен для больших лабиринтов.</p>
+
+                    <h3>📊 Характеристики лабиринтов</h3>
+                    <ul>
+                        <li><strong>Perfect maze</strong> — лабиринт с единственным решением</li>
+                        <li><strong>Simply connected</strong> — без изолированных областей</li>
+                        <li><strong>No loops</strong> — отсутствие циклов</li>
+                        <li><strong>Uniform</strong> — равномерное распределение сложности</li>
+                    </ul>
+
+                    <h3>💡 Практическое применение</h3>
+                    <div class="example-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🎮 Игровая разработка</h4>
+                            <p>Создание процедурных уровней для игр</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🧪 Обучение алгоритмам</h4>
+                            <p>Визуализация работы поисковых алгоритмов</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🧩 Головоломки</h4>
+                            <p>Создание уникальных пазлов и challenges</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Что такое "perfect maze"?</strong><br>
+                    Это лабиринт, в котором существует ровно один путь между любыми двумя точками. Не содержит циклов и изолированных областей.</p>
+                    
+                    <p><strong>Какой алгоритм самый быстрый?</strong><br>
+                    Recursive Division обычно самый быстрый для больших лабиринтов, а DFS — для маленьких.</p>
+                    
+                    <p><strong>Можно ли создать лабиринт с несколькими решениями?</strong><br>
+                    Да, можно настроить алгоритмы для создания лабиринтов с циклами и альтернативными путями.</p>
+                    
+                    <p><strong>Как решаются лабиринты?</strong><br>
+                    Обычно используются алгоритмы поиска в ширину (BFS) или глубину (DFS), либо A* для нахождения кратчайшего пути.</p>
+                    
+                    <p><strong>Можно ли использовать лабиринты в machine learning?</strong><br>
+                    Да, лабиринты часто используются для тестирования reinforcement learning алгоритмов.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const mazeWidthInput = document.getElementById('mazeWidth');
+            const mazeHeightInput = document.getElementById('mazeHeight');
+            const cellSizeInput = document.getElementById('cellSize');
+            const mazeDifficulty = document.getElementById('mazeDifficulty');
+            const generateBtn = document.getElementById('generateBtn');
+            const solveBtn = document.getElementById('solveBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stepBtn = document.getElementById('stepBtn');
+            const animationSpeed = document.getElementById('animationSpeed');
+            const mazeCanvas = document.getElementById('mazeCanvas');
+            const mazeContainer = document.getElementById('mazeContainer');
+            const mazeSize = document.getElementById('mazeSize');
+            const pathLength = document.getElementById('pathLength');
+            const solutionLength = document.getElementById('solutionLength');
+            const generationTime = document.getElementById('generationTime');
+
+            const algorithmBtns = document.querySelectorAll('.algorithm-btn');
+            let selectedAlgorithm = 'dfs';
+            let maze = null;
+            let ctx = null;
+
+            // Глобальные переменные для анимации
+            let solveQueue = [];
+            let solveParent = {};
+            let isPaused = false;
+            let animationTimeoutId = null;
+
+            // Инициализация canvas
+            ctx = mazeCanvas.getContext('2d');
+
+            // Выбор алгоритма
+            algorithmBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    algorithmBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedAlgorithm = btn.dataset.algorithm;
+                });
+            });
+
+            // События кнопок
+            generateBtn.addEventListener('click', generateMaze);
+            solveBtn.addEventListener('click', solveMaze);
+            clearBtn.addEventListener('click', clearSolution);
+            downloadBtn.addEventListener('click', downloadMaze);
+            pauseBtn.addEventListener('click', togglePause);
+            stepBtn.addEventListener('click', stepSolve);
+
+            function togglePause() {
+                isPaused = !isPaused;
+                pauseBtn.textContent = isPaused ? '▶️ Продолжить' : '⏸️ Пауза';
+                if (!isPaused) {
+                    animateSolve();
+                } else {
+                    clearTimeout(animationTimeoutId);
+                }
+            }
+
+            function stepSolve() {
+                if (isPaused) {
+                    executeStep();
+                }
+            }
+
+            function generateMaze() {
+                const width = parseInt(mazeWidthInput.value);
+                const height = parseInt(mazeHeightInput.value);
+                const size = parseInt(cellSizeInput.value);
+                
+                if (width < 5 || width > 100 || height < 5 || height > 100) {
+                    alert('Размер лабиринта должен быть от 5×5 до 100×100');
+                    return;
+                }
+
+                clearTimeout(animationTimeoutId);
+                isPaused = false;
+                pauseBtn.textContent = '⏸️ Пауза';
+
+                mazeCanvas.width = (width * 2 + 1) * size;
+                mazeCanvas.height = (height * 2 + 1) * size;
+                
+                const startTime = performance.now();
+                
+                maze = generateMazeAlgorithm(width, height, selectedAlgorithm);
+                
+                const endTime = performance.now();
+                
+                drawMaze(maze, size);
+                updateStats(maze, endTime - startTime);
+            }
+
+            function generateMazeAlgorithm(width, height, algorithm) {
+                const maze = Array(height * 2 + 1).fill().map(() => Array(width * 2 + 1).fill(1));
+                
+                const startNode = { x: 1, y: 1 };
+                const stack = [startNode];
+                maze[startNode.y][startNode.x] = 0;
+                
+                const directions = [
+                    { dx: 0, dy: -2 },
+                    { dx: 2, dy: 0 },
+                    { dx: 0, dy: 2 },
+                    { dx: -2, dy: 0 }
+                ];
+
+                while (stack.length > 0) {
+                    const current = stack[stack.length - 1];
+                    const neighbors = [];
+
+                    for (const dir of directions) {
+                        const nx = current.x + dir.dx;
+                        const ny = current.y + dir.dy;
+                        
+                        if (nx > 0 && nx < width * 2 + 1 && ny > 0 && ny < height * 2 + 1 && maze[ny][nx] === 1) {
+                            neighbors.push({ x: nx, y: ny, dir });
+                        }
+                    }
+
+                    if (neighbors.length === 0) {
+                        stack.pop();
+                        continue;
+                    }
+
+                    const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
+                    const wallX = current.x + randomNeighbor.dir.dx / 2;
+                    const wallY = current.y + randomNeighbor.dir.dy / 2;
+
+                    maze[wallY][wallX] = 0;
+                    maze[randomNeighbor.y][randomNeighbor.x] = 0;
+
+                    stack.push({ x: randomNeighbor.x, y: randomNeighbor.y });
+                }
+
+                // Установка входа и выхода на пути
+                maze[1][0] = 0; 
+                maze[height * 2 - 1][width * 2] = 0;
+
+                return maze;
+            }
+
+            function drawMaze(maze, cellSize) {
+                const height = maze.length;
+                const width = maze[0].length;
+                
+                ctx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        let color = '';
+                        if (maze[y][x] === 1) {
+                            color = '#1a202c'; // Стена
+                        } else if (maze[y][x] === 0) {
+                            color = 'white'; // Путь
+                        } else if (maze[y][x] === 2) {
+                            color = '#10b981'; // Старт
+                        } else if (maze[y][x] === 3) {
+                            color = '#ef4444'; // Финиш
+                        }
+                        ctx.fillStyle = color;
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                    }
+                }
+                
+                // Рисуем Старт и Финиш, используя их реальные координаты в массиве
+                const startX = 0;
+                const startY = 1;
+                const endX = width - 1;
+                const endY = height - 2;
+
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(startX * cellSize, startY * cellSize, cellSize, cellSize);
+
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(endX * cellSize, endY * cellSize, cellSize, cellSize);
+            }
+
+            function solveMaze() {
+                if (!maze) {
+                    alert('Сначала сгенерируйте лабиринт!');
+                    return;
+                }
+
+                clearTimeout(animationTimeoutId);
+                isPaused = false;
+                pauseBtn.textContent = '⏸️ Пауза';
+
+                // Сброс цветов
+                drawMaze(maze, parseInt(cellSizeInput.value));
+                
+                const start = { x: 1, y: 1 };
+                const end = { x: maze[0].length - 2, y: maze.length - 2 };
+                
+                solveQueue = [{ x: start.x, y: start.y }];
+                let visited = new Set();
+                visited.add(`${start.x},${start.y}`);
+                
+                solveParent = {};
+                solveParent[`${start.x},${start.y}`] = null;
+
+                // Запуск анимации
+                animateSolve();
+            }
+
+            function executeStep() {
+                const cellSize = parseInt(cellSizeInput.value);
+                const end = { x: maze[0].length - 2, y: maze.length - 2 };
+                
+                if (solveQueue.length === 0) {
+                    clearTimeout(animationTimeoutId);
+                    return;
+                }
+                
+                const current = solveQueue.shift();
+                
+                if (current.x === end.x && current.y === end.y) {
+                    // Путь найден, рисуем его
+                    let path = [];
+                    let node = current;
+                    while (node) {
+                        path.push(node);
+                        node = solveParent[`${node.x},${node.y}`];
+                    }
+                    
+                    path.reverse();
+                    solutionLength.textContent = path.length;
+                    
+                    for (const point of path) {
+                        ctx.fillStyle = '#3b82f6';
+                        ctx.fillRect(point.x * cellSize, point.y * cellSize, cellSize, cellSize);
+                    }
+                    
+                    clearTimeout(animationTimeoutId);
+                    return;
+                }
+
+                // Рисуем посещенную клетку
+                if (maze[current.y][current.x] === 0) {
+                    ctx.fillStyle = '#93c5fd';
+                    ctx.fillRect(current.x * cellSize, current.y * cellSize, cellSize, cellSize);
+                }
+
+                // Добавляем соседей в очередь
+                const directions = [
+                    { dx: 0, dy: -1 }, { dx: 1, dy: 0 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }
+                ];
+                for (const dir of directions) {
+                    const nx = current.x + dir.dx;
+                    const ny = current.y + dir.dy;
+                    
+                    if (nx >= 0 && nx < maze[0].length && ny >= 0 && ny < maze.length && 
+                        maze[ny][nx] !== 1 && !solveParent.hasOwnProperty(`${nx},${ny}`)) {
+                        
+                        solveParent[`${nx},${ny}`] = current;
+                        solveQueue.push({ x: nx, y: ny });
+                    }
+                }
+
+                if (!isPaused) {
+                    animationTimeoutId = setTimeout(executeStep, 100 - animationSpeed.value);
+                }
+            }
+
+            function animateSolve() {
+                if (solveQueue.length > 0 && !isPaused) {
+                    executeStep();
+                } else {
+                    clearTimeout(animationTimeoutId);
+                }
+            }
+            
+            animationSpeed.addEventListener('input', () => {
+                // Если анимация идет, просто перезапускаем таймер с новой скоростью
+                if (solveQueue.length > 0 && !isPaused) {
+                    clearTimeout(animationTimeoutId);
+                    animateSolve();
+                }
+            });
+
+            function clearSolution() {
+                if (!maze) return;
+                
+                clearTimeout(animationTimeoutId);
+                isPaused = false;
+                pauseBtn.textContent = '⏸️ Пауза';
+
+                drawMaze(maze, parseInt(cellSizeInput.value));
+                solutionLength.textContent = '0';
+            }
+
+            function downloadMaze() {
+                if (!maze) {
+                    alert('Сначала сгенерируйте лабиринт!');
+                    return;
+                }
+
+                const link = document.createElement('a');
+                link.download = `maze-${mazeWidthInput.value}x${mazeHeightInput.value}.png`;
+                link.href = mazeCanvas.toDataURL();
+                link.click();
+            }
+
+            function updateStats(maze, genTime) {
+                const width = (maze[0].length - 1) / 2;
+                const height = (maze.length - 1) / 2;
+                
+                let pathCells = 0;
+                for (let y = 0; y < maze.length; y++) {
+                    for (let x = 0; x < maze[0].length; x++) {
+                        if (maze[y][x] === 0) pathCells++;
+                    }
+                }
+                
+                mazeSize.textContent = `${width}×${height}`;
+                pathLength.textContent = pathCells;
+                solutionLength.textContent = '0';
+                generationTime.textContent = `${Math.round(genTime)}ms`;
+            }
+
+            // Автоматическая генерация при загрузке
+            generateMaze();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер регистра | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенное изменение регистра текста: строчные, прописные, заглавные и другие стили.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+    /* ... (остальные стили, которые уже есть) ... */
+
+    .tool-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .tool-header h1 {
+        margin-bottom: .5rem;
+    }
+    .tool-header p {
+        max-width: 800px; /* Увеличил ширину описания в заголовке */
+        margin: 0 auto;
+        color: var(--text-secondary);
+    }
+    .tool-features {
+        margin-top: 28px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border-light);
+    }
+    .tool-features .feature {
+        margin-bottom: 1rem;
+    }
+    
+    /* Основной контейнер инструмента */
+    .age-calculator { /* или просто .tool-content, если у тебя такой класс */
+        max-width: 900px; /* Увеличил максимальную ширину инструмента */
+        margin: 0 auto;
+    }
+    /* Для article, если он не внутри age-calculator, можно добавить: */
+    .article {
+        max-width: 900px; /* Расширяем статью */
+        margin: 2rem auto; /* Центрируем и добавляем отступы */
+        text-align: left; /* Возвращаем текст к обычному выравниванию */
+    }
+
+    .calculator-card {
+        background: var(--bg-primary);
+        padding: 2rem;
+        border-radius: 20px;
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        margin-bottom: 2rem;
+    }
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-align: left; /* Выравнивание лейбла по левому краю */
+    }
+    .date-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+    .date-input:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    .calculate-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    .results-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* Теперь 4 колонки в одну строку */
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    .result-card {
+        background: var(--bg-secondary);
+        padding: 1.5rem;
+        border-radius: 16px;
+        border: 2px solid var(--border-light);
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .result-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent-primary);
+    }
+    .result-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        margin: 0;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
+    }
+    .result-label {
+        color: var(--text-secondary);
+        margin: 0.5rem 0 0;
+        font-size: 0.9rem;
+    }
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        resize: vertical;
+    }
+    textarea:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Медиазапросы для адаптивности */
+    @media (max-width: 992px) { /* Если 4 колонки не помещаются, делаем 2 */
+        .results-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 768px) {
+        .tool-header p,
+        .age-calculator,
+        .article {
+            max-width: 100%; /* На мобильных делаем полной ширины */
+            padding: 0 1rem; /* Добавляем небольшой отступ по бокам */
+        }
+        .results-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .calculator-card {
+            padding: 1.5rem;
+        }
+        .result-value {
+            font-size: 1rem;
+        }
+    }
+    @media (max-width: 480px) {
+        .results-grid {
+            grid-template-columns: 1fr; /* На самых маленьких экранах - по одной колонке */
+        }
+    }
+</style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="case-converter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Конвертер регистра текста</h1>
+                <p class="tool-description">Мгновенное изменение регистра текста: строчные, прописные, заглавные и другие стили.</p>
+            </div>
+
+            <div class="age-calculator">
+                <div class="calculator-card">
+                    <div class="input-group">
+                        <label for="inputText">Введите ваш текст:</label>
+                        <textarea id="inputText" rows="8" placeholder="Начните печатать или вставьте текст..."></textarea>
+                    </div>
+
+                    <div class="results-grid">
+                        <div class="result-card" onclick="copyToClipboard('lowercaseResult')">
+                            <p class="result-label">строчные</p>
+                            <p class="result-value" id="lowercaseResult">строчный текст</p>
+                        </div>
+                        <div class="result-card" onclick="copyToClipboard('uppercaseResult')">
+                            <p class="result-label">ПРОПИСНЫЕ</p>
+                            <p class="result-value" id="uppercaseResult">ПРОПИСНОЙ ТЕКСТ</p>
+                        </div>
+                        <div class="result-card" onclick="copyToClipboard('titleCaseResult')">
+                            <p class="result-label">Заглавные</p>
+                            <p class="result-value" id="titleCaseResult">Текст С Заглавных Букв</p>
+                        </div>
+                        <div class="result-card" onclick="copyToClipboard('sentenceCaseResult')">
+                            <p class="result-label">Предложения</p>
+                            <p class="result-value" id="sentenceCaseResult">Текст в стиле предложения.</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary calculate-btn" id="convert-btn" style="margin-top: 2rem;">
+                        📝 Применить
+                    </button>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>⚡️ Мгновенно и просто</h4>
+                        <p>Преобразуйте текст в любой регистр за один клик. Просто вставьте текст и получите результат.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📋 Копирование в один клик</h4>
+                        <p>Каждый результат можно скопировать в буфер обмена одним нажатием на карточку.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📈 Для любых задач</h4>
+                        <p>Идеально подходит для работы с документами, текстами для сайтов или постов в соцсетях.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Как работает конвертер регистра</h2>
+                    <p>Наш онлайн-инструмент позволяет быстро изменить формат любого текста без необходимости ручного редактирования. Это особенно полезно, когда нужно подготовить текст для определённой задачи, например, для заголовков или обычных предложений.</p>
+                    
+                    <h3>Основные режимы конвертации</h3>
+                    <ul>
+                        <li><strong>Строчные (lowercase):</strong> Преобразует все буквы в тексте в нижний регистр. Отлично подходит для стандартных электронных писем и сообщений.</li>
+                        <li><strong>ПРОПИСНЫЕ (UPPERCASE):</strong> Делает все буквы заглавными. Часто используется для выделения заголовков или важных фраз.</li>
+                        <li><strong>Заглавные (Title Case):</strong> Каждое слово в предложении начинается с заглавной буквы. Идеально для названий, заголовков статей или книг.</li>
+                        <li><strong>Предложения (Sentence case):</strong> Только первая буква каждого предложения будет заглавной. Это стандартный формат для большинства текстов и статей.</li>
+                    </ul>
+                    
+                    <h3>💡 Примеры использования</h3>
+                    <div class="example-grid">
+                        <div class="example">
+                            <h4>✍️ Копирайтинг и контент</h4>
+                            <p>Быстрое форматирование текста для статей, постов в блогах и социальных сетях.</p>
+                        </div>
+                        <div class="example">
+                            <h4>👨‍💻 Разработка и программирование</h4>
+                            <p>Удобно для приведения переменных или комментариев к единому стилю.</p>
+                        </div>
+                        <div class="example">
+                            <h4>📚 Учёба и работа</h4>
+                            <p>Форматирование докладов, рефератов или презентаций в нужный формат.</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Безопасно ли использовать этот инструмент для конфиденциальных данных?</strong><br>
+                    Да, наш конвертер работает полностью на стороне вашего браузера. Текст никуда не отправляется и не сохраняется на сервере, что обеспечивает полную конфиденциальность.</p>
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputText = document.getElementById('inputText');
+            const lowercaseResult = document.getElementById('lowercaseResult');
+            const uppercaseResult = document.getElementById('uppercaseResult');
+            const titleCaseResult = document.getElementById('titleCaseResult');
+            const sentenceCaseResult = document.getElementById('sentenceCaseResult');
+            const convertBtn = document.getElementById('convert-btn');
+
+            function convertText() {
+                const text = inputText.value;
+                if (!text) {
+                    lowercaseResult.textContent = 'строчный текст';
+                    uppercaseResult.textContent = 'ПРОПИСНОЙ ТЕКСТ';
+                    titleCaseResult.textContent = 'Текст С Заглавных Букв';
+                    sentenceCaseResult.textContent = 'Текст в стиле предложения.';
+                    return;
+                }
+
+                lowercaseResult.textContent = text.toLowerCase();
+                uppercaseResult.textContent = text.toUpperCase();
+
+                titleCaseResult.textContent = text.split(' ').map(word => {
+                    if (word.length === 0) return '';
+                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                }).join(' ');
+                
+                sentenceCaseResult.textContent = text.toLowerCase().replace(/(^\s*|\.\s*|\?\s*|\!\s*)([a-zа-я])/g, (match) => match.toUpperCase());
+            }
+
+            function copyToClipboard(elementId) {
+                const element = document.getElementById(elementId);
+                const textToCopy = element.textContent;
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = element.textContent;
+                    element.textContent = 'Скопировано!';
+                    setTimeout(() => {
+                        element.textContent = originalText;
+                    }, 1000);
+                }).catch(err => {
+                    console.error('Не удалось скопировать текст: ', err);
+                });
+            }
+            
+            inputText.addEventListener('input', convertText);
+            convertBtn.addEventListener('click', convertText);
+            
+            window.copyToClipboard = copyToClipboard;
+            window.convertText = convertText;
+            
+            convertText();
+        });
+    </script>
+</body>
+</html>

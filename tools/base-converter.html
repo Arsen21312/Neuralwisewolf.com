@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+  <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base Converter | Neural Wise Wolf</title>
+  <meta name="description" content="Конвертер чисел между системами счисления 2–36. Поддержка дробей и префиксов 0x/0o/0b.">
+  <base href="/">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .tool-header{text-align:center;margin-bottom:1.5rem}
+    .tool-header p{max-width:640px;margin:.25rem auto 0;color:var(--text-secondary)}
+    .conv{max-width:980px;margin:0 auto}
+    .panel{background:var(--bg-primary);border:1px solid var(--border-light);border-radius:20px;box-shadow:var(--shadow-md);padding:1.25rem;margin-bottom:1rem}
+    .grid{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .field{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;padding:.75rem}
+    .field label{display:block;font-weight:700;font-size:.9rem;margin-bottom:.35rem}
+    .row{display:flex;gap:.5rem;align-items:center}
+    .text,.select{width:100%;padding:.65rem .75rem;border:1.5px solid var(--border-medium);border-radius:10px;background:var(--bg-primary);color:var(--text-primary)}
+    .text:focus,.select:focus{outline:none;border-color:var(--accent-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent-primary) 20%,transparent)}
+    .mini{padding:.55rem .75rem;border:1px solid var(--border-medium);background:var(--bg-primary);border-radius:10px;cursor:pointer}
+    .mini:hover{background:var(--bg-secondary)}
+    .controls{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:.5rem}
+    .result{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:16px;padding:1rem}
+    .result pre{margin:0;font-family:ui-monospace,Consolas,Menlo,monospace;font-size:1rem;white-space:pre-wrap;word-break:break-all}
+    .hint{color:var(--text-secondary);font-size:.9rem}
+    .tool-features{margin-top:28px;padding-top:18px;border-top:1px solid var(--border-light)}
+    .tool-features .feature{margin-bottom:1rem}
+    .badge{display:inline-flex;gap:.35rem;align-items:center;font-size:.8rem;border:1px dashed var(--border-medium);padding:.2rem .5rem;border-radius:999px;color:var(--text-secondary)}
+  </style>
+</head>
+<body>
+  <div data-include="header"></div>
+  <div data-include="sidebar"></div>
+  <div id="overlay" class="overlay"></div>
+
+  <main class="tool" data-category="math" data-slug="base-converter">
+    <div class="tool-container">
+      <div class="tool-header">
+        <h1>Base Converter</h1>
+<p class="tool-description">
+  Переводи числа между основаниями 2–36. Поддерживаются знак, дробная часть, префиксы 0x, 0o, 0b.
+</p>
+      </div>
+
+      <div class="conv">
+        <div class="panel">
+          <div class="grid">
+            <div class="field">
+              <label>Исходное число</label>
+              <input id="inVal" class="text" placeholder="например: -0x1A.F или 1011.01">
+              <div class="row" style="margin-top:.5rem">
+                <button class="mini" data-eg="-255">-255</button>
+                <button class="mini" data-eg="0b1111.01">0b1111.01</button>
+                <button class="mini" data-eg="0x1A3F">0x1A3F</button>
+                <button class="mini" data-eg="0755">0755</button>
+              </div>
+              <p class="hint" style="margin:.5rem 0 0">Допустимы цифры 0–9 A–Z, разделитель — точка.</p>
+            </div>
+
+            <div class="field">
+              <label>Основание входа</label>
+              <div class="row">
+                <select id="inBase" class="select"></select>
+                <button id="detect" class="mini">авто по префиксу</button>
+              </div>
+              <p class="hint" style="margin:.5rem 0 0">0b→2, 0o/ведущий 0→8, 0x→16. Иначе используем выбранное основание.</p>
+            </div>
+
+            <div class="field">
+              <label>Основание выхода</label>
+              <select id="outBase" class="select"></select>
+              <div class="row" style="margin-top:.5rem">
+                <button class="mini" data-ob="2">bin</button>
+                <button class="mini" data-ob="8">oct</button>
+                <button class="mini" data-ob="10">dec</button>
+                <button class="mini" data-ob="16">hex</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Настройки точности</label>
+              <div class="row"><span class="hint">Знаков после точки</span><input id="prec" type="number" class="text" value="12" min="0" max="32" style="max-width:110px"></div>
+              <label>
+  <input type="checkbox" id="trim" checked>
+  обрезать хвост нулей
+</label>
+
+<label>
+  <input type="checkbox" id="group">
+  группировать разряды (выход)
+</label>
+
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="row">
+              <button id="convert" class="mini">конвертировать</button>
+              <button id="swap" class="mini">⇄ поменять базы</button>
+              <button id="copy" class="mini">копировать</button>
+            </div>
+            <div id="status" class="hint">Готово</div>
+          </div>
+        </div>
+
+        <div class="result">
+          <pre id="out">—</pre>
+        </div>
+      </div>
+
+      <div class="tool-features">
+        <div class="feature"><h4>🎯 Полная поддержка</h4><p>Знак, дробная часть, основания 2–36, автоопределение по префиксу.</p></div>
+        <div class="feature"><h4>⚡ Точная конвертация</h4><p>Дробная часть с контролем точности до 32 знаков.</p></div>
+        <div class="feature"><h4>📋 Удобный вывод</h4><p>Группировка разрядов и быстое копирование результата.</p></div>
+      </div>
+
+      <div data-include="related"></div>
+    </div>
+  </main>
+
+  <div data-include="footer"></div>
+
+  <script src="js/loader.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const inVal = document.getElementById('inVal');
+    const inBase = document.getElementById('inBase');
+    const outBase = document.getElementById('outBase');
+    const prec = document.getElementById('prec');
+    const trim = document.getElementById('trim');
+    const group = document.getElementById('group');
+    const out = document.getElementById('out');
+    const status = document.getElementById('status');
+
+    // заполнение селектов 2..36
+    for(let b=2;b<=36;b++){
+      const o1 = document.createElement('option'); o1.value=b; o1.textContent=b;
+      const o2 = document.createElement('option'); o2.value=b; o2.textContent=b;
+      inBase.appendChild(o1); outBase.appendChild(o2);
+    }
+    inBase.value = 10; outBase.value = 16;
+
+    // примеры
+    document.querySelectorAll('[data-eg]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ inVal.value = btn.dataset.eg; convert(); });
+    });
+    document.querySelectorAll('[data-ob]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ outBase.value = btn.dataset.ob; convert(); });
+    });
+
+    document.getElementById('detect').addEventListener('click', ()=>{ detectBase(); convert(); });
+    document.getElementById('convert').addEventListener('click', convert);
+    document.getElementById('swap').addEventListener('click', ()=>{
+      const a = inBase.value; inBase.value = outBase.value; outBase.value = a; convert();
+    });
+    document.getElementById('copy').addEventListener('click', ()=>{
+      navigator.clipboard.writeText(out.textContent||'').then(()=> status.textContent='Скопировано').catch(()=>{});
+    });
+
+    [inVal,inBase,outBase,prec,trim,group].forEach(el=>el.addEventListener('input', convert));
+
+    function detectBase(){
+      const s = inVal.value.trim();
+      if(/^[-+]?0b/i.test(s)) { inBase.value = 2; return; }
+      if(/^[-+]?0o/i.test(s)) { inBase.value = 8; return; }
+      if(/^[-+]?0x/i.test(s)) { inBase.value = 16; return; }
+      if(/^[-+]?0[0-7]+(\.[0-7]+)?$/.test(s)) { inBase.value = 8; return; } // ведущий 0 как октал
+      inBase.value = inBase.value || 10;
+    }
+
+    function sanitize(s){
+      return s.replace(/\s+/g,'').toUpperCase();
+    }
+
+    function splitSign(s){
+      let sign = 1;
+      if(s.startsWith('+')) s = s.slice(1);
+      else if(s.startsWith('-')) { sign = -1; s = s.slice(1); }
+      return {sign, s};
+    }
+
+    function stripPrefixes(s){
+      if(s.startsWith('0B')) return {s:s.slice(2), base:2};
+      if(s.startsWith('0O')) return {s:s.slice(2), base:8};
+      if(s.startsWith('0X')) return {s:s.slice(2), base:16};
+      return {s, base:null};
+    }
+
+    function charVal(c){
+      const code = c.charCodeAt(0);
+      if(code>=48 && code<=57) return code-48;        // 0..9
+      if(code>=65 && code<=90) return code-55;        // A..Z -> 10..35
+      return -1;
+    }
+
+    // parse string in arbitrary base -> decimal number as {int: BigInt, frac: decimal in [0,1), sign}
+    function parseArb(str, base){
+      let s = sanitize(str);
+      let {sign, s:rest} = splitSign(s);
+      let pref = stripPrefixes(rest); if(pref.base) base = pref.base; s = pref.s;
+
+      // split integer and fractional parts
+      const parts = s.split('.');
+      const intPart = parts[0] || '0';
+      const fracPart = parts[1] || '';
+
+      // integer to BigInt
+      let intVal = 0n;
+      for(const ch of intPart){
+        const v = charVal(ch);
+        if(v<0 || v>=base) throw new Error('Недопустимый символ для основания '+base+': '+ch);
+        intVal = intVal * BigInt(base) + BigInt(v);
+      }
+
+      // fractional to Number with controlled precision via division
+      let frac = 0;
+      let denom = 1;
+      for(const ch of fracPart){
+        const v = charVal(ch);
+        if(v<0 || v>=base) throw new Error('Недопустимый символ для основания '+base+': '+ch);
+        denom *= base;
+        frac = frac + v * (1/denom);
+      }
+      return { sign, intVal, frac, baseIn: base };
+    }
+
+    function toTarget({sign,intVal,frac}, base, precision, trimZeros, grouping){
+      // integer part
+      const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let intStr = '';
+      let n = intVal < 0n ? -intVal : intVal;
+      if(n===0n) intStr = '0';
+      while(n>0n){
+        const rem = n % BigInt(base);
+        intStr = digits[Number(rem)] + intStr;
+        n = n / BigInt(base);
+      }
+      if(sign<0 && !(intStr==='0' && frac===0)) intStr = '-'+intStr;
+
+      // fractional part via multiplication
+      let fr = frac;
+      let fracStr = '';
+      for(let i=0;i<precision;i++){
+        fr *= base;
+        const d = Math.floor(fr + 1e-14); // guard for FP noise
+        fracStr += digits[d];
+        fr -= d;
+        if(fr<=1e-15) break;
+      }
+      if(trimZeros) fracStr = fracStr.replace(/0+$/,'');
+
+      if(grouping && intStr.replace('-','').length>4){
+        const neg = intStr.startsWith('-'); const core = neg ? intStr.slice(1) : intStr;
+        const grouped = core.replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+        intStr = neg ? '-'+grouped : grouped;
+      }
+
+      return fracStr.length ? intStr + '.' + fracStr : intStr;
+    }
+
+    function convert(){
+      try{
+        status.textContent = 'Конвертация…';
+        const s = inVal.value.trim();
+        if(!s){ out.textContent = '—'; status.textContent = 'Введите число'; return; }
+
+        const baseIn = parseInt(inBase.value,10);
+        const baseOut = parseInt(outBase.value,10);
+        const precision = Math.max(0, Math.min(32, parseInt(prec.value||'12',10)));
+
+        const parsed = parseArb(s, baseIn);
+        // нормализуем знак в BigInt
+        if(parsed.sign<0) parsed.intVal = -parsed.intVal;
+        // в целевой
+        const res = toTarget(parsed, baseOut, precision, trim.checked, group.checked);
+
+        out.textContent = res;
+        status.textContent = `OK: ${parsed.baseIn} → ${baseOut}`;
+      }catch(e){
+        out.textContent = '—';
+        status.textContent = 'Ошибка: ' + (e.message||e);
+      }
+    }
+
+    // URL ?in=0xFF&ib=16&ob=2&prec=8
+    const q = new URLSearchParams(location.search);
+    if(q.has('in')) inVal.value = q.get('in');
+    if(q.has('ib')) inBase.value = q.get('ib');
+    if(q.has('ob')) outBase.value = q.get('ob');
+    if(q.has('prec')) prec.value = q.get('prec');
+    detectBase();
+    convert();
+  });
+  </script>
+</body>
+</html>

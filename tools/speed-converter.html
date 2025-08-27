@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер скорости | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенно конвертируйте значения скорости между километрами в час, милями в час, метрами в секунду, узлами и другими единицами.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .converter-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+        }
+
+        .input-field {
+            flex-grow: 1;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .input-field input,
+        .input-field select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field input:focus,
+        .input-field select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .result-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .result-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .result-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            font-family: 'Fira Code', monospace;
+            word-wrap: break-word;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="convert" data-slug="speed-converter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Конвертер скорости</h1>
+                <p class="tool-description">Быстро и точно конвертируйте единицы скорости для автомобиля, самолета или спортивной тренировки.</p>
+            </div>
+
+            <div class="converter-container">
+                <div class="input-group">
+                    <div class="input-field">
+                        <label for="input-value">Значение</label>
+                        <input type="number" id="input-value" value="100">
+                    </div>
+                    <div class="input-field">
+                        <label for="input-unit">Единица измерения</label>
+                        <select id="input-unit">
+                            <option value="km/h">Километры в час (км/ч)</option>
+                            <option value="mph">Мили в час (миль/ч)</option>
+                            <option value="m/s">Метры в секунду (м/с)</option>
+                            <option value="ft/s">Футы в секунду (фут/с)</option>
+                            <option value="knots">Узлы (уз.)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h4>Километры в час</h4>
+                        <span class="value" id="km-h-result">0</span>
+                    </div>
+                    <div class="result-card">
+                        <h4>Мили в час</h4>
+                        <span class="value" id="mph-result">0</span>
+                    </div>
+                    <div class="result-card">
+                        <h4>Метры в секунду</h4>
+                        <span class="value" id="m-s-result">0</span>
+                    </div>
+                    <div class="result-card">
+                        <h4>Футы в секунду</h4>
+                        <span class="value" id="ft-s-result">0</span>
+                    </div>
+                    <div class="result-card">
+                        <h4>Узлы</h4>
+                        <span class="value" id="knots-result">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p>Конвертируем...</p>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Мгновенная конвертация</h4>
+                    <p>Результаты обновляются в реальном времени, как только вы вводите значение.</p>
+                </div>
+                <div class="feature">
+                    <h4>💡 Популярные единицы</h4>
+                    <p>Поддерживает основные единицы скорости для повседневных и профессиональных задач.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Все расчеты выполняются локально в вашем браузере, без отправки данных на сервер.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое скорость?</h2>
+                <p><strong>Скорость</strong> — это мера того, как быстро движется объект в пространстве. Она измеряется как расстояние, пройденное за единицу времени. Разные области — от физики и инженерии до навигации и спорта — используют свои стандартные единицы измерения скорости.</p>
+                
+                <h3>Как работает этот конвертер?</h3>
+                <p>Инструмент использует предопределенные коэффициенты для преобразования значения скорости в базовую единицу (метры в секунду), а затем конвертирует её во все остальные единицы. Например, чтобы перевести километры в час в метры в секунду, мы делим значение на 3.6 (поскольку 1000 метров в километре и 3600 секунд в часе). Это обеспечивает высокую точность и мгновенную работу.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputValue = document.getElementById('input-value');
+            const inputUnit = document.getElementById('input-unit');
+            const results = {
+                'km/h': document.getElementById('km-h-result'),
+                'mph': document.getElementById('mph-result'),
+                'm/s': document.getElementById('m-s-result'),
+                'ft/s': document.getElementById('ft-s-result'),
+                'knots': document.getElementById('knots-result')
+            };
+            const loadingIndicator = document.getElementById('loading');
+            
+            // Коэффициенты конвертации относительно м/с
+            const conversionFactors = {
+                'km/h': 3.6,
+                'mph': 2.23694,
+                'm/s': 1,
+                'ft/s': 3.28084,
+                'knots': 1.94384
+            };
+
+            function convertSpeed() {
+                loadingIndicator.style.display = 'block';
+                setTimeout(() => {
+                    const value = parseFloat(inputValue.value);
+                    const unit = inputUnit.value;
+                    
+                    if (isNaN(value)) {
+                        for (const key in results) {
+                            results[key].textContent = '—';
+                        }
+                        loadingIndicator.style.display = 'none';
+                        return;
+                    }
+
+                    // Конвертация в базовую единицу (м/с)
+                    const baseValue = value / conversionFactors[unit];
+                    
+                    // Конвертация во все остальные единицы
+                    for (const key in conversionFactors) {
+                        const convertedValue = baseValue * conversionFactors[key];
+                        results[key].textContent = convertedValue.toFixed(2);
+                    }
+                    loadingIndicator.style.display = 'none';
+                }, 100);
+            }
+
+            inputValue.addEventListener('input', convertSpeed);
+            inputUnit.addEventListener('change', convertSpeed);
+
+            // Начальная конвертация при загрузке страницы
+            convertSpeed();
+        });
+    </script>
+</body>
+
+</html>

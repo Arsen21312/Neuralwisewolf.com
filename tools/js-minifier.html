@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Minifier | Neural Wise Wolf</title>
+    <meta name="description" content="Минификация JavaScript кода: удаление комментариев, пробелов, оптимизация. Уменьшение размера файлов для ускорения загрузки сайтов.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .js-minifier {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .minifier-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            height: 400px;
+        }
+
+        .editor-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .editor-panel label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .code-editor {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            resize: none;
+            background: var(--bg-primary);
+            line-height: 1.5;
+            transition: border-color 0.3s ease;
+        }
+
+        .code-editor:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-primary);
+        }
+
+        .option-item label {
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 500;
+            flex: 1;
+            margin: 0;
+        }
+
+        .option-item.selected {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .stats {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin: 0.25rem 0 0;
+            font-size: 0.85rem;
+        }
+
+        .comparison {
+            margin-top: 2rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .file-upload {
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px dashed var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .file-input:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        @media (max-width: 968px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+                height: 800px;
+            }
+            
+            .minifier-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .copy-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .positive {
+            color: var(--accent-success);
+        }
+
+        .negative {
+            color: var(--accent-danger);
+        }
+
+        .loading {
+            opacity: 0.6;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-light);
+            border-top: 2px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="dev" data-slug="js-minifier">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>JS Minifier</h1>
+                <p class="tool-description">Минификация JavaScript кода для уменьшения размера файлов и ускорения загрузки</p>
+            </div>
+
+            <div class="js-minifier">
+                <div class="minifier-card">
+                    <div class="file-upload">
+                        <label for="fileInput" class="file-input" id="fileInputLabel">
+                            📁 Загрузить JS файл или перетащите сюда
+                        </label>
+                        <input type="file" id="fileInput" accept=".js,.javascript" style="display: none;">
+                        <div class="file-name" id="fileName"></div>
+                    </div>
+
+                    <div class="editor-container">
+                        <div class="editor-panel">
+                            <div class="code-header">
+                                <span class="code-title">Исходный код</span>
+                                <button class="copy-btn" onclick="copyCode('inputCode')">📋 Копировать</button>
+                            </div>
+                            <textarea 
+                                id="inputCode" 
+                                class="code-editor" 
+                                placeholder="Вставьте JavaScript код здесь... // Пример:
+function calculateSum(a, b) {
+    // Складываем два числа
+    return a + b;
+}
+
+console.log('Сумма:', calculateSum(5, 3));"
+                            >function calculateSum(a, b) {
+    // Складываем два числа
+    return a + b;
+}
+
+console.log('Сумма:', calculateSum(5, 3));</textarea>
+                        </div>
+
+                        <div class="editor-panel">
+                            <div class="code-header">
+                                <span class="code-title">Минифицированный код</span>
+                                <button class="copy-btn" onclick="copyCode('outputCode')">📋 Копировать</button>
+                            </div>
+                            <textarea 
+                                id="outputCode" 
+                                class="code-editor" 
+                                placeholder="Минифицированная версия появится здесь..."
+                                readonly
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="options-grid">
+                        <div class="option-item" data-option="removeComments">
+                            <input type="checkbox" id="removeComments" checked>
+                            <label for="removeComments">Удалять комментарии</label>
+                        </div>
+                        <div class="option-item" data-option="removeWhitespace">
+                            <input type="checkbox" id="removeWhitespace" checked>
+                            <label for="removeWhitespace">Удалять пробелы</label>
+                        </div>
+                        <div class="option-item" data-option="shortenVariables">
+                            <input type="checkbox" id="shortenVariables">
+                            <label for="shortenVariables">Сокращать переменные</label>
+                        </div>
+                        <div class="option-item" data-option="removeConsole">
+                            <input type="checkbox" id="removeConsole">
+                            <label for="removeConsole">Удалять console.log</label>
+                        </div>
+                        <div class="option-item" data-option="optimizeBooleans">
+                            <input type="checkbox" id="optimizeBooleans" checked>
+                            <label for="optimizeBooleans">Оптимизировать булевы значения</label>
+                        </div>
+                        <div class="option-item" data-option="preserveSemicolons">
+                            <input type="checkbox" id="preserveSemicolons" checked>
+                            <label for="preserveSemicolons">Сохранять точки с запятой</label>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-full" id="minifyBtn">
+                            ⚡ Минифицировать
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="clearBtn">
+                            🧹 Очистить всё
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="downloadBtn">
+                            💾 Скачать минифицированный
+                        </button>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <p class="stat-value" id="originalSize">0</p>
+                                <p class="stat-label">Исходный размер (байт)</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="minifiedSize">0</p>
+                                <p class="stat-label">Минифицированный (байт)</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="savings">0</p>
+                                <p class="stat-label">Экономия</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-value" id="compression">0%</p>
+                                <p class="stat-label">Сжатие</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Сравнение -->
+                <div class="comparison">
+                    <h3>📊 Зачем нужна минификация JavaScript?</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🚀 Ускорение загрузки</h4>
+                            <p>Уменьшение размера файлов на 30-70% значительно ускоряет загрузку страниц</p>
+                            <ul>
+                                <li>Меньше трафика</li>
+                                <li>Быстрее парсинг</li>
+                                <li>Улучшение SEO</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔒 Безопасность</h4>
+                            <p>Затруднение чтения и анализа исходного кода</p>
+                            <ul>
+                                <li>Сокрытие логики</li>
+                                <li>Защита интеллектуальной собственности</li>
+                                <li>Усложнение реверс-инжиниринга</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📦 Оптимизация продакшена</h4>
+                            <p>Профессиональная подготовка кода для production-среды</p>
+                            <ul>
+                                <li>Удаление отладочного кода</li>
+                                <li>Оптимизация производительности</li>
+                                <li>Стандарт индустрии</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Особенности -->
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>⚡ Мгновенная обработка</h4>
+                        <p>Минификация в реальном времени без задержек</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎛️ Гибкие настройки</h4>
+                        <p>Настройка уровня оптимизации под ваши needs</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📊 Детальная статистика</h4>
+                        <p>Точные данные об экономии и степени сжатия</p>
+                    </div>
+                </div>
+
+                <!-- SEO контент -->
+                <div class="article">
+                    <h2>Минификация JavaScript: полное руководство</h2>
+                    <p>Минификация — это процесс удаления из исходного кода всех ненужных символов без изменения его functionality. Это crucial этап подготовки JavaScript к production-среде.</p>
+                    
+                    <h3>🎯 Что удаляется при минификации?</h3>
+                    <ul>
+                        <li><strong>Комментарии</strong> — все однострочные и многострочные комментарии</li>
+                        <li><strong>Пробелы и переносы строк</strong> — лишние пробелы, табы, пустые строки</li>
+                        <li><strong>Ненужные точки с запятой</strong> — в некоторых случаях</li>
+                        <li><strong>Отладочный код</strong> — console.log, debugger statements</li>
+                        <li><strong>Укорачивание переменных</strong> — замена длинных имен на короткие</li>
+                    </ul>
+                    
+                    <h3>⚡ Техники минификации</h3>
+                    
+                    <h4>Базовые техники</h4>
+                    <pre>// До минификации
+function calculateTotalPrice(products) {
+    // Рассчитываем общую стоимость
+    let total = 0;
+    for (let i = 0; i < products.length; i++) {
+        total += products[i].price * products[i].quantity;
+    }
+    return total;
+}
+
+// После минификации
+function calculateTotalPrice(n){let t=0;for(let i=0;i<n.length;i++)t+=n[i].price*n[i].quantity;return t}</pre>
+
+                    <h4>Продвинутые техники</h4>
+                    <pre>// Удаление неиспользуемого кода
+// Свертывание констант
+// Inlining функций
+// Оптимизация булевых выражений</pre>
+                    
+                    <h3>💡 Практические примеры экономии</h3>
+                    <div class="example-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>📦 jQuery</h4>
+                            <p>Исходный: 271 KB → Минифицированный: 87 KB (68% сжатие)</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>⚛️ React</h4>
+                            <p>Исходный: 120 KB → Минифицированный: 42 KB (65% сжатие)</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🎯 Vue.js</h4>
+                            <p>Исходный: 92 KB → Минифицированный: 33 KB (64% сжатие)</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Чем минификация отличается от обфускации?</strong><br>
+                    Минификация уменьшает размер, обфускация затрудняет понимание кода. Часто используются together.</p>
+                    
+                    <p><strong>Влияет ли минификация на производительность?</strong><br>
+                    Да, положительно! Меньший размер файла → быстрее загрузка → быстрее выполнение.</p>
+                    
+                    <p><strong>Нужно ли тестировать код после минификации?</strong><br>
+                    Обязательно! Всегда тестируйте минифицированный код перед deployment.</p>
+                    
+                    <p><strong>Какие инструменты используются в индустрии?</strong><br>
+                    UglifyJS, Terser, Google Closure Compiler, Webpack, Rollup, и другие.</p>
+                    
+                    <p><strong>Когда не стоит минифицировать код?</strong><br>
+                    В development-среде, при отладке, и когда читаемость кода важнее размера.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const inputCode = document.getElementById('inputCode');
+            const outputCode = document.getElementById('outputCode');
+            const fileInput = document.getElementById('fileInput');
+            const fileInputLabel = document.getElementById('fileInputLabel');
+            const fileName = document.getElementById('fileName');
+            const minifyBtn = document.getElementById('minifyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const originalSize = document.getElementById('originalSize');
+            const minifiedSize = document.getElementById('minifiedSize');
+            const savings = document.getElementById('savings');
+            const compression = document.getElementById('compression');
+
+            // Опции
+            const options = {
+                removeComments: document.getElementById('removeComments'),
+                removeWhitespace: document.getElementById('removeWhitespace'),
+                shortenVariables: document.getElementById('shortenVariables'),
+                removeConsole: document.getElementById('removeConsole'),
+                optimizeBooleans: document.getElementById('optimizeBooleans'),
+                preserveSemicolons: document.getElementById('preserveSemicolons')
+            };
+
+            // Инициализация опций
+            Object.entries(options).forEach(([key, checkbox]) => {
+                const item = document.querySelector(`[data-option="${key}"]`);
+                checkbox.addEventListener('change', () => {
+                    item.classList.toggle('selected', checkbox.checked);
+                    if (inputCode.value.trim()) {
+                        minifyCode();
+                    }
+                });
+                // Изначально добавляем класс selected для отмеченных опций
+                if (checkbox.checked) {
+                    item.classList.add('selected');
+                }
+            });
+
+            // Обработка drag and drop для файлов
+            fileInputLabel.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileInputLabel.style.borderColor = 'var(--accent-primary)';
+                fileInputLabel.style.background = 'var(--bg-secondary)';
+            });
+
+            fileInputLabel.addEventListener('dragleave', () => {
+                fileInputLabel.style.borderColor = 'var(--border-light)';
+                fileInputLabel.style.background = 'var(--bg-primary)';
+            });
+
+            fileInputLabel.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileInputLabel.style.borderColor = 'var(--border-light)';
+                fileInputLabel.style.background = 'var(--bg-primary)';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    loadFile();
+                }
+            });
+
+            fileInput.addEventListener('change', loadFile);
+
+            function loadFile() {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    if (file.type === 'application/javascript' || file.name.endsWith('.js')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            inputCode.value = e.target.result;
+                            fileName.textContent = `📄 ${file.name} (${formatFileSize(file.size)})`;
+                            minifyCode();
+                        };
+                        reader.readAsText(file);
+                    } else {
+                        alert('Пожалуйста, выберите JavaScript файл (.js)');
+                        fileInput.value = '';
+                    }
+                }
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Минификация
+            minifyBtn.addEventListener('click', minifyCode);
+            inputCode.addEventListener('input', minifyCode);
+            clearBtn.addEventListener('click', clearAll);
+            downloadBtn.addEventListener('click', downloadMinified);
+
+            function minifyCode() {
+                const code = inputCode.value;
+                if (!code.trim()) {
+                    outputCode.value = '';
+                    updateStats(0, 0);
+                    return;
+                }
+
+                let minified = code;
+
+                // Удаление комментариев
+                if (options.removeComments.checked) {
+                    minified = minified.replace(/\/\/.*$/gm, '') // Однострочные комментарии
+                                      .replace(/\/\*[\s\S]*?\*\//g, ''); // Многострочные комментарии
+                }
+
+                // Удаление console.log
+                if (options.removeConsole.checked) {
+                    minified = minified.replace(/console\.(log|warn|error|info)\(.*?\);?/g, '');
+                }
+
+                // Оптимизация булевых значений
+                if (options.optimizeBooleans.checked) {
+                    minified = minified.replace(/true/g, '!0')
+                                      .replace(/false/g, '!1');
+                }
+
+                // Удаление пробелов и переносов строк
+                if (options.removeWhitespace.checked) {
+                    minified = minified.replace(/\s+/g, ' ')
+                                      .replace(/^\s+|\s+$/g, '')
+                                      .replace(/\s*([=+-\/*%&|^~!<>?{}();:,])\s*/g, '$1');
+                }
+
+                // Сокращение переменных (базовое)
+                if (options.shortenVariables.checked) {
+                    // Простая замена длинных имен переменных на короткие
+                    const variables = {};
+                    let counter = 0;
+                    const varRegex = /(var|let|const)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
+                    let match;
+                    
+                    while ((match = varRegex.exec(minified)) !== null) {
+                        const varName = match[2];
+                        if (!variables[varName] && varName.length > 2) {
+                            variables[varName] = 'v' + counter++;
+                        }
+                    }
+
+                    // Заменяем использования переменных
+                    for (const [oldVar, newVar] of Object.entries(variables)) {
+                        const regex = new RegExp('\\b' + oldVar + '\\b', 'g');
+                        minified = minified.replace(regex, newVar);
+                    }
+
+                    // Заменяем объявления переменных
+                    for (const [oldVar, newVar] of Object.entries(variables)) {
+                        const regex = new RegExp('(var|let|const)\\s+' + oldVar, 'g');
+                        minified = minified.replace(regex, '$1 ' + newVar);
+                    }
+                }
+
+                // Сохранение точек с запятой
+                if (!options.preserveSemicolons.checked) {
+                    minified = minified.replace(/;\s*}/g, '}')
+                                      .replace(/;\s*$/g, '');
+                }
+
+                // Финальная очистка
+                minified = minified.replace(/\s+/g, ' ')
+                                  .trim();
+
+                outputCode.value = minified;
+                updateStats(code.length, minified.length);
+            }
+
+            function updateStats(originalLength, minifiedLength) {
+                originalSize.textContent = originalLength;
+                minifiedSize.textContent = minifiedLength;
+                
+                const savingsBytes = originalLength - minifiedLength;
+                savings.textContent = savingsBytes;
+                savings.className = savingsBytes > 0 ? 'stat-value positive' : 'stat-value';
+                
+                const compressionRatio = originalLength > 0 ? 
+                    ((savingsBytes / originalLength) * 100).toFixed(1) : 0;
+                compression.textContent = compressionRatio + '%';
+                compression.className = compressionRatio > 0 ? 'stat-value positive' : 'stat-value';
+            }
+
+            function clearAll() {
+                inputCode.value = '';
+                outputCode.value = '';
+                fileInput.value = '';
+                fileName.textContent = '';
+                updateStats(0, 0);
+            }
+
+            function downloadMinified() {
+                const minifiedCode = outputCode.value;
+                if (!minifiedCode.trim()) {
+                    alert('Нет минифицированного кода для скачивания');
+                    return;
+                }
+
+                const blob = new Blob([minifiedCode], { type: 'application/javascript' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'minified.js';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            // Глобальная функция для копирования
+            window.copyCode = function(textareaId) {
+                const textarea = document.getElementById(textareaId);
+                textarea.select();
+                navigator.clipboard.writeText(textarea.value)
+                    .then(() => {
+                        const event = new CustomEvent('showToast', {
+                            detail: { message: 'Код скопирован в буфер обмена!', type: 'success' }
+                        });
+                        document.dispatchEvent(event);
+                    })
+                    .catch(err => {
+                        console.error('Ошибка при копировании:', err);
+                    });
+            };
+
+            // Первоначальная минификация
+            minifyCode();
+        });
+    </script>
+</body>
+</html>

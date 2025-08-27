@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор идей для мемов | Нейронный волк</title>
+    <meta name="description" content="Генератор тематических идей для мемов в духе «Нейронного волка»: волки, пацанские цитаты и, конечно, Ауф!">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .random-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            word-wrap: break-word;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            line-height: 1.5;
+        }
+        
+        .result-value.visible {
+            opacity: 1;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-meme-idea">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор идей для мемов</h1>
+                <p class="tool-description">Получите случайную идею для мема в тематике «Нейронного волка». Вдохновляйтесь волчьей мудростью и пацанской философией. Ауф!</p>
+            </div>
+
+            <div class="random-generator">
+                <div class="generator-card">
+                    <button class="btn btn-primary btn-full" id="generateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Сгенерировать идею
+                    </button>
+
+                    <div class="result-container">
+                        <span class="result-title" id="resultLabel">Идея для твоего мема:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🐺 Уникальная тематика</h4>
+                        <p>Генерирует идеи, вдохновленные «пацанской» культурой, волками и цитатами.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенное вдохновение</h4>
+                        <p>Получите готовую идею для мема за доли секунды. Просто добавьте картинку!</p>
+                    </div>
+                    <div class="feature">
+                        <h4>😂 Смех гарантирован</h4>
+                        <p>Комбинация случайных фраз подарит много весёлых и абсурдных идей.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Что за «Нейронный волк» и пацанские мемы?</h2>
+                    <p>Сообщество «Нейронный волк» объединило в себе образы суровых волков и пацанскую философию, создав уникальную субкультуру. Мемы с «Ауф!» и цитатами про волков-одиночек стали символом силы, верности и немного абсурда.</p>
+                    
+                    <h3>💡 Как работает генератор?</h3>
+                    <p>Наш генератор работает по принципу случайной комбинации. Он берет фразы из разных категорий:</p>
+                    <ul>
+                        <li>**Начало:** "Когда ты...", "По жизни...", "Я не...", "Сначала я подумал..."</li>
+                        <li>**Основная идея:** "...пацан к успеху шёл", "...волк одиночка", "...не предавал братву".</li>
+                        <li>**Финал:** "...и ты такой: Ауф!", "...а потом вспомнил, что ты волк", "...но в душе остался пацаном".</li>
+                    </ul>
+                    <p>Объединяя эти части, генератор создаёт свежие и уморительные идеи, которые можно использовать для создания своих мемов. **Ауф!**</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const resultLabel = document.getElementById('resultLabel');
+            const resultValue = document.getElementById('resultValue');
+
+            const intros = [
+                "Когда ты...",
+                "Жизнь как...",
+                "Когда жизнь дала тебе по щщам, ты...",
+                "В отношениях я как...",
+                "Мой жизненный принцип:",
+                "Пацан сказал - пацан сделал."
+            ];
+
+            const themes = [
+                "волк одиночка",
+                "пацан к успеху шёл",
+                "не предавал братву",
+                "слушаешь старый рэп",
+                "отвечаешь за свои слова",
+                "остаёшься собой",
+                "начинаешь новую главу",
+                "идёшь к своей цели",
+                "ценишь верность"
+            ];
+            
+            const outros = [
+                "И ты такой: Ауф!",
+                "Волк не предаст.",
+                "Душа пацана.",
+                "И это по-братски.",
+                "Никакой фальши.",
+                "Так и живём."
+            ];
+            
+            const fullQuotes = [
+                "Волк не выступает в цирке.",
+                "Братство — не звук пустой.",
+                "Ауф.",
+                "Пацаны не извиняются, они просто не ошибаются.",
+                "Кто с волками живёт, тот по-волчьи воет.",
+                "Волчара.",
+                "Запомни, главное - не потерять себя.",
+                "Волк-одиночка, но с пацанами.",
+                "Успех — это не цель, это путь."
+            ];
+
+            generateBtn.addEventListener('click', generateMemeIdea);
+
+            function generateMemeIdea() {
+                let idea = '';
+                const format = Math.floor(Math.random() * 3);
+                
+                if (format === 0) {
+                    // Формат: Начало + Тема + Аутро
+                    const intro = intros[Math.floor(Math.random() * intros.length)];
+                    const theme = themes[Math.floor(Math.random() * themes.length)];
+                    const outro = outros[Math.floor(Math.random() * outros.length)];
+                    idea = `${intro} ${theme}, а ты такой: ${outro}`;
+                } else if (format === 1) {
+                    // Формат: Полная цитата
+                    idea = fullQuotes[Math.floor(Math.random() * fullQuotes.length)];
+                } else {
+                    // Формат: Две части
+                    const intro = intros[Math.floor(Math.random() * intros.length)];
+                    const theme = themes[Math.floor(Math.random() * themes.length)];
+                    idea = `${intro} ${theme}.`;
+                }
+
+                resultValue.classList.remove('visible');
+                resultLabel.style.display = 'block';
+
+                setTimeout(() => {
+                    resultValue.textContent = idea;
+                    resultValue.classList.add('visible');
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

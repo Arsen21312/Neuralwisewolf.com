@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор цвета | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенный подбор цвета и получение его значений в форматах HEX, RGB, HSL и CMYK.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .color-picker-card {
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .color-preview-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 2rem;
+        }
+        #color-input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 150px;
+            height: 150px;
+            border: 5px solid var(--border-light);
+            background-color: transparent;
+            cursor: pointer;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 0 10px rgba(59, 130, 246, 0.2);
+            transition: border-color 0.3s ease;
+        }
+        #color-input:hover, #color-input:focus {
+            border-color: var(--accent-primary);
+        }
+        #color-input::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+        #color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        .color-results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .result-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-primary);
+        }
+        .result-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.3;
+        }
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .color-results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="dev" data-slug="color-picker">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Выбор цвета (Color Picker)</h1>
+                <p class="tool-description">Мгновенный подбор цвета и получение его значений в форматах HEX, RGB и HSL.</p>
+            </div>
+
+            <div class="calculator-card color-picker-card">
+                <div class="color-preview-container">
+                    <input type="color" id="color-input" value="#1e3a8a">
+                </div>
+                
+                <div class="results-grid color-results-grid">
+                    <div class="result-card" onclick="copyToClipboard('hex-result')">
+                        <p class="result-label">HEX</p>
+                        <p class="result-value" id="hex-result">#1e3a8a</p>
+                    </div>
+                    <div class="result-card" onclick="copyToClipboard('rgb-result')">
+                        <p class="result-label">RGB</p>
+                        <p class="result-value" id="rgb-result">rgb(30, 58, 138)</p>
+                    </div>
+                    <div class="result-card" onclick="copyToClipboard('hsl-result')">
+                        <p class="result-label">HSL</p>
+                        <p class="result-value" id="hsl-result">hsl(223, 64%, 33%)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Мгновенная конвертация</h4>
+                    <p>Получайте коды цвета в самых популярных форматах сразу, как только выберете нужный оттенок.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Копирование в один клик</h4>
+                    <p>Просто нажмите на карточку с кодом, чтобы скопировать его в буфер обмена.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для любых задач</h4>
+                    <p>Идеален для веб-разработки, графического дизайна, копирайтинга или просто для вдохновения.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое цветовая палитра?</h2>
+                <p>Цветовая палитра — это набор цветов, которые используются для создания дизайна. Она может быть гармоничной и сбалансированной, если цвета подобраны правильно. Цветовые модели, такие как HEX, RGB и HSL, помогают точно определить и воспроизвести любой оттенок.</p>
+                
+                <h3>Как работает наш Color Picker?</h3>
+                <p>Когда вы выбираете цвет, инструмент мгновенно преобразует его значение. Например, если вы выбрали оттенок синего, он покажет его код в виде <code>#0000FF</code> (HEX), <code>rgb(0, 0, 255)</code> (RGB) и <code>hsl(240, 100%, 50%)</code> (HSL). Это значительно упрощает работу с цветом.</p>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✍️ Для веб-разработки</h4>
+                        <p>Быстрый выбор цветов для CSS-свойств, таких как <code>background-color</code>, <code>color</code> или <code>border</code>.</p>
+                    </div>
+                    <div class="example">
+                        <h4>👨‍💻 Для дизайна</h4>
+                        <p>Подбор идеальных оттенков для логотипов, иллюстраций или макетов.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📚 Для повседневной жизни</h4>
+                        <p>Используйте инструмент, чтобы определить цвет чего-либо и найти его точное значение.</p>
+                    </div>
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        // Функция для преобразования HEX в RGB
+        function hexToRgb(hex) {
+            const bigint = parseInt(hex.slice(1), 16);
+            const r = (bigint >> 16) & 255;
+            const g = (bigint >> 8) & 255;
+            const b = bigint & 255;
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        // Функция для преобразования RGB в HSL
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0; // achromatic
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+        }
+        
+        // Функция для копирования в буфер обмена
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const textToCopy = element.textContent;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = element.textContent;
+                element.textContent = 'Скопировано!';
+                setTimeout(() => {
+                    element.textContent = originalText;
+                }, 1000);
+            }).catch(err => {
+                console.error('Не удалось скопировать текст: ', err);
+            });
+        }
+        window.copyToClipboard = copyToClipboard;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const colorInput = document.getElementById('color-input');
+            const hexResult = document.getElementById('hex-result');
+            const rgbResult = document.getElementById('rgb-result');
+            const hslResult = document.getElementById('hsl-result');
+
+            function updateColor() {
+                const hexValue = colorInput.value;
+                const rgbValue = hexToRgb(hexValue);
+                const rgbMatch = rgbValue.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+                const hslValue = rgbToHsl(parseInt(rgbMatch[1]), parseInt(rgbMatch[2]), parseInt(rgbMatch[3]));
+                
+                hexResult.textContent = hexValue;
+                rgbResult.textContent = rgbValue;
+                hslResult.textContent = hslValue;
+            }
+
+            colorInput.addEventListener('input', updateColor);
+            
+            // Инициализация при загрузке страницы
+            updateColor();
+        });
+    </script>
+</body>
+</html>

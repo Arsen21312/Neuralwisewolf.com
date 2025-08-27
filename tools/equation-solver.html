@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Решатель уравнений | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенно решайте линейные и квадратные уравнения онлайн. Узнайте корни уравнения с подробным объяснением.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .equation-type-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+        .type-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid var(--border-light);
+            background: var(--bg-secondary);
+            transition: all 0.2s ease;
+        }
+        .type-btn.active {
+            background: var(--accent-primary);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: left;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            text-align: center;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .result-container {
+            margin-top: 1.5rem;
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+        }
+        .result-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            word-break: break-word;
+        }
+        .error-text {
+            color: var(--accent-danger);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .example {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+        }
+        @media (max-width: 480px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="equation-solver">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Решатель уравнений</h1>
+                <p class="tool-description">Мгновенно решайте линейные и квадратные уравнения онлайн. Узнайте корни уравнения с подробным объяснением.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="equation-type-selector">
+                    <button class="type-btn active" data-type="quadratic">Квадратное</button>
+                    <button class="type-btn" data-type="linear">Линейное</button>
+                </div>
+
+                <div id="input-fields" class="input-grid">
+                    <div class="input-group" id="input-a">
+                        <label for="coeff-a">Коэффициент a:</label>
+                        <input type="number" id="coeff-a" value="1" step="any">
+                    </div>
+                    <div class="input-group" id="input-b">
+                        <label for="coeff-b">Коэффициент b:</label>
+                        <input type="number" id="coeff-b" value="0" step="any">
+                    </div>
+                    <div class="input-group" id="input-c">
+                        <label for="coeff-c">Коэффициент c:</label>
+                        <input type="number" id="coeff-c" value="0" step="any">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary calculate-btn" id="solve-btn">
+                    ✔️ Решить
+                </button>
+
+                <div id="result-container" class="result-container" style="display: none;">
+                    <p class="result-label">Решение:</p>
+                    <p class="result-value" id="solution-value"></p>
+                </div>
+                <div id="error-message" class="error-text" style="display: none;"></div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Мгновенное решение</h4>
+                    <p>Получайте точные корни уравнений в реальном времени, без сложных вычислений.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Удобный интерфейс</h4>
+                    <p>Просто выберите тип уравнения и введите коэффициенты. Всё остальное мы сделаем за вас.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для учёбы и работы</h4>
+                    <p>Идеален для студентов, инженеров и всех, кто работает с уравнениями.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Как работает решатель уравнений?</h2>
+                <p>Наш онлайн-инструмент — это простой и быстрый способ найти корни линейных и квадратных уравнений. Вам не нужно помнить сложные формулы, достаточно просто ввести коэффициенты, а калькулятор выполнит все вычисления за вас.</p>
+                
+                <h3>Решение квадратных уравнений</h3>
+                <p>Квадратное уравнение имеет вид: <code>ax² + bx + c = 0</code>. Для его решения используется формула дискриминанта: <code>D = b² - 4ac</code>. В зависимости от значения дискриминанта, уравнение может иметь:</p>
+                <ul>
+                    <li>**Два корня:** если `D > 0`, корни вычисляются по формуле: <code>x = (-b ± √D) / 2a</code>.</li>
+                    <li>**Один корень:** если `D = 0`, корень вычисляется по формуле: <code>x = -b / 2a</code>.</li>
+                    <li>**Нет действительных корней:** если `D < 0`, корни являются комплексными числами.</li>
+                </ul>
+                
+                <h3>Решение линейных уравнений</h3>
+                <p>Линейное уравнение имеет вид: <code>ax + b = 0</code>. Его решение найти очень просто: <code>x = -b / a</code>.</p>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✍️ Для учёбы</h4>
+                        <p>Идеально для проверки домашних заданий по алгебре и подготовки к экзаменам.</p>
+                    </div>
+                    <div class="example">
+                        <h4>👨‍💻 Для инженерии</h4>
+                        <p>Быстрое решение уравнений, возникающих при расчётах в физике и инженерии.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📚 В быту</h4>
+                        <p>Помогает решать задачи, связанные с пропорциями и расчётами, где требуется найти неизвестную величину.</p>
+                    </div>
+                </div>
+
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Какие числа я могу вводить?</strong><br>
+                Инструмент работает с любыми действительными числами (положительными, отрицательными, целыми и десятичными).</p>
+                <p><strong>Будет ли решатель поддерживать другие типы уравнений?</strong><br>
+                На данный момент мы поддерживаем линейные и квадратные уравнения. В будущем планируем расширить функционал для решения кубических уравнений и систем уравнений.</p>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeBtns = document.querySelectorAll('.type-btn');
+            const inputFields = document.getElementById('input-fields');
+            const solveBtn = document.getElementById('solve-btn');
+            const resultContainer = document.getElementById('result-container');
+            const solutionValue = document.getElementById('solution-value');
+            const errorMessage = document.getElementById('error-message');
+            
+            let currentType = 'quadratic';
+
+            function updateInputs(type) {
+                currentType = type;
+                typeBtns.forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`.type-btn[data-type="${type}"]`).classList.add('active');
+
+                document.getElementById('input-a').style.display = 'block';
+                document.getElementById('input-b').style.display = 'block';
+                
+                if (type === 'quadratic') {
+                    document.getElementById('input-c').style.display = 'block';
+                } else {
+                    document.getElementById('input-c').style.display = 'none';
+                }
+                
+                hideResult();
+                hideError();
+            }
+
+            typeBtns.forEach(btn => {
+                btn.addEventListener('click', () => updateInputs(btn.dataset.type));
+            });
+
+            solveBtn.addEventListener('click', () => {
+                hideResult();
+                hideError();
+
+                const a = parseFloat(document.getElementById('coeff-a').value);
+                const b = parseFloat(document.getElementById('coeff-b').value);
+                const c = parseFloat(document.getElementById('coeff-c').value);
+
+                if (isNaN(a) || isNaN(b) || (currentType === 'quadratic' && isNaN(c))) {
+                    showError('Пожалуйста, введите корректные числа.');
+                    return;
+                }
+                
+                let solution;
+                if (currentType === 'linear') {
+                    if (a === 0) {
+                        if (b === 0) {
+                            solution = 'Бесконечное множество решений.';
+                        } else {
+                            solution = 'Нет решений.';
+                        }
+                    } else {
+                        solution = `x = ${(-b / a).toFixed(4)}`;
+                    }
+                } else if (currentType === 'quadratic') {
+                    if (a === 0) {
+                        showError('Коэффициент "a" не может быть равен 0 для квадратного уравнения.');
+                        return;
+                    }
+
+                    const discriminant = b * b - 4 * a * c;
+
+                    if (discriminant > 0) {
+                        const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                        const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                        solution = `x₁ = ${x1.toFixed(4)}, x₂ = ${x2.toFixed(4)}`;
+                    } else if (discriminant === 0) {
+                        const x = -b / (2 * a);
+                        solution = `x = ${x.toFixed(4)}`;
+                    } else {
+                        const realPart = (-b / (2 * a)).toFixed(4);
+                        const imaginaryPart = (Math.sqrt(Math.abs(discriminant)) / (2 * a)).toFixed(4);
+                        solution = `x₁ = ${realPart} + ${imaginaryPart}i, x₂ = ${realPart} - ${imaginaryPart}i`;
+                    }
+                }
+                
+                showResult(solution);
+            });
+
+            function showResult(value) {
+                solutionValue.textContent = value;
+                resultContainer.style.display = 'block';
+            }
+
+            function hideResult() {
+                resultContainer.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                hideResult();
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+            
+            // Инициализация
+            updateInputs('quadratic');
+        });
+    </script>
+</body>
+</html>

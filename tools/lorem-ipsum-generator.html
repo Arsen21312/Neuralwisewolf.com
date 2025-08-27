@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор Lorem Ipsum | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-генератор Lorem Ipsum текста. Создавайте любой объем 'рыбы' для ваших макетов, веб-сайтов и документов.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .result-container {
+            margin-top: 1.5rem;
+        }
+        .result-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .result-container textarea {
+            width: 100%;
+            height: 300px;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-light);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .status-message {
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+        .success {
+            color: var(--accent-success);
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="lorem-ipsum-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор Lorem Ipsum</h1>
+                <p class="tool-description">Создавайте любое количество Lorem Ipsum текста для ваших проектов.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-group">
+                    <label for="num-paragraphs">Количество абзацев</label>
+                    <input type="number" id="num-paragraphs" class="input-field" value="5" min="1" max="50">
+                </div>
+
+                <button class="btn btn-primary" id="generate-btn">
+                    ✍️ Сгенерировать
+                </button>
+
+                <div class="result-container" style="display: none;" id="result-container">
+                    <label for="generated-text">Сгенерированный текст</label>
+                    <textarea id="generated-text" readonly></textarea>
+                    <div class="buttons-container">
+                        <button class="btn btn-secondary" id="copy-btn">
+                            📋 Копировать
+                        </button>
+                    </div>
+                    <div id="status-message" class="status-message"></div>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Быстро и удобно</h4>
+                    <p>Мгновенная генерация текста нужного объема.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Простое копирование</h4>
+                    <p>Копируйте результат в один клик.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для любых проектов</h4>
+                    <p>Идеально подходит для веб-дизайна, печати и презентаций.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое Lorem Ipsum?</h2>
+                <p><strong>Lorem Ipsum</strong> — это классический "рыбный" текст, используемый в полиграфии и веб-дизайне для имитации текстового наполнения. Он позволяет оценить внешний вид и структуру макета, не отвлекаясь на смысл содержания.</p>
+                <p>Этот текст существует с XVI века и представляет собой бессмысленную смесь латинских слов, что делает его идеальным для использования в качестве заглушки.</p>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const numParagraphsInput = document.getElementById('num-paragraphs');
+            const generateBtn = document.getElementById('generate-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const generatedTextarea = document.getElementById('generated-text');
+            const resultContainer = document.getElementById('result-container');
+            const statusMessage = document.getElementById('status-message');
+
+            const loremIpsumText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac justo vel turpis vulputate dapibus. Fusce vel odio sed libero viverra scelerisque. Vivamus quis magna at enim mattis laoreet. Duis malesuada dolor in arcu auctor, ut tincidunt libero tincidunt. Donec non odio nec nisi pharetra dapibus. Sed vel dolor vel nisi consectetur eleifend. Cras vel turpis vel libero vulputate dapibus. In hac habitasse platea dictumst. Curabitur vel justo sed odio pulvinar vulputate. Quisque ac magna vel justo pulvinar vulputate. Curabitur vel justo sed odio pulvinar vulputate. Quisque ac magna vel justo pulvinar vulputate. Cras vel turpis vel libero vulputate dapibus. In hac habitasse platea dictumst. Curabitur vel justo sed odio pulvinar vulputate. Quisque ac magna vel justo pulvinar vulputate. Curabitur vel justo sed odio pulvinar vulputate. Quisque ac magna vel justo pulvinar vulputate.`;
+
+            function generateLoremIpsum() {
+                const numParagraphs = parseInt(numParagraphsInput.value);
+                if (isNaN(numParagraphs) || numParagraphs < 1) {
+                    alert('Пожалуйста, введите корректное число абзацев.');
+                    return;
+                }
+
+                let result = [];
+                for (let i = 0; i < numParagraphs; i++) {
+                    result.push(loremIpsumText.substring(0, Math.floor(Math.random() * (loremIpsumText.length - 100)) + 100));
+                }
+
+                generatedTextarea.value = result.join('\n\n');
+                resultContainer.style.display = 'block';
+            }
+
+            function copyToClipboard() {
+                generatedTextarea.select();
+                generatedTextarea.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(generatedTextarea.value)
+                    .then(() => {
+                        statusMessage.textContent = 'Текст скопирован!';
+                        statusMessage.className = 'status-message success';
+                        setTimeout(() => {
+                            statusMessage.textContent = '';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        statusMessage.textContent = 'Не удалось скопировать текст.';
+                        statusMessage.className = 'status-message error';
+                    });
+            }
+
+            generateBtn.addEventListener('click', generateLoremIpsum);
+            copyBtn.addEventListener('click', copyToClipboard);
+
+            // Генерируем текст по умолчанию при загрузке
+            generateLoremIpsum();
+        });
+    </script>
+</body>
+</html>

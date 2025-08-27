@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+  <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barcode Generator | Neural Wise Wolf</title>
+  <meta name="description" content="Генератор штрих-кодов: EAN-13 и Code 39. Превью, подпись, экспорт PNG/SVG.">
+  <base href="/">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .tool-header{text-align:center;margin-bottom:1.5rem}
+    .tool-header p{max-width:640px;margin:.25rem auto 0;color:var(--text-secondary)}
+    .bc-tool{max-width:980px;margin:0 auto}
+    .panel{background:var(--bg-primary);border:1px solid var(--border-light);border-radius:20px;box-shadow:var(--shadow-md);padding:1.25rem;margin-bottom:1rem}
+    .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem}
+    .control{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;padding:.75rem}
+    .control label{display:block;font-weight:700;font-size:.9rem;margin-bottom:.35rem}
+    .row{display:flex;gap:.5rem;align-items:center}
+    .mini{padding:.55rem .75rem;border:1px solid var(--border-medium);background:var(--bg-primary);border-radius:10px;cursor:pointer}
+    .mini:hover{background:var(--bg-secondary)}
+    .select,.text{width:100%;padding:.6rem .75rem;border:1.5px solid var(--border-medium);border-radius:10px;background:var(--bg-primary);color:var(--text-primary)}
+    .select:focus,.text:focus{outline:none;border-color:var(--accent-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent-primary) 20%,transparent)}
+    .preview{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:16px;padding:1rem;text-align:center}
+    .hint{color:var(--text-secondary);font-size:.9rem}
+    .tool-features{margin-top:28px;padding-top:18px;border-top:1px solid var(--border-light)}
+    .tool-features .feature{margin-bottom:1rem}
+  </style>
+</head>
+<body>
+  <div data-include="header"></div>
+  <div data-include="sidebar"></div>
+  <div id="overlay" class="overlay"></div>
+
+  <main class="tool" data-category="dev" data-slug="barcode-generator">
+    <div class="tool-container">
+      <div class="tool-header">
+        <h1>Barcode Generator</h1>
+        <p class="tool-description">Создавай штрих-коды EAN-13 и Code 39. Настрой текст, высоту, толщину штриха, подпись. Экспорт в PNG или SVG.</p>
+      </div>
+
+      <div class="bc-tool">
+        <div class="panel">
+          <div class="controls">
+            <div class="control">
+              <label for="symb">Символика</label>
+              <select id="symb" class="select">
+                <option value="ean13">EAN-13</option>
+                <option value="code39">Code 39</option>
+              </select>
+            </div>
+
+            <div class="control">
+              <label for="text">Данные</label>
+              <input id="text" class="text" placeholder="EAN-13: 12–13 цифр, Code39: A-Z 0-9 - . $ / + % и пробел">
+              <div class="row" style="margin-top:.5rem">
+                <button class="mini" id="ex1">пример EAN-13</button>
+                <button class="mini" id="ex2">пример Code39</button>
+              </div>
+            </div>
+
+            <div class="control">
+              <label>Параметры</label>
+              <div class="row"><span class="hint">Толщина модуля</span><input id="mw" type="number" class="text" value="2" min="1" max="6" style="max-width:90px"></div>
+              <div class="row"><span class="hint">Высота (px)</span><input id="bh" type="number" class="text" value="120" min="40" max="300" style="max-width:110px"></div>
+              <label class="row" style="gap:.4rem;margin-top:.4rem"><input type="checkbox" id="human" checked> подпись под кодом</label>
+            </div>
+
+            <div class="control">
+              <label>Действия</label>
+              <div class="row">
+                <button class="mini" id="render">генерировать</button>
+                <button class="mini" id="savePng">PNG</button>
+                <button class="mini" id="saveSvg">SVG</button>
+              </div>
+              <div class="hint" id="msg" style="margin-top:.5rem">Готово к генерации</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview">
+          <canvas id="canvas"></canvas>
+          <div class="hint" style="margin-top:.5rem">Подпись отключается переключателем «подпись под кодом».</div>
+        </div>
+      </div>
+
+      <div class="tool-features">
+        <div class="feature"><h4>🎯 Поддержка форматов</h4><p>EAN-13 и Code 39. Контроль контрольной суммы EAN-13.</p></div>
+        <div class="feature"><h4>⚡ Рендер локально</h4><p>Canvas и SVG без внешних библиотек.</p></div>
+        <div class="feature"><h4>📦 Экспорт</h4><p>Сохранение в PNG и SVG одним кликом.</p></div>
+      </div>
+
+      <div data-include="related"></div>
+    </div>
+  </main>
+
+  <div data-include="footer"></div>
+
+  <script src="js/loader.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const symb = document.getElementById('symb');
+    const text = document.getElementById('text');
+    const mw = document.getElementById('mw');
+    const bh = document.getElementById('bh');
+    const human = document.getElementById('human');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const msg = document.getElementById('msg');
+
+    // Примеры
+    document.getElementById('ex1').onclick = () => { text.value = '5901234123457'; render(); };
+    document.getElementById('ex2').onclick = () => { text.value = 'NEURAL-WOLF 2025'; symb.value='code39'; render(); };
+
+    document.getElementById('render').onclick = render;
+    [symb,text,mw,bh,human].forEach(el => el.addEventListener('change', render));
+
+    // -------- EAN-13 ----------
+    const L = {
+      '0':'0001101','1':'0011001','2':'0010011','3':'0111101','4':'0100011','5':'0110001','6':'0101111','7':'0111011','8':'0110111','9':'0001011'
+    };
+    const G = {
+      '0':'0100111','1':'0110011','2':'0011011','3':'0100001','4':'0011101','5':'0111001','6':'0000101','7':'0010001','8':'0001001','9':'0010111'
+    };
+    const R = {
+      '0':'1110010','1':'1100110','2':'1101100','3':'1000010','4':'1011100','5':'1001110','6':'1010000','7':'1000100','8':'1001000','9':'1110100'
+    };
+    const PARITY = {
+      '0':'LLLLLL','1':'LLGLGG','2':'LLGGLG','3':'LLGGGL','4':'LGLLGG','5':'LGGLLG','6':'LGGGLL','7':'LGLGLG','8':'LGLGGL','9':'LGGLGL'
+    };
+
+    function ean13Checksum12(d12){
+      let sum = 0;
+      for(let i=0;i<12;i++){
+        const n = d12.charCodeAt(i)-48;
+        sum += (i%2===0) ? n : n*3;
+      }
+      const c = (10 - (sum % 10)) % 10;
+      return String(c);
+    }
+
+    function ean13Pattern(digits){
+      // digits: 12 или 13 цифр
+      if(!/^\d{12,13}$/.test(digits)) throw 'EAN-13: нужны 12–13 цифр';
+      const d = digits.padEnd(13, ean13Checksum12(digits.slice(0,12)));
+      // Guards
+      let bits = '101';
+      const parity = PARITY[d[0]];
+      // left 6 digits (1..6)
+      for(let i=1;i<=6;i++){
+        const enc = parity[i-1]==='L' ? L[d[i]] : G[d[i]];
+        bits += enc;
+      }
+      bits += '01010';
+      // right 6 digits (7..12)
+      for(let i=7;i<=12;i++){
+        bits += R[d[i]];
+      }
+      bits += '101';
+      return {bits, digits:d};
+    }
+
+    // -------- Code 39 ----------
+    // N = тонкий, W = широкий штрих/пробел. Каждая буква: 9 элементов (5 штрихов, 4 промежутка)
+    const C39 = {
+      '0':'NNNWWNWNN','1':'WNNWNNNNW','2':'NNWWNNNNW','3':'WNWWNNNNN','4':'NNNWWNNNW','5':'WNNWWNNNN','6':'NNWWWNNNN','7':'NNNWNNWNW','8':'WNNWNNWNN','9':'NNWWNNWNN',
+      'A':'WNNNNWNNW','B':'NNWNNWNNW','C':'WNWNNWNNN','D':'NNNNWWNNW','E':'WNNNWWNNN','F':'NNWNWWNNN','G':'NNNNNWWNW','H':'WNNNNWWNN','I':'NNWNNWWNN','J':'NNNNWWWNN',
+      'K':'WNNNNNNWW','L':'NNWNNNNWW','M':'WNWNNNNWN','N':'NNNNWNNWW','O':'WNNNWNNWN','P':'NNWNWNNWN','Q':'NNNNNNWWW','R':'WNNNNNWWN','S':'NNWNNNWWN','T':'NNNNWNWWN',
+      'U':'WWNNNNNNW','V':'NWWNNNNNW','W':'WWWNNNNNN','X':'NWNNWNNNW','Y':'WWNNWNNNN','Z':'NWWNWNNNN','-':'NWNNNNWNW','.' :'WWNNNNWNN',' ' :'NWWNNNWNN',
+      '$':'NWNWNNWNN','/':'NWNNNWNWN','+':'NNNWNWNWN','%':'NNWNWNWNN','*':'NWNWNWNNN'
+    };
+    function code39Pattern(raw){
+      // Добавляем старт/стоп *
+      const txt = '*'+raw.toUpperCase()+'*';
+      // Проверка допустимых символов
+      for(const ch of txt){
+        if(!C39[ch]) throw 'Code 39: недопустимый символ «'+ch+'»';
+      }
+      // Узкий/широкий в биты модулей: N = 1 модуль, W = 3 модуля; чередование штрих/пробел, плюс межсимвольный узкий пробел (1 модуль)
+      let seq = [];
+      for(const ch of txt){
+        const pat = C39[ch];
+        for(let i=0;i<pat.length;i++){
+          const isBar = (i%2===0);
+          const w = pat[i]==='W' ? 3 : 1;
+          seq.push({bar:isBar, w});
+        }
+        // межсимвольный пробел
+        seq.push({bar:false, w:1});
+      }
+      return seq; // массив элементов
+    }
+
+    // -------- Рендер ----------
+    function drawEAN13(digits, moduleW, barH, showText){
+      const {bits, digits:full} = ean13Pattern(digits);
+      const quiet = 9*moduleW; // тихая зона
+      const guardExt = Math.round(barH*0.1); // выступающие гварды
+      const textH = showText ? 18 : 0;
+      const w = quiet + bits.length*moduleW + quiet;
+      const h = barH + textH;
+
+      canvas.width = w; canvas.height = h;
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-secondary') || '#0b0b0b';
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = '#fff'; // фон под штрихкодом (если нужен контраст). Отключено:
+      // ctx.fillRect(0,0,w,h);
+
+      // фон прозрачный, рисуем черные штрихи
+      ctx.fillStyle = '#000';
+      let x = quiet;
+      for(let i=0;i<bits.length;i++){
+        const isGuard = (i<3) || (i>=45 && i<50) || (i>=92); // позиции гвардов: 101, 01010, 101
+        const hh = isGuard ? barH+guardExt : barH;
+        if(bits[i]==='1'){
+          ctx.fillRect(x, 0, moduleW, hh);
+        }
+        x += moduleW;
+      }
+
+      if(showText){
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-primary') || '#111';
+        ctx.font = '14px system-ui, -apple-system, Segoe UI, Roboto';
+        ctx.textAlign = 'center';
+        // Первая цифра слева от левого блока
+        ctx.fillText(full[0], quiet - 8, barH + 14);
+        // 6 слева под первым блоком
+        const leftStart = quiet + 3*moduleW;
+        const leftWidth = 42*moduleW;
+        for(let i=1;i<=6;i++){
+          const cx = leftStart + (i-0.5)*7*moduleW;
+          ctx.fillText(full[i], cx, barH + 14);
+        }
+        // 6 справа
+        const rightStart = quiet + (3 + 42 + 5)*moduleW;
+        for(let i=7;i<=12;i++){
+          const cx = rightStart + (i-6-0.5)*7*moduleW;
+          ctx.fillText(full[i], cx, barH + 14);
+        }
+      }
+    }
+
+    function drawCode39(raw, moduleW, barH, showText){
+      const seq = code39Pattern(raw);
+      const quiet = 10*moduleW;
+      const textH = showText ? 18 : 0;
+
+      const totalModules = seq.reduce((s,e)=>s+e.w,0);
+      const w = quiet + totalModules*moduleW + quiet;
+      const h = barH + textH;
+      canvas.width = w; canvas.height = h;
+
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = '#000';
+      let x = quiet;
+      for(const e of seq){
+        const px = e.w * moduleW;
+        if(e.bar) ctx.fillRect(x, 0, px, barH);
+        x += px;
+      }
+
+      if(showText){
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-primary') || '#111';
+        ctx.font = '14px system-ui, -apple-system, Segoe UI, Roboto';
+        ctx.textAlign = 'center';
+        ctx.fillText(raw.toUpperCase(), w/2, barH + 14);
+      }
+    }
+
+    function render(){
+      try{
+        const m = Math.max(1, Math.min(6, parseInt(mw.value||'2',10)));
+        const h = Math.max(40, Math.min(300, parseInt(bh.value||'120',10)));
+        const val = (text.value||'').trim();
+        if(symb.value==='ean13'){
+          if(!/^\d{12,13}$/.test(val)) throw 'EAN-13: введите 12–13 цифр';
+          drawEAN13(val, m, h, human.checked);
+          msg.textContent = 'OK: EAN-13 сгенерирован';
+        }else{
+          if(!/^[0-9A-Z\-\.\ \$\/\+\% ]+$/.test(val.toUpperCase())) throw 'Code 39: допустимы A-Z 0-9 и - . $ / + % пробел';
+          drawCode39(val, m, h, human.checked);
+          msg.textContent = 'OK: Code 39 сгенерирован';
+        }
+      }catch(e){
+        msg.textContent = 'Ошибка: ' + e;
+      }
+    }
+
+    // Экспорт
+    document.getElementById('savePng').onclick = () => {
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = (symb.value==='ean13'?'ean13':'code39') + '.png';
+      a.click();
+    };
+
+    document.getElementById('saveSvg').onclick = () => {
+      // Простейший SVG из текущего кода по тем же алгоритмам
+      try{
+        const m = Math.max(1, Math.min(6, parseInt(mw.value||'2',10)));
+        const h = Math.max(40, Math.min(300, parseInt(bh.value||'120',10)));
+        const val = (text.value||'').trim();
+        let svg = '';
+        if(symb.value==='ean13'){
+          const {bits, digits} = ean13Pattern(val);
+          const quiet = 9*m, guardExt = Math.round(h*0.1), textH = human.checked?18:0;
+          const W = quiet + bits.length*m + quiet, H = h + textH;
+          let x = quiet; svg += `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+          for(let i=0;i<bits.length;i++){
+            const isGuard = (i<3)||(i>=45&&i<50)||(i>=92);
+            const hh = isGuard ? h+guardExt : h;
+            if(bits[i]==='1') svg += `<rect x="${x}" y="0" width="${m}" height="${hh}" fill="#000"/>`;
+            x += m;
+          }
+          if(human.checked){
+            const leftStart = quiet + 3*m, rightStart = quiet + (3+42+5)*m;
+            svg += `<g font-family="system-ui,Segoe UI,Roboto" font-size="14" fill="#111" text-anchor="middle">`;
+            svg += `<text x="${quiet-8}" y="${h+14}" text-anchor="end">${digits[0]}</text>`;
+            for(let i=1;i<=6;i++){ const cx = leftStart + (i-0.5)*7*m; svg += `<text x="${cx}" y="${h+14}">${digits[i]}</text>`; }
+            for(let i=7;i<=12;i++){ const cx = rightStart + (i-6-0.5)*7*m; svg += `<text x="${cx}" y="${h+14}">${digits[i]}</text>`; }
+            svg += `</g>`;
+          }
+          svg += `</svg>`;
+        }else{
+          const seq = code39Pattern(val);
+          const quiet = 10*m, textH = human.checked?18:0;
+          const totalModules = seq.reduce((s,e)=>s+e.w,0);
+          const W = quiet + totalModules*m + quiet, H = h + textH;
+          let x = quiet; svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+          for(const e of seq){ const px = e.w*m; if(e.bar) svg += `<rect x="${x}" y="0" width="${px}" height="${h}" fill="#000"/>`; x += px; }
+          if(human.checked) svg += `<text x="${W/2}" y="${h+14}" font-family="system-ui,Segoe UI,Roboto" font-size="14" fill="#111" text-anchor="middle">${val.toUpperCase()}</text>`;
+          svg += `</svg>`;
+        }
+        const blob = new Blob([svg], {type:'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = (symb.value==='ean13'?'ean13':'code39')+'.svg'; a.click();
+        setTimeout(()=>URL.revokeObjectURL(url), 1000);
+      }catch(e){ msg.textContent = 'Ошибка SVG: '+e; }
+    };
+
+    // Автогенерация для примера
+    text.value = '5901234123457';
+    render();
+  });
+  </script>
+</body>
+</html>

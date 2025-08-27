@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Визуализатор единичной окружности | Neural Wise Wolf</title>
+    <meta name="description" content="Интерактивный инструмент для изучения единичной окружности. Визуализируйте синус, косинус и тангенс в реальном времени.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .visualizer-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        #unit-circle-canvas {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            margin: 0 auto 1rem;
+        }
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .field {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 5px;
+            outline: none;
+            transition: background .2s;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+            transition: background .2s;
+        }
+        
+        .values {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .value-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .value-box strong {
+            display: block;
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            color: var(--accent-primary);
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="unit-circle-visualizer">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Визуализатор единичной окружности</h1>
+                <p class="tool-description">Изучайте синус, косинус и тангенс в реальном времени. Перетаскивайте точку по окружности, чтобы увидеть, как меняются их значения.</p>
+            </div>
+
+            <div class="visualizer-container">
+                <canvas id="unit-circle-canvas" width="500" height="500"></canvas>
+                
+                <div class="controls">
+                    <div class="field">
+                        <label for="angle-slider" class="field-label">Угол (в градусах): <span id="angle-value">0</span>°</label>
+                        <input type="range" id="angle-slider" min="0" max="360" value="0">
+                    </div>
+                    
+                    <div class="values">
+                        <div class="value-box">
+                            <span class="field-label">Косинус (x)</span>
+                            <strong id="cos-value">0.00</strong>
+                        </div>
+                        <div class="value-box">
+                            <span class="field-label">Синус (y)</span>
+                            <strong id="sin-value">0.00</strong>
+                        </div>
+                        <div class="value-box">
+                            <span class="field-label">Тангенс</span>
+                            <strong id="tan-value">0.00</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>✨ Интерактивное обучение</h4>
+                    <p>Идеально подходит для студентов и всех, кто хочет лучше понять тригонометрию.</p>
+                </div>
+                <div class="feature">
+                    <h4>🚀 Мгновенные расчеты</h4>
+                    <p>Значения обновляются в реальном времени при изменении угла.</p>
+                </div>
+                <div class="feature">
+                    <h4>🧠 Понятная визуализация</h4>
+                    <p>Наглядно показывает связь между углом и координатами точки на окружности.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое единичная окружность?</h2>
+                <p><strong>Единичная окружность</strong> — это окружность с радиусом 1, центр которой находится в начале координат (0,0). Она является фундаментальным инструментом в тригонометрии, так как позволяет визуализировать значения тригонометрических функций.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Для любого угла θ, синус (sin θ) равен y-координате, а косинус (cos θ) равен x-координате точки на окружности. Тангенс (tan θ) — это отношение синуса к косинусу (y/x). Визуализатор помогает понять эту взаимосвязь, показывая, как эти значения изменяются при вращении точки по окружности.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('unit-circle-canvas');
+            const ctx = canvas.getContext('2d');
+            const slider = document.getElementById('angle-slider');
+            const angleValueElement = document.getElementById('angle-value');
+            const cosValueElement = document.getElementById('cos-value');
+            const sinValueElement = document.getElementById('sin-value');
+            const tanValueElement = document.getElementById('tan-value');
+            
+            const size = 500;
+            const radius = size * 0.4;
+            const center = size / 2;
+            
+            function draw() {
+                const angleDeg = parseFloat(slider.value);
+                const angleRad = angleDeg * Math.PI / 180;
+                
+                const cosVal = Math.cos(angleRad);
+                const sinVal = Math.sin(angleRad);
+                const tanVal = Math.tan(angleRad);
+                
+                const x = center + cosVal * radius;
+                const y = center - sinVal * radius;
+
+                // Clear canvas
+                ctx.clearRect(0, 0, size, size);
+
+                // Draw Circle
+                ctx.beginPath();
+                ctx.arc(center, center, radius, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'var(--border-medium)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw axes
+                ctx.beginPath();
+                ctx.moveTo(center, 0);
+                ctx.lineTo(center, size);
+                ctx.moveTo(0, center);
+                ctx.lineTo(size, center);
+                ctx.strokeStyle = 'var(--text-secondary)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                
+                // Draw point
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = 'var(--accent-primary)';
+                ctx.fill();
+
+                // Draw triangle lines
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.lineTo(x, y);
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, center);
+                ctx.moveTo(center, center);
+                ctx.lineTo(x, center);
+                ctx.strokeStyle = 'var(--accent-primary)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Update values
+                angleValueElement.textContent = angleDeg.toFixed(0);
+                cosValueElement.textContent = cosVal.toFixed(3);
+                sinValueElement.textContent = sinVal.toFixed(3);
+                tanValueElement.textContent = isFinite(tanVal) ? tanVal.toFixed(3) : '∞';
+            }
+
+            slider.addEventListener('input', draw);
+            
+            // Initial draw
+            draw();
+        });
+    </script>
+</body>
+
+</html>

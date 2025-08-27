@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+  <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calorie Calculator | Neural Wise Wolf</title>
+  <meta name="description" content="Калькулятор дневной нормы калорий. TDEE, цели, скорость изменения веса, срок до цели и макросы.">
+  <base href="/">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .tool-header{text-align:center;margin-bottom:1.5rem}
+    .tool-header p{max-width:720px;margin:.25rem auto 0;color:var(--text-secondary)}
+    .cc{max-width:980px;margin:0 auto}
+    .panel{background:var(--bg-primary);border:1px solid var(--border-light);border-radius:20px;box-shadow:var(--shadow-md);padding:1.25rem}
+    .grid{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .field{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:12px;padding:.8rem;display:flex;flex-direction:column;gap:.55rem}
+    .field label{font-weight:700}
+    .row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .text,.select{width:100%;padding:.65rem .75rem;border:1.5px solid var(--border-medium);border-radius:10px;background:var(--bg-primary);color:var(--text-primary)}
+    .text:focus,.select:focus{outline:none;border-color:var(--accent-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent-primary) 20%,transparent)}
+    .mini{padding:.55rem .75rem;border:1px solid var(--border-medium);background:var(--bg-primary);border-radius:10px;cursor:pointer}
+    .mini:hover{background:var(--bg-secondary)}
+    .check {display: flex;align-items: center;gap: .5rem;font-size: .95rem;}    .check input{width:16px;height:16px;accent-color:var(--accent-primary)}
+    .result-cards{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:1rem}
+    .card{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:16px;padding:1rem;text-align:center}
+    .big{font-size:1.8rem;font-weight:800;color:var(--accent-primary);margin:0}
+    .muted{color:var(--text-secondary);font-size:.9rem}
+    .tool-features{margin-top:28px;padding-top:18px;border-top:1px solid var(--border-light)}
+    .tool-features .feature{margin-bottom:1rem}
+    .unit-badge{font-size:.85rem;border:1px dashed var(--border-medium);padding:.15rem .5rem;border-radius:999px}
+    .macro-grid {display: grid;gap: .4rem; grid-template-columns: 1fr;   /* одна колонка */justify-items: start;         /* всё влево */}
+        @media (max-width:520px){.macro-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div data-include="header"></div>
+  <div data-include="sidebar"></div>
+  <div id="overlay" class="overlay"></div>
+
+  <main class="tool" data-category="life" data-slug="calorie-calculator">
+    <div class="tool-container">
+      <div class="tool-header">
+        <h1>Calorie Calculator</h1>
+        <p class="tool-description">Считаем суточную норму калорий (TDEE), подбираем калории под цель, оцениваем срок до желаемого веса и раскладываем макросы.</p>
+      </div>
+
+      <div class="cc">
+        <div class="panel">
+          <div class="grid">
+            <div class="field">
+              <label>Пол и единицы</label>
+              <div class="row">
+                <select id="sex" class="select">
+                  <option value="male">Мужчина</option>
+                  <option value="female">Женщина</option>
+                </select>
+                <span class="unit-badge" id="unitBadge">метрическая</span>
+                <button class="mini" id="toggleUnits">⇄ единицы</button>
+              </div>
+              <label>Возраст</label>
+              <input id="age" type="number" class="text" min="10" max="100" value="28">
+            </div>
+
+            <div class="field">
+              <label>Рост (<span id="hUnit">см</span>)</label>
+              <input id="height" type="number" class="text" min="50" max="230" value="175">
+              <label>Вес (<span id="wUnit">кг</span>)</label>
+              <input id="weight" type="number" class="text" min="30" max="250" value="70">
+            </div>
+
+            <div class="field">
+              <label>Активность (множитель)</label>
+              <select id="activity" class="select">
+                <option value="1.2">1.2 — минимальная</option>
+                <option value="1.375">1.375 — лёгкая</option>
+                <option value="1.55" selected>1.55 — средняя</option>
+                <option value="1.725">1.725 — высокая</option>
+                <option value="1.9">1.9 — очень высокая</option>
+              </select>
+              <label>Цель</label>
+              <select id="goal" class="select">
+                <option value="def">Дефицит</option>
+                <option value="maint" selected>Поддержание</option>
+                <option value="sur">Профицит</option>
+              </select>
+              <div class="row">
+                <span class="muted">Скорость (кг/нед)</span>
+                <input id="rate" type="number" class="text" value="0.5" min="0.1" max="1.5" step="0.1" style="max-width:110px">
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Целевой вес (опционально)</label>
+              <input id="targetW" type="number" class="text" placeholder="кг">
+              <div class="macro-grid" style="margin-top:.25rem">
+                <div class="check"><input type="radio" name="split" value="40-30-30" checked> 40/30/30</div>
+                <div class="check"><input type="radio" name="split" value="30-30-40"> 30/30/40</div>
+                <div class="check"><input type="radio" name="split" value="30-25-45"> 30/25/45 (высок. углев.)</div>
+                <div class="check"><input type="radio" name="split" value="35-25-40"> 35/25/40 (высок. белок)</div>
+                <div class="check"><input type="radio" name="split" value="20-70-10"> 20/70/10 (кето)</div>
+                <div class="check"><input type="radio" name="split" value="25-30-45"> 25/30/45</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="justify-content:space-between;margin-top:.6rem">
+            <div class="row">
+              <button id="calc" class="mini">рассчитать</button>
+              <button id="reset" class="mini">сброс</button>
+            </div>
+            <span id="status" class="muted">Готово</span>
+          </div>
+
+          <div class="result-cards">
+            <div class="card">
+              <p class="big" id="bmrVal">—</p>
+              <div class="muted">BMR, ккал/день</div>
+            </div>
+            <div class="card">
+              <p class="big" id="tdeeVal">—</p>
+              <div class="muted">TDEE (с активностью)</div>
+            </div>
+            <div class="card">
+              <p class="big" id="targetCal">—</p>
+              <div class="muted">Калории под цель</div>
+            </div>
+            <div class="card">
+              <p class="big" id="etaVal">—</p>
+              <div class="muted">Срок до цели</div>
+            </div>
+          </div>
+
+          <div class="result-cards">
+            <div class="card">
+              <p class="big" id="macroKcal">—</p>
+              <div class="muted">Ккал по макро-сплиту</div>
+            </div>
+            <div class="card">
+              <p class="big" id="macroGrams">—</p>
+              <div class="muted">Белки / Жиры / Углеводы, г</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-features">
+        <div class="feature"><h4>🎯 Методика</h4><p>BMR по Mifflin–St Jeor. Калории цели считаются через эквивалент 7700 ккал ≈ 1 кг жира.</p></div>
+        <div class="feature"><h4>⚡ Практика</h4><p>Выбери скорость изменения веса — получишь дефицит или профицит и ориентировочный срок до цели.</p></div>
+        <div class="feature"><h4>🍽️ Макросы</h4><p>Быстрые пресеты сплитов. 1 г белка/углевода = 4 ккал, 1 г жира = 9 ккал.</p></div>
+      </div>
+
+      <div data-include="related"></div>
+    </div>
+  </main>
+
+  <div data-include="footer"></div>
+
+  <script src="js/loader.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sex = document.getElementById('sex');
+    const age = document.getElementById('age');
+    const height = document.getElementById('height');
+    const weight = document.getElementById('weight');
+    const activity = document.getElementById('activity');
+    const goal = document.getElementById('goal');
+    const rate = document.getElementById('rate');
+    const targetW = document.getElementById('targetW');
+
+    const unitBadge = document.getElementById('unitBadge');
+    const hUnit = document.getElementById('hUnit');
+    const wUnit = document.getElementById('wUnit');
+    const toggleUnits = document.getElementById('toggleUnits');
+
+    const bmrVal = document.getElementById('bmrVal');
+    const tdeeVal = document.getElementById('tdeeVal');
+    const targetCal = document.getElementById('targetCal');
+    const etaVal = document.getElementById('etaVal');
+
+    const macroKcal = document.getElementById('macroKcal');
+    const macroGrams = document.getElementById('macroGrams');
+    const status = document.getElementById('status');
+
+    let metric = true;
+
+    function toNum(el){ return parseFloat((el.value||'').toString().replace(',', '.')) || 0; }
+    function round(x){ return Math.round(x); }
+
+    function switchUnits(){
+      if(metric){
+        // метрика -> imperial
+        height.value = (toNum(height)/2.54).toFixed(1);  // см -> in
+        weight.value = (toNum(weight)/0.45359237).toFixed(1); // кг -> lb
+        if(targetW.value) targetW.value = (toNum(targetW)/0.45359237).toFixed(1);
+        hUnit.textContent='in'; wUnit.textContent='lb'; unitBadge.textContent='imperial'; metric=false;
+      }else{
+        // imperial -> метрика
+        height.value = (toNum(height)*2.54).toFixed(1);  // in -> см
+        weight.value = (toNum(weight)*0.45359237).toFixed(1); // lb -> кг
+        if(targetW.value) targetW.value = (toNum(targetW)*0.45359237).toFixed(1);
+        hUnit.textContent='см'; wUnit.textContent='кг'; unitBadge.textContent='метрическая'; metric=true;
+      }
+      calc();
+    }
+    toggleUnits.addEventListener('click', switchUnits);
+
+    function mifflinBMR(kg, cm, yrs, isMale){
+      return 10*kg + 6.25*cm - 5*yrs + (isMale ? 5 : -161);
+    }
+
+    function kcalDeltaFromRate(kgPerWeek){
+      // 1 кг ≈ 7700 ккал
+      return kgPerWeek * 7700 / 7; // ккал/день
+    }
+
+    function parseSplit(){
+      const val = (document.querySelector('input[name="split"]:checked')?.value || '40-30-30').split('-').map(Number);
+      return {p:val[0], f:val[1], c:val[2]};
+    }
+
+    function macrosFromTarget(kcal, split){
+      const pKcal = kcal * (split.p/100);
+      const fKcal = kcal * (split.f/100);
+      const cKcal = kcal * (split.c/100);
+      const p = Math.round(pKcal/4), f = Math.round(fKcal/9), c = Math.round(cKcal/4);
+      return {p,f,c, pKcal:Math.round(pKcal), fKcal:Math.round(fKcal), cKcal:Math.round(cKcal)};
+    }
+
+    function calc(){
+      let yrs = toNum(age);
+      let cm = toNum(height);
+      let kg = toNum(weight);
+      let tw = toNum(targetW);
+
+      // если сейчас imperial — приводим в метрику для формул
+      if(!metric){ cm *= 2.54; kg *= 0.45359237; if(tw) tw *= 0.45359237; }
+
+      if(kg<=0 || cm<=0 || yrs<=0){ status.textContent='Введите корректные данные'; return; }
+
+      const bmr = mifflinBMR(kg, cm, yrs, sex.value==='male');
+      const tdee = bmr * parseFloat(activity.value);
+
+      // цель
+      const r = Math.max(0.1, Math.min(1.5, toNum(rate))); // кг/нед
+      const delta = kcalDeltaFromRate(r) * (goal.value==='def' ? -1 : goal.value==='sur' ? +1 : 0);
+      const targetCalories = Math.max(1200, tdee + delta);
+
+      // срок до цели (если указан вес)
+      let eta = '—';
+      if(tw>0){
+        const diff = Math.abs(tw - kg); // кг
+        if(diff===0){ eta = 'уже достигнуто'; }
+        else if(goal.value==='maint'){ eta = 'без изменения веса'; }
+        else{
+          const weeks = diff / r;
+          const days = Math.ceil(weeks*7);
+          eta = days < 7 ? `${days} дн.` : `${Math.ceil(weeks)} нед.`;
+        }
+      }
+
+      // макросы
+      const split = parseSplit();
+      const ms = macrosFromTarget(targetCalories, split);
+
+      bmrVal.textContent = round(bmr).toLocaleString('ru-RU');
+      tdeeVal.textContent = round(tdee).toLocaleString('ru-RU');
+      targetCal.textContent = round(targetCalories).toLocaleString('ru-RU');
+      etaVal.textContent = eta;
+
+      macroKcal.textContent = `${ms.pKcal}/${ms.fKcal}/${ms.cKcal} ккал`;
+      macroGrams.textContent = `${ms.p} / ${ms.f} / ${ms.c}`;
+      status.textContent = 'OK';
+    }
+
+    document.getElementById('calc').addEventListener('click', calc);
+    document.getElementById('reset').addEventListener('click', ()=>{
+      sex.value='male'; age.value=28; height.value=175; weight.value=70; activity.value='1.55';
+      goal.value='maint'; rate.value=0.5; targetW.value='';
+      if(!metric) switchUnits(); else calc();
+    });
+
+    [sex,age,height,weight,activity,goal,rate,targetW].forEach(el=>el.addEventListener('input', calc));
+    document.querySelectorAll('input[name="split"]').forEach(r=>r.addEventListener('change', calc));
+
+    // URL: ?sex=female&age=30&h=165&w=58&act=1.375&goal=def&rate=0.5&tw=55&units=metric
+    const q = new URLSearchParams(location.search);
+    if(q.has('sex')) sex.value=q.get('sex');
+    if(q.has('age')) age.value=q.get('age');
+    if(q.has('h')) height.value=q.get('h');
+    if(q.has('w')) weight.value=q.get('w');
+    if(q.has('act')) activity.value=q.get('act');
+    if(q.has('goal')) goal.value=q.get('goal');
+    if(q.has('rate')) rate.value=q.get('rate');
+    if(q.has('tw')) targetW.value=q.get('tw');
+    if(q.get('units')==='imperial' && metric) switchUnits();
+
+    calc();
+  });
+  </script>
+</body>
+</html>

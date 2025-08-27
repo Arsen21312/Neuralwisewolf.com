@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор сна | Neural Wise Wolf</title>
+    <meta name="description" content="Рассчитайте идеальное время для отхода ко сну и пробуждения на основе циклов сна. Просыпайтесь отдохнувшим и полным энергии!">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        
+        .sleep-calculator {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .calculator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .time-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .time-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .result-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-primary);
+        }
+        
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+        
+        .sleep-schedule {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+        
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .schedule-time {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .schedule-desc {
+            color: var(--text-secondary);
+        }
+        
+        .optimal-time {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .optimal-time h3 {
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .cycle-info {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+        
+        .cycle-stage {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+        }
+        
+        .cycle-stage h4 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+        
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .calculator-card {
+                padding: 1.5rem;
+            }
+            
+            .result-value {
+                font-size: 1.25rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="life" data-slug="sleep-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор сна</h1>
+                <p class="tool-description">Рассчитайте идеальное время для отхода ко сну и пробуждения на основе циклов сна</p>
+            </div>
+
+            <div class="sleep-calculator">
+                <div class="calculator-card">
+                    <div class="input-group">
+                        <label for="wakeup-time">Во сколько вы хотите проснуться?</label>
+                        <input type="time" id="wakeup-time" class="time-input" value="07:00">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="fall-asleep-time">Сколько минут вам нужно, чтобы заснуть? (обычно 10-20 минут)</label>
+                        <input type="number" id="fall-asleep-time" class="time-input" value="15" min="5" max="30">
+                    </div>
+                    
+                    <button class="btn btn-primary calculate-btn" id="calculate-btn">
+               
+                        Рассчитать время сна
+                    </button>
+                    
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <p class="result-value" id="cycles-count">5-6</p>
+                            <p class="result-label">циклов сна</p>
+                        </div>
+                        <div class="result-card">
+                            <p class="result-value" id="total-sleep">7.5-9</p>
+                            <p class="result-label">часов сна</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sleep-schedule">
+                    <h3>
+               
+                        Рекомендуемое время отхода ко сну</h3>
+                    
+                    <div class="schedule-item">
+                        <span class="schedule-desc">Для 6 циклов (9 часов):</span>
+                        <span class="schedule-time" id="cycle-6">22:15</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-desc">Для 5 циклов (7.5 часов):</span>
+                        <span class="schedule-time" id="cycle-5">23:45</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-desc">Для 4 циклов (6 часов):</span>
+                        <span class="schedule-time" id="cycle-4">01:15</span>
+                    </div>
+                </div>
+                
+                <div class="optimal-time" id="optimal-time">
+                    <h3>
+               
+                        Оптимальное время пробуждения</h3>
+                    <p class="result-value" id="best-wake-time">07:00</p>
+                    <p>Просыпайтесь между циклами для лучшего самочувствия</p>
+                </div>
+
+                <div class="cycle-info">
+                    <h3>
+               
+                        О циклах сна</h3>
+                    
+                    <div class="cycle-stage">
+                        <h4>Фазы сна (90-минутный цикл)</h4>
+                        <p>• Легкий сон: 1-7 минут</p>
+                        <p>• Глубокий сон: 20-40 минут</p>
+                        <p>• REM-сон: 10-60 минут</p>
+                    </div>
+                    
+                    <div class="cycle-stage">
+                        <h4>Почему важно просыпаться между циклами?</h4>
+                        <p>Пробуждение в конце цикла позволяет чувствовать себя более отдохнувшим, так как вы не прерываете глубокие фазы сна.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>
+               
+                        Научный подход</h4>
+                    <p>Расчет основан на 90-минутных циклах сна, подтвержденных исследованиями</p>
+                </div>
+                <div class="feature">
+                    <h4>
+               
+                        Персонализация</h4>
+                    <p>Учитывается индивидуальное время засыпания для точных рекомендаций</p>
+                </div>
+                <div class="feature">
+                    <h4>
+               
+                        Качество пробуждения</h4>
+                    <p>Помогаем проснуться в оптимальной фазе для лучшего самочувствия</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>Как работает калькулятор сна</h2>
+                <p>Наш калькулятор использует научные принципы архитектуры сна для расчета оптимального времени отхода ко сну и пробуждения:</p>
+                
+                <h3>
+               
+                    90-минутные циклы сна</h3>
+                <p>Человеческий сон состоит из циклов продолжительностью примерно 90 минут. Каждый цикл включает фазы легкого сна, глубокого сна и REM-фазы (быстрое движение глаз).</p>
+                
+                <h3>
+               
+                    Важность пробуждения между циклами</h3>
+                <p>Просыпаться в конце цикла (между циклами) значительно легче, чем во время глубокой или REM-фазы. Это обеспечивает лучшее самочувствие и меньшую сонливость.</p>
+                
+                <h3>
+               
+                    Формулы расчета</h3>
+                <ul>
+                    <li><strong>Время засыпания:</strong> Учитывается индивидуальное время, необходимое для засыпания</li>
+                    <li><strong>Циклы сна:</strong> Расчет основан на 90-минутных циклах</li>
+                    <li><strong>Оптимальная продолжительность:</strong> 5-6 полных циклов (7.5-9 часов)</li>
+                    <li><strong>Время пробуждения:</strong> Определяется на основе желаемого времени пробуждения</li>
+                </ul>
+                
+                <h3>
+               
+                    Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>
+               
+                            Утренняя продуктивность</h4>
+                        <p>Просыпайтесь отдохнувшим для максимальной продуктивности</p>
+                    </div>
+                    <div class="example">
+                        <h4>
+               
+                            Подготовка к важным событиям</h4>
+                        <p>Оптимальный сон перед экзаменами, собеседованиями и событиями</p>
+                    </div>
+                    <div class="example">
+                        <h4>
+               
+                            Регуляция режима</h4>
+                        <p>Установите здоровый режим сна и бодрствования</p>
+                    </div>
+                </div>
+                
+                <h3>
+               
+                    Частые вопросы</h3>
+                <p><strong>Почему именно 90-минутные циклы?</strong><br>
+                Исследования показывают, что полный цикл сна длится в среднем 90 минут. Пробуждение в конце цикла соответствует естественному завершению фазы сна.</p>
+                
+                <p><strong>Что делать, если я просыпаюсь ночью?</strong><br>
+                Кратковременные пробуждения ночью нормальны. Старайтесь не смотреть на время и расслабленно дышать, чтобы быстрее уснуть.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wakeupTimeInput = document.getElementById('wakeup-time');
+            const fallAsleepTimeInput = document.getElementById('fall-asleep-time');
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            // Устанавливаем текущее время + 1 час как значение по умолчанию для пробуждения
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
+            const defaultTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            wakeupTimeInput.value = defaultTime;
+            
+            calculateBtn.addEventListener('click', calculateSleepTimes);
+            
+            // Авторасчет при изменении времени
+            wakeupTimeInput.addEventListener('change', calculateSleepTimes);
+            fallAsleepTimeInput.addEventListener('change', calculateSleepTimes);
+            
+            function calculateSleepTimes() {
+                const wakeupTime = wakeupTimeInput.value;
+                const fallAsleepMinutes = parseInt(fallAsleepTimeInput.value) || 15;
+                
+                // Валидация
+                if (!wakeupTime) {
+                    alert('Пожалуйста, укажите время пробуждения');
+                    return;
+                }
+                
+                if (fallAsleepMinutes < 5 || fallAsleepMinutes > 30) {
+                    alert('Время засыпания должно быть от 5 до 30 минут');
+                    return;
+                }
+                
+                // Расчет времени сна
+                const sleepTimes = calculateSleepSchedule(wakeupTime, fallAsleepMinutes);
+                
+                // Обновление UI
+                updateResults(sleepTimes);
+            }
+            
+            function calculateSleepSchedule(wakeupTime, fallAsleepMinutes) {
+                const [wakeHours, wakeMinutes] = wakeupTime.split(':').map(Number);
+                
+                // Длительность одного цикла сна в минутах
+                const CYCLE_DURATION = 90;
+                
+                // Рассчитываем время для 6, 5 и 4 циклов (9, 7.5 и 6 часов сна соответственно)
+                const calculateBedtime = (cycles) => {
+                    const totalSleepMinutes = cycles * CYCLE_DURATION + fallAsleepMinutes;
+                    
+                    // Вычитаем общее время сна из времени пробуждения
+                    let bedtimeHours = wakeHours;
+                    let bedtimeMinutes = wakeMinutes - totalSleepMinutes;
+                    
+                    // Корректируем отрицательные минуты/часы
+                    while (bedtimeMinutes < 0) {
+                        bedtimeHours -= 1;
+                        bedtimeMinutes += 60;
+                    }
+                    
+                    while (bedtimeHours < 0) {
+                        bedtimeHours += 24;
+                    }
+                    
+                    return {
+                        hours: bedtimeHours,
+                        minutes: bedtimeMinutes,
+                        formatted: `${bedtimeHours.toString().padStart(2, '0')}:${bedtimeMinutes.toString().padStart(2, '0')}`
+                    };
+                };
+                
+                const cycle6 = calculateBedtime(6); // 9 часов
+                const cycle5 = calculateBedtime(5); // 7.5 часов
+                const cycle4 = calculateBedtime(4); // 6 часов
+                
+                return {
+                    cycle6,
+                    cycle5,
+                    cycle4,
+                    cyclesCount: '5-6',
+                    totalSleep: '7.5-9',
+                    bestWakeTime: wakeupTime
+                };
+            }
+            
+            function updateResults(results) {
+                // Основные результаты
+                document.getElementById('cycles-count').textContent = results.cyclesCount;
+                document.getElementById('total-sleep').textContent = results.totalSleep;
+                
+                // Время отхода ко сну
+                document.getElementById('cycle-6').textContent = results.cycle6.formatted;
+                document.getElementById('cycle-5').textContent = results.cycle5.formatted;
+                document.getElementById('cycle-4').textContent = results.cycle4.formatted;
+                
+                // Оптимальное время пробуждения
+                document.getElementById('best-wake-time').textContent = results.bestWakeTime;
+            }
+            
+            // Автоматический расчет при загрузке
+            calculateSleepTimes();
+        });
+    </script>
+</body>
+</html>

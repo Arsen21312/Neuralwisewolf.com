@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор ипотеки | Neural Wise Wolf</title>
+    <meta name="description" content="Расчет ипотечных платежей: аннуитетные и дифференцированные платежи, переплата, график платежей. Планирование ипотеки и сравнение вариантов.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .mortgage-calculator {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .calculator-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input, .unit-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .value-input:focus, .unit-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .slider-container {
+            margin-top: 0.5rem;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border-light);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
+        }
+
+        .results-container {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-item {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+
+        .payment-comparison {
+            margin-top: 2rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .chart-container {
+            margin-top: 2rem;
+            height: 300px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            padding: 1rem;
+        }
+
+        .amortization-table {
+            margin-top: 2rem;
+            overflow-x: auto;
+        }
+
+        .table-container {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .calculator-card {
+                padding: 1.5rem;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .calculator-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .positive {
+            color: var(--accent-success);
+        }
+
+        .negative {
+            color: var(--accent-danger);
+        }
+
+        .currency {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-right: 0.2em;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="life" data-slug="mortgage-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор ипотеки</h1>
+                <p class="tool-description">Расчет ипотечных платежей, переплаты и графика погашения. Сравнение аннуитетных и дифференцированных платежей.</p>
+            </div>
+
+            <div class="mortgage-calculator">
+                <div class="calculator-card">
+                    <div class="calculator-tabs">
+                        <button class="tab active" data-tab="calculator">🧮 Калькулятор</button>
+                        <button class="tab" data-tab="comparison">📊 Сравнение</button>
+                        <button class="tab" data-tab="schedule">📅 График платежей</button>
+                    </div>
+
+                    <!-- Калькулятор -->
+                    <div class="tab-content active" id="calculator-tab">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="loanAmount">Сумма кредита:</label>
+                                <input type="number" id="loanAmount" class="value-input" placeholder="1000000" value="2000000" min="100000" max="100000000" step="100000">
+                                <div class="slider-container">
+                                    <input type="range" id="loanAmountSlider" class="slider" min="100000" max="10000000" value="2000000" step="100000">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="interestRate">Процентная ставка (% годовых):</label>
+                                <input type="number" id="interestRate" class="value-input" placeholder="7.5" value="7.5" min="1" max="20" step="0.1">
+                                <div class="slider-container">
+                                    <input type="range" id="interestRateSlider" class="slider" min="1" max="20" value="7.5" step="0.1">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="loanTerm">Срок кредита (лет):</label>
+                                <input type="number" id="loanTerm" class="value-input" placeholder="20" value="20" min="1" max="30" step="1">
+                                <div class="slider-container">
+                                    <input type="range" id="loanTermSlider" class="slider" min="1" max="30" value="20" step="1">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="paymentType">Тип платежей:</label>
+                                <select id="paymentType" class="unit-select">
+                                    <option value="annuity">Аннуитетные</option>
+                                    <option value="differentiated">Дифференцированные</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary calculate-btn" id="calculateBtn">
+                            📊 Рассчитать ипотеку
+                        </button>
+
+                        <div class="results-container">
+                            <h3 style="margin-bottom: 1rem; text-align: center;">Результаты расчета</h3>
+                            <div class="results-grid">
+                                <div class="result-item">
+                                    <p class="result-value"><span class="currency">₽</span><span id="monthlyPayment">0</span></p>
+                                    <p class="result-label">Ежемесячный платеж</p>
+                                </div>
+                                <div class="result-item">
+                                    <p class="result-value"><span class="currency">₽</span><span id="totalPayment">0</span></p>
+                                    <p class="result-label">Общая выплата</p>
+                                </div>
+                                <div class="result-item">
+                                    <p class="result-value"><span class="currency">₽</span><span id="totalInterest" class="negative">0</span></p>
+                                    <p class="result-label">Переплата по кредиту</p>
+                                </div>
+                                <div class="result-item">
+                                    <p class="result-value"><span id="interestPercentage">0</span>%</p>
+                                    <p class="result-label">Процент переплаты</p>
+                                </div>
+                            </div>
+
+                            <div class="chart-container" id="paymentChart">
+                                <p style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                    График платежей появится после расчета
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Сравнение -->
+                    <div class="tab-content" id="comparison-tab">
+                        <div class="comparison">
+                            <h3>📊 Сравнение типов платежей</h3>
+                            <div class="comparison-grid">
+                                <div class="comparison-card">
+                                    <h4>📈 Аннуитетные платежи</h4>
+                                    <p>Равные платежи в течение всего срока кредита. Удобство планирования бюджета.</p>
+                                    <ul>
+                                        <li>✅ Постоянный размер платежа</li>
+                                        <li>✅ Легче планировать бюджет</li>
+                                        <li>❌ Большая переплата в начале</li>
+                                        <li>❌ Медленное уменьшение долга</li>
+                                    </ul>
+                                </div>
+                                <div class="comparison-card">
+                                    <h4>📉 Дифференцированные платежи</h4>
+                                    <p>Платежи уменьшаются со временем. Экономия на процентах.</p>
+                                    <ul>
+                                        <li>✅ Меньшая общая переплата</li>
+                                        <li>✅ Быстрое уменьшение долга</li>
+                                        <li>❌ Высокие платежи в начале</li>
+                                        <li>❌ Сложнее планировать бюджет</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="results-container" style="margin-top: 2rem;">
+                                <h4 style="text-align: center; margin-bottom: 1rem;">Сравнение в цифрах</h4>
+                                <div class="results-grid">
+                                    <div class="result-item">
+                                        <p class="result-value"><span class="currency">₽</span><span id="annuityPayment">0</span></p>
+                                        <p class="result-label">Аннуитетный платеж</p>
+                                    </div>
+                                    <div class="result-item">
+                                        <p class="result-value"><span class="currency">₽</span><span id="diffPayment">0</span></p>
+                                        <p class="result-label">Дифференцированный (первый)</p>
+                                    </div>
+                                    <div class="result-item">
+                                        <p class="result-value"><span class="currency">₽</span><span id="annuityOverpayment">0</span></p>
+                                        <p class="result-label">Переплата (аннуитет)</p>
+                                    </div>
+                                    <div class="result-item">
+                                        <p class="result-value"><span class="currency">₽</span><span id="diffOverpayment">0</span></p>
+                                        <p class="result-label">Переплата (дифференц.)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- График платежей -->
+                    <div class="tab-content" id="schedule-tab">
+                        <div class="amortization-table">
+                            <h3 style="text-align: center; margin-bottom: 1rem;">График платежей по месяцам</h3>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Месяц</th>
+                                            <th>Платеж</th>
+                                            <th>Основной долг</th>
+                                            <th>Проценты</th>
+                                            <th>Остаток долга</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="paymentSchedule">
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                                                Выполните расчет для просмотра графика платежей
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Особенности -->
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>📈 Детальный расчет</h4>
+                        <p>Точный расчет аннуитетных и дифференцированных платежей с учетом всех параметров</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📊 Визуализация</h4>
+                        <p>Графики платежей и наглядное сравнение разных вариантов ипотеки</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📅 Полный график</h4>
+                        <p>Подробный график платежей по месяцам с разбивкой на основной долг и проценты</p>
+                    </div>
+                </div>
+
+                <!-- SEO контент -->
+                <div class="article">
+                    <h2>Ипотечный калькулятор: полное руководство</h2>
+                    <p>Ипотека — один из самых важных финансовых инструментов в жизни. Правильный расчет платежей поможет выбрать оптимальные условия и сэкономить значительные средства.</p>
+                    
+                    <h3>🎯 Основные понятия ипотеки</h3>
+                    <ul>
+                        <li><strong>Основной долг</strong> — сумма, которую вы взяли в кредит</li>
+                        <li><strong>Проценты</strong> — плата банку за использование денежных средств</li>
+                        <li><strong>Аннуитетный платеж</strong> — равные платежи в течение всего срока</li>
+                        <li><strong>Дифференцированный платеж</strong> — уменьшающиеся платежи</li>
+                        <li><strong>Переплата</strong> — общая сумма процентов за весь срок</li>
+                    </ul>
+                    
+                    <h3>🧮 Формулы расчета</h3>
+                    
+                    <h4>Аннуитетный платеж</h4>
+                    <pre>Ежемесячный платеж = P × [r × (1 + r)^n] / [(1 + r)^n - 1]
+Где:
+P - основная сумма кредита
+r = годовая ставка / 12 / 100
+n - количество месяцев</pre>
+
+                    <h4>Дифференцированный платеж</h4>
+                    <pre>Платеж = (P / n) + (P - (P × (m - 1) / n)) × r
+Где:
+m - номер текущего месяца</pre>
+                    
+                    <h3>💡 Как снизить переплату по ипотеке?</h3>
+                    <div class="example-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>💰 Досрочные погашения</h4>
+                            <p>Даже небольшие дополнительные платежи значительно сокращают переплату</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>📉 Уменьшение срока</h4>
+                            <p>Сокращение срока кредита при сохранении платежа уменьшает переплату</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>🎯 Рефинансирование</h4>
+                            <p>Перекредитование под более низкую процентную ставку</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Что выгоднее: аннуитетные или дифференцированные платежи?</strong><br>
+                    Дифференцированные платежи дают меньшую общую переплату, но требуют более высоких платежей в начале срока.</p>
+                    
+                    <p><strong>Как учитывается первоначальный взнос?</strong><br>
+                    Первоначальный взнос уменьшает сумму кредита. Например, при стоимости квартиры 5 млн и взносе 1 млн, кредит будет 4 млн.</p>
+                    
+                    <p><strong>Что такое ипотечные каникулы?</strong><br>
+                    Это право на приостановление платежей или их уменьшение на срок до 6 месяцев при наступлении определенных обстоятельств.</p>
+                    
+                    <p><strong>Как влияет срок кредита на переплату?</strong><br>
+                    Чем longer срок кредита, тем больше общая переплата, но ниже ежемесячный платеж.</p>
+                    
+                    <p><strong>Что такое ESL?</strong><br>
+                    Effective Interest Rate (эффективная ставка) включает все комиссии и расходы по кредиту.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const loanAmount = document.getElementById('loanAmount');
+            const loanAmountSlider = document.getElementById('loanAmountSlider');
+            const interestRate = document.getElementById('interestRate');
+            const interestRateSlider = document.getElementById('interestRateSlider');
+            const loanTerm = document.getElementById('loanTerm');
+            const loanTermSlider = document.getElementById('loanTermSlider');
+            const paymentType = document.getElementById('paymentType');
+            
+            // Результаты
+            const monthlyPayment = document.getElementById('monthlyPayment');
+            const totalPayment = document.getElementById('totalPayment');
+            const totalInterest = document.getElementById('totalInterest');
+            const interestPercentage = document.getElementById('interestPercentage');
+            const annuityPayment = document.getElementById('annuityPayment');
+            const diffPayment = document.getElementById('diffPayment');
+            const annuityOverpayment = document.getElementById('annuityOverpayment');
+            const diffOverpayment = document.getElementById('diffOverpayment');
+            const paymentSchedule = document.getElementById('paymentSchedule');
+            
+            let chart = null;
+
+            // Синхронизация полей ввода и слайдеров
+            function syncInputs(input, slider) {
+                input.addEventListener('input', () => {
+                    slider.value = input.value;
+                    calculateMortgage();
+                });
+                slider.addEventListener('input', () => {
+                    input.value = slider.value;
+                    calculateMortgage();
+                });
+            }
+
+            syncInputs(loanAmount, loanAmountSlider);
+            syncInputs(interestRate, interestRateSlider);
+            syncInputs(loanTerm, loanTermSlider);
+
+            // Переключение вкладок
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    
+                    // Активируем вкладку
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Показываем соответствующий контент
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-tab`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Расчет ипотеки
+            calculateBtn.addEventListener('click', calculateMortgage);
+            paymentType.addEventListener('change', calculateMortgage);
+
+            function calculateMortgage() {
+                const amount = parseFloat(loanAmount.value);
+                const rate = parseFloat(interestRate.value) / 100;
+                const term = parseInt(loanTerm.value);
+                const type = paymentType.value;
+
+                if (!amount || !rate || !term) {
+                    alert('Пожалуйста, заполните все поля корректно.');
+                    return;
+                }
+
+                const monthlyRate = rate / 12;
+                const months = term * 12;
+
+                let monthlyPaymentValue, totalPaymentValue, totalInterestValue;
+
+                if (type === 'annuity') {
+                    // Аннуитетные платежи
+                    monthlyPaymentValue = amount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+                    totalPaymentValue = monthlyPaymentValue * months;
+                    totalInterestValue = totalPaymentValue - amount;
+                } else {
+                    // Дифференцированные платежи (первый платеж)
+                    const principal = amount / months;
+                    const firstInterest = amount * monthlyRate;
+                    monthlyPaymentValue = principal + firstInterest;
+                    totalInterestValue = calculateDifferentiatedTotal(amount, rate, term);
+                    totalPaymentValue = amount + totalInterestValue;
+                }
+
+                // Обновление результатов
+                monthlyPayment.textContent = formatCurrency(monthlyPaymentValue);
+                totalPayment.textContent = formatCurrency(totalPaymentValue);
+                totalInterest.textContent = formatCurrency(totalInterestValue);
+                interestPercentage.textContent = ((totalInterestValue / amount) * 100).toFixed(1);
+
+                // Сравнение типов платежей
+                calculateComparison(amount, rate, term);
+                
+                // График платежей
+                generatePaymentSchedule(amount, rate, term, type);
+                
+                // Построение графика
+                createChart(amount, totalInterestValue);
+            }
+
+            function calculateDifferentiatedTotal(amount, rate, term) {
+                const monthlyRate = rate / 12;
+                const months = term * 12;
+                let totalInterest = 0;
+                
+                for (let i = 0; i < months; i++) {
+                    const remaining = amount - (amount / months) * i;
+                    totalInterest += remaining * monthlyRate;
+                }
+                
+                return totalInterest;
+            }
+
+            function calculateComparison(amount, rate, term) {
+                // Аннуитетные платежи
+                const monthlyRate = rate / 12;
+                const months = term * 12;
+                const annuityMonthly = amount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+                const annuityTotalInterest = annuityMonthly * months - amount;
+                
+                // Дифференцированные платежи
+                const diffTotalInterest = calculateDifferentiatedTotal(amount, rate, term);
+                const diffFirstPayment = (amount / months) + (amount * monthlyRate);
+                
+                annuityPayment.textContent = formatCurrency(annuityMonthly);
+                diffPayment.textContent = formatCurrency(diffFirstPayment);
+                annuityOverpayment.textContent = formatCurrency(annuityTotalInterest);
+                diffOverpayment.textContent = formatCurrency(diffTotalInterest);
+            }
+
+            function generatePaymentSchedule(amount, rate, term, type) {
+                const monthlyRate = rate / 12;
+                const months = term * 12;
+                let scheduleHTML = '';
+                let balance = amount;
+
+                for (let i = 1; i <= months; i++) {
+                    let principal, interest, payment;
+                    
+                    if (type === 'annuity') {
+                        payment = amount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+                        interest = balance * monthlyRate;
+                        principal = payment - interest;
+                    } else {
+                        principal = amount / months;
+                        interest = balance * monthlyRate;
+                        payment = principal + interest;
+                    }
+                    
+                    balance -= principal;
+                    
+                    if (balance < 0) balance = 0;
+                    
+                    scheduleHTML += `
+                        <tr>
+                            <td>${i}</td>
+                            <td>${formatCurrency(payment)}</td>
+                            <td>${formatCurrency(principal)}</td>
+                            <td>${formatCurrency(interest)}</td>
+                            <td>${formatCurrency(balance)}</td>
+                        </tr>
+                    `;
+                    
+                    // Показываем только первые 12 месяцев для примера
+                    if (i >= 12) break;
+                }
+                
+                paymentSchedule.innerHTML = scheduleHTML;
+            }
+
+            function createChart(principal, interest) {
+                if (chart) {
+                    chart.destroy();
+                }
+
+                const ctx = document.createElement('canvas');
+                const chartContainer = document.getElementById('paymentChart');
+                chartContainer.innerHTML = '';
+                chartContainer.appendChild(ctx);
+
+                chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Основной долг', 'Проценты'],
+                        datasets: [{
+                            data: [principal, interest],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(239, 68, 68, 0.8)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + formatCurrency(context.raw);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('ru-RU', {
+                    maximumFractionDigits: 0
+                }).format(amount);
+            }
+
+            // Первоначальный расчет
+            calculateMortgage();
+        });
+    </script>
+</body>
+</html>

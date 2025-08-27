@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Очиститель пробелов | Neural Wise Wolf</title>
+    <meta name="description" content="Удалите лишние пробелы, табы и переносы строк из текста. Очистка текста, форматирование, удаление двойных пробелов.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        
+        .whitespace-cleaner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .input-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .text-areas {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: var(--font-mono);
+            transition: border-color 0.3s ease;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .option-item input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .option-item label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .action-btn {
+            padding: 1rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            min-width: 120px;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        .result-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .copy-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .result-content {
+            position: relative;
+        }
+        
+        #output-text {
+            background: var(--bg-secondary);
+            min-height: 150px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .preset-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .preset-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .preset-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .preset-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+        
+        .character-count {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stat-item {
+                min-width: auto;
+            }
+            
+            .result-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .result-actions {
+                justify-content: center;
+            }
+            
+            .input-card,
+            .result-card {
+                padding: 1.5rem;
+            }
+            
+            textarea {
+                min-height: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .preset-buttons {
+                flex-direction: column;
+            }
+            
+            .preset-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .action-btn {
+                font-size: 0.9rem;
+            }
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--border-light);
+            border-top: 2px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="whitespace-cleaner">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Очиститель пробелов</h1>
+                <p class="tool-description">Удалите лишние пробелы, табы и переносы строк из текста. Идеально для очистки и форматирования текста.</p>
+            </div>
+
+            <div class="whitespace-cleaner">
+                <div class="input-card">
+                    <h3>📝 Введите текст для очистки</h3>
+                    
+                    <div class="preset-buttons">
+                        <button class="preset-btn" data-preset="double-spaces">Двойные пробелы</button>
+                        <button class="preset-btn" data-preset="tabs">Табы</button>
+                        <button class="preset-btn" data-preset="line-breaks">Переносы строк</button>
+                        <button class="preset-btn" data-preset="all">Всё вместе</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="input-text">Исходный текст:</label>
+                        <textarea id="input-text" placeholder="Введите текст с лишними пробелами здесь..." autofocus></textarea>
+                        <div class="character-count" id="input-count">0 символов</div>
+                    </div>
+                    
+                    <div class="options-grid">
+                        <div class="option-item">
+                            <input type="checkbox" id="remove-double-spaces" checked>
+                            <label for="remove-double-spaces">Удалить двойные пробелы</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="remove-tabs" checked>
+                            <label for="remove-tabs">Удалить табы</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="remove-line-breaks">
+                            <label for="remove-line-breaks">Удалить переносы строк</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="trim-spaces" checked>
+                            <label for="trim-spaces">Обрезать пробелы по краям</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="keep-single-breaks">
+                            <label for="keep-single-breaks">Сохранять одиночные переносы</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="remove-non-breaking">
+                            <label for="remove-non-breaking">Удалить неразрывные пробелы</label>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary action-btn" id="clean-btn">
+                            🧹 Очистить текст
+                        </button>
+                        <button class="btn btn-secondary action-btn" id="clear-btn">
+                            🗑️ Очистить всё
+                        </button>
+                        <button class="btn action-btn" id="paste-btn">
+                            📋 Вставить из буфера
+                        </button>
+                    </div>
+                    
+                    <div class="stats" id="stats" style="display: none;">
+                        <div class="stat-item">
+                            <p class="stat-number" id="spaces-removed">0</p>
+                            <p class="stat-label">Пробелов удалено</p>
+                        </div>
+                        <div class="stat-item">
+                            <p class="stat-number" id="tabs-removed">0</p>
+                            <p class="stat-label">Табов удалено</p>
+                        </div>
+                        <div class="stat-item">
+                            <p class="stat-number" id="lines-removed">0</p>
+                            <p class="stat-label">Переносов удалено</p>
+                        </div>
+                        <div class="stat-item">
+                            <p class="stat-number" id="time-taken">0ms</p>
+                            <p class="stat-label">Время обработки</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-card" id="result-card" style="display: none;">
+                    <div class="result-header">
+                        <h3>✅ Очищенный текст</h3>
+                        <div class="result-actions">
+                            <button class="copy-btn" id="copy-btn">
+                                📋 Копировать
+                            </button>
+                            <button class="copy-btn" id="download-btn">
+                                💾 Скачать
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="result-content">
+                        <textarea id="output-text" readonly></textarea>
+                        <div class="character-count" id="output-count">0 символов</div>
+                    </div>
+                </div>
+                
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <h3>Введите текст для очистки</h3>
+                    <p>Начните писать в поле выше или вставьте текст из буфера обмена</p>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🎯 Точная очистка</h4>
+                    <p>Удаляет только лишние пробелы, сохраняя структуру текста</p>
+                </div>
+                <div class="feature">
+                    <h4>⚡ Мгновенная обработка</h4>
+                    <p>Быстрый алгоритм обрабатывает большие тексты за доли секунды</p>
+                </div>
+                <div class="feature">
+                    <h4>🎛️ Гибкие настройки</h4>
+                    <p>Выбирайте какие именно пробелы удалять, а какие оставлять</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>Зачем очищать пробелы в тексте?</h2>
+                <p>Лишние пробелы, табы и переносы строк могут возникнуть при копировании текста из разных источников, неправильном форматировании или ошибках ввода. Они портят внешний вид текста, мешают чтению и могут вызвать проблемы при обработке.</p>
+                
+                <h3>📊 Типы пробелов и их проблемы</h3>
+                <ul>
+                    <li><strong>Двойные пробелы</strong> — возникают при неаккуратном наборе или копировании</li>
+                    <li><strong>Табы</strong> — могут отображаться по-разному в различных программах</li>
+                    <li><strong>Лишние переносы строк</strong> — нарушают структуру абзацев</li>
+                    <li><strong>Неразрывные пробелы</strong> — могут мешать обработке текста</li>
+                    <li><strong>Пробелы в начале/конце</strong> — невидимы, но влияют на форматирование</li>
+                </ul>
+                
+                <h3>💡 Где пригодится очистка пробелов?</h3>
+                <div class="usage-grid">
+                    <div class="usage-item">
+                        <h4>👨‍💻 Программирование</h4>
+                        <p>Очистка кода от лишних пробелов для лучшей читаемости</p>
+                    </div>
+                    <div class="usage-item">
+                        <h4>📧 Электронная почта</h4>
+                        <p>Корректное форматирование писем перед отправкой</p>
+                    </div>
+                    <div class="usage-item">
+                        <h4>📄 Документы</h4>
+                        <p>Подготовка текстов для печати или публикации</p>
+                    </div>
+                    <div class="usage-item">
+                        <h4>🌐 Веб-разработка</h4>
+                        <p>Очистка контента для сайтов и приложений</p>
+                    </div>
+                </div>
+                
+                <h3>⚡ Как работает наш очиститель</h3>
+                <p>Используется эффективный алгоритм на JavaScript, который:</p>
+                <ol>
+                    <li>Анализирует текст на наличие разных типов пробелов</li>
+                    <li>Применет выбранные настройки очистки</li>
+                    <li>Сохраняет нужные пробелы и переносы</li>
+                    <li>Предоставляет статистику по очистке</li>
+                </ol>
+                
+                <h3>🎯 Советы по использованию</h3>
+                <ul>
+                    <li>Используйте предустановки для быстрой очистки常见 проблем</li>
+                    <li>Проверяйте результат перед копированием</li>
+                    <li>Сохраняйте оригинальный текст для сравнения</li>
+                    <li>Используйте разные настройки для разных типов текстов</li>
+                </ul>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputText = document.getElementById('input-text');
+            const outputText = document.getElementById('output-text');
+            const cleanBtn = document.getElementById('clean-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const pasteBtn = document.getElementById('paste-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const statsSection = document.getElementById('stats');
+            const resultCard = document.getElementById('result-card');
+            const emptyState = document.getElementById('empty-state');
+            const presetBtns = document.querySelectorAll('.preset-btn');
+            
+            let stats = {
+                spacesRemoved: 0,
+                tabsRemoved: 0,
+                linesRemoved: 0,
+                timeTaken: 0
+            };
+            
+            // Счетчик символов
+            inputText.addEventListener('input', function() {
+                document.getElementById('input-count').textContent = 
+                    `${inputText.value.length} символов`;
+            });
+            
+            // Кнопка очистки
+            cleanBtn.addEventListener('click', cleanText);
+            
+            // Кнопка очистки всего
+            clearBtn.addEventListener('click', function() {
+                inputText.value = '';
+                outputText.value = '';
+                statsSection.style.display = 'none';
+                resultCard.style.display = 'none';
+                emptyState.style.display = 'block';
+                document.getElementById('input-count').textContent = '0 символов';
+            });
+            
+            // Вставить из буфера
+            pasteBtn.addEventListener('click', async function() {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    inputText.value = text;
+                    document.getElementById('input-count').textContent = 
+                        `${text.length} символов`;
+                } catch (err) {
+                    showNotification('Не удалось получить доступ к буферу обмена');
+                }
+            });
+            
+            // Копировать результат
+            copyBtn.addEventListener('click', function() {
+                outputText.select();
+                navigator.clipboard.writeText(outputText.value).then(() => {
+                    showNotification('Текст скопирован в буфер обмена');
+                });
+            });
+            
+            // Скачать результат
+            downloadBtn.addEventListener('click', function() {
+                const blob = new Blob([outputText.value], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'очищенный-текст.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+            
+            // Предустановки
+            presetBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    presetBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const preset = this.dataset.preset;
+                    applyPreset(preset);
+                });
+            });
+            
+            function applyPreset(preset) {
+                const options = {
+                    removeDoubleSpaces: document.getElementById('remove-double-spaces'),
+                    removeTabs: document.getElementById('remove-tabs'),
+                    removeLineBreaks: document.getElementById('remove-line-breaks'),
+                    trimSpaces: document.getElementById('trim-spaces'),
+                    keepSingleBreaks: document.getElementById('keep-single-breaks'),
+                    removeNonBreaking: document.getElementById('remove-non-breaking')
+                };
+                
+                // Сброс всех опций
+                Object.values(options).forEach(opt => {
+                    opt.checked = false;
+                });
+                
+                // Применение пресета
+                switch(preset) {
+                    case 'double-spaces':
+                        options.removeDoubleSpaces.checked = true;
+                        options.trimSpaces.checked = true;
+                        break;
+                    case 'tabs':
+                        options.removeTabs.checked = true;
+                        options.trimSpaces.checked = true;
+                        break;
+                    case 'line-breaks':
+                        options.removeLineBreaks.checked = true;
+                        options.keepSingleBreaks.checked = true;
+                        break;
+                    case 'all':
+                        Object.values(options).forEach(opt => {
+                            opt.checked = true;
+                        });
+                        break;
+                }
+            }
+            
+            function cleanText() {
+                const text = inputText.value.trim();
+                if (!text) {
+                    showNotification('Введите текст для очистки');
+                    return;
+                }
+                
+                const startTime = performance.now();
+                
+                // Получаем настройки
+                const removeDoubleSpaces = document.getElementById('remove-double-spaces').checked;
+                const removeTabs = document.getElementById('remove-tabs').checked;
+                const removeLineBreaks = document.getElementById('remove-line-breaks').checked;
+                const trimSpaces = document.getElementById('trim-spaces').checked;
+                const keepSingleBreaks = document.getElementById('keep-single-breaks').checked;
+                const removeNonBreaking = document.getElementById('remove-non-breaking').checked;
+                
+                let cleanedText = text;
+                
+                // Сбрасываем статистику
+                stats = {
+                    spacesRemoved: 0,
+                    tabsRemoved: 0,
+                    linesRemoved: 0,
+                    timeTaken: 0
+                };
+                
+                // Удаляем неразрывные пробелы
+                if (removeNonBreaking) {
+                    const before = cleanedText.length;
+                    cleanedText = cleanedText.replace(/\u00A0/g, ' ');
+                    stats.spacesRemoved += (before - cleanedText.length);
+                }
+                
+                // Удаляем табы
+                if (removeTabs) {
+                    const before = cleanedText.length;
+                    cleanedText = cleanedText.replace(/\t/g, ' ');
+                    stats.tabsRemoved += (before - cleanedText.length);
+                }
+                
+                // Удаляем двойные пробелы
+                if (removeDoubleSpaces) {
+                    let previousLength;
+                    do {
+                        previousLength = cleanedText.length;
+                        cleanedText = cleanedText.replace(/ {2,}/g, ' ');
+                        stats.spacesRemoved += (previousLength - cleanedText.length);
+                    } while (cleanedText.length !== previousLength);
+                }
+                
+                // Обрабатываем переносы строк
+                if (removeLineBreaks) {
+                    const before = cleanedText.length;
+                    if (keepSingleBreaks) {
+                        // Заменяем множественные переносы на одиночные
+                        cleanedText = cleanedText.replace(/\n{3,}/g, '\n\n');
+                        stats.linesRemoved += (before - cleanedText.length);
+                    } else {
+                        // Заменяем все переносы на пробелы
+                        cleanedText = cleanedText.replace(/\n+/g, ' ');
+                        stats.linesRemoved += (before - cleanedText.length);
+                    }
+                }
+                
+                // Обрезаем пробелы по краям
+                if (trimSpaces) {
+                    cleanedText = cleanedText.trim();
+                }
+                
+                const endTime = performance.now();
+                stats.timeTaken = Math.round(endTime - startTime);
+                
+                // Показываем результат
+                outputText.value = cleanedText;
+                document.getElementById('output-count').textContent = 
+                    `${cleanedText.length} символов`;
+                
+                // Обновляем статистику
+                document.getElementById('spaces-removed').textContent = stats.spacesRemoved;
+                document.getElementById('tabs-removed').textContent = stats.tabsRemoved;
+                document.getElementById('lines-removed').textContent = stats.linesRemoved;
+                document.getElementById('time-taken').textContent = `${stats.timeTaken}ms`;
+                
+                // Показываем элементы
+                statsSection.style.display = 'flex';
+                resultCard.style.display = 'block';
+                emptyState.style.display = 'none';
+            }
+            
+            function showNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification show';
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

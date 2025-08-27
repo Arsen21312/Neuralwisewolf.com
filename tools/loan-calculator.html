@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кредитный калькулятор | Neural Wise Wolf</title>
+    <meta name="description" content="Рассчитайте ежемесячные платежи, общую сумму выплат и переплату по кредиту или ипотеке.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .input-field.icon-left {
+            padding-left: 3rem;
+        }
+        .input-field.icon-right {
+            padding-right: 3rem;
+        }
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        .input-icon.left {
+            left: 1rem;
+        }
+        .input-icon.right {
+            right: 1rem;
+        }
+        .result-section {
+            display: none; /* Скрываем по умолчанию */
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .result-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        .result-value .currency {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .result-value .total {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="life" data-slug="loan-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Кредитный калькулятор</h1>
+                <p class="tool-description">Рассчитайте ежемесячный платеж, общую сумму выплат и переплату по кредиту или ипотеке.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="input-group">
+                    <label for="loan-amount">Сумма кредита</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="loan-amount" class="input-field icon-right" placeholder="100 000">
+                        <span class="input-icon right">₽</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="interest-rate">Процентная ставка (годовая)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="interest-rate" class="input-field icon-right" placeholder="10">
+                        <span class="input-icon right">%</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="loan-term">Срок кредита (в месяцах)</label>
+                    <input type="number" id="loan-term" class="input-field" placeholder="12">
+                </div>
+
+                <button class="btn btn-primary" id="calculate-btn">
+                    💰 Рассчитать
+                </button>
+
+                <div id="result-section" class="result-section">
+                    <div class="result-item">
+                        <span class="result-label">Ежемесячный платёж</span>
+                        <span class="result-value"><span id="monthly-payment">0</span> <span class="currency">₽</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Общая сумма выплат</span>
+                        <span class="result-value"><span id="total-payment">0</span> <span class="currency">₽</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Общая переплата</span>
+                        <span class="result-value"><span id="total-interest">0</span> <span class="currency">₽</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>📊 Точные расчёты</h4>
+                    <p>Мгновенно рассчитайте ключевые параметры вашего кредита.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Прозрачность</h4>
+                    <p>Поймите, сколько вы будете платить и сколько составит переплата.</p>
+                </div>
+                <div class="feature">
+                    <h4>💡 Финансовое планирование</h4>
+                    <p>Идеален для сравнения предложений разных банков и планирования бюджета.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Как работает кредитный калькулятор?</h2>
+                <p>Кредитный калькулятор — это инструмент, который помогает оценить стоимость кредита или ипотеки. Он использует математические формулы для расчета ежемесячных платежей, исходя из суммы кредита, процентной ставки и срока.</p>
+
+                <h3>Аннуитетные платежи</h3>
+                <p>Большинство банков используют схему аннуитетных платежей. Это означает, что вы платите фиксированную сумму каждый месяц в течение всего срока кредита. В начале срока большая часть платежа идёт на погашение процентов, а меньшая — на погашение основного долга. К концу срока пропорция меняется.</p>
+
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>🏠 Расчёт ипотеки</h4>
+                        <p>Оцените ежемесячную нагрузку и переплату по долгосрочной ипотеке.</p>
+                    </div>
+                    <div class="example">
+                        <h4>🚗 Покупка автомобиля</h4>
+                        <p>Сравните предложения автокредитов от разных дилеров.</p>
+                    </div>
+                    <div class="example">
+                        <h4>🎓 Студенческий кредит</h4>
+                        <p>Планируйте возврат долга по образовательному кредиту.</p>
+                    </div>
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+    const loanAmountInput = document.getElementById('loan-amount');
+    const interestRateInput = document.getElementById('interest-rate');
+    const loanTermInput = document.getElementById('loan-term');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const resultSection = document.getElementById('result-section');
+    const monthlyPaymentEl = document.getElementById('monthly-payment');
+    const totalPaymentEl = document.getElementById('total-payment');
+    const totalInterestEl = document.getElementById('total-interest');
+
+    calculateBtn.addEventListener('click', calculateLoan);
+
+    function calculateLoan() {
+        const loanAmount = parseFloat(loanAmountInput.value);
+        const interestRate = parseFloat(interestRateInput.value);
+        const loanTerm = parseInt(loanTermInput.value);
+
+        if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTerm) || loanAmount <= 0 || interestRate < 0 || loanTerm <= 0) {
+            alert('Пожалуйста, введите корректные значения.');
+            resultSection.style.display = 'none';
+            return;
+        }
+
+        // Месячная процентная ставка
+        const monthlyRate = interestRate / 100 / 12;
+
+        let monthlyPayment = 0;
+        let totalPayment = 0;
+        let totalInterest = 0;
+
+        // Формула для аннуитетного платежа
+        if (interestRate === 0) {
+            monthlyPayment = loanAmount / loanTerm;
+            totalPayment = loanAmount;
+            totalInterest = 0;
+        } else {
+            monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) / (Math.pow(1 + monthlyRate, loanTerm) - 1);
+            totalPayment = monthlyPayment * loanTerm;
+            totalInterest = totalPayment - loanAmount;
+        }
+        
+        // Выводим результаты
+        monthlyPaymentEl.textContent = monthlyPayment.toFixed(2).toLocaleString('ru-RU');
+        totalPaymentEl.textContent = totalPayment.toFixed(2).toLocaleString('ru-RU');
+        totalInterestEl.textContent = totalInterest.toFixed(2).toLocaleString('ru-RU');
+        resultSection.style.display = 'block';
+    }
+});</script>
+</body>
+</html>

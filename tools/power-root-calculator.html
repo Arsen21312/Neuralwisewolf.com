@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор корней и степеней | Neural Wise Wolf</title>
+    <meta name="description" content="Универсальный калькулятор для возведения в степень и извлечения корней любой степени. Идеально подходит для школьников, студентов и инженеров.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .power-root-calculator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .value-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-top: 0.5rem;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-card {
+                padding: 1.5rem;
+            }
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="power-root-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор корней и степеней</h1>
+                <p class="tool-description">Универсальный инструмент для возведения числа в степень, извлечения корня или нахождения показателя степени. Введите любые два значения, чтобы найти третье.</p>
+            </div>
+
+            <div class="power-root-calculator">
+                <div class="calculator-card">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="numberInput">Число (x):</label>
+                            <input type="number" id="numberInput" class="value-input" step="any" placeholder="Например, 2">
+                        </div>
+                        <div class="input-group">
+                            <label for="powerInput">Степень (y):</label>
+                            <input type="number" id="powerInput" class="value-input" step="any" placeholder="Например, 3">
+                        </div>
+                        <div class="input-group">
+                            <label for="rootInput">Корень (z):</label>
+                            <input type="number" id="rootInput" class="value-input" step="any" placeholder="Например, 2">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="calculateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Рассчитать
+                    </button>
+
+                    <div class="result-container" id="resultContainer" style="display: none;">
+                        <span class="result-label" id="resultLabel">Результат:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🔢 3-в-1 Калькулятор</h4>
+                        <p>Возведение в степень, извлечение корня и нахождение показателя степени в одном месте.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>✅ Точность</h4>
+                        <p>Высокая точность расчетов для любых чисел, включая дробные.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎓 Полезно для учебы</h4>
+                        <p>Отличный помощник для школьников и студентов при решении сложных задач по математике.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Степени и корни: основы математики</h2>
+                    <p><strong>Степень числа</strong> — это сокращенная запись многократного умножения числа на само себя. Например, 2<sup>3</sup> (два в степени три) означает 2 × 2 × 2 = 8.</p>
+                    <p><strong>Корень числа</strong> — это обратная операция. Например, квадратный корень из 9 — это 3, потому что 3 × 3 = 9. Корень n-й степени из числа x — это число y, которое при возведении в степень n дает x.</p>
+                    
+                    <h3>💡 Как работает наш калькулятор?</h3>
+                    <p>Наш инструмент использует эти обратные зависимости для вычислений. В зависимости от того, какие два поля вы заполните, он выполнит нужную операцию.</p>
+                    <ul>
+                        <li>**Если введены Число (x) и Степень (y):** Расчет: x<sup>y</sup></li>
+                        <li>**Если введены Число (x) и Результат (y):** Расчет: log<sub>x</sub>(y)</li>
+                        <li>**Если введены Степень (y) и Результат (z):** Расчет: y-корень из z</li>
+                    </ul>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const numberInput = document.getElementById('numberInput');
+            const powerInput = document.getElementById('powerInput');
+            const rootInput = document.getElementById('rootInput');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultLabel = document.getElementById('resultLabel');
+            const resultValue = document.getElementById('resultValue');
+
+            calculateBtn.addEventListener('click', calculate);
+            [numberInput, powerInput, rootInput].forEach(input => {
+                input.addEventListener('input', calculate);
+            });
+
+            function calculate() {
+                const number = parseFloat(numberInput.value);
+                const power = parseFloat(powerInput.value);
+                const root = parseFloat(rootInput.value);
+
+                let result = NaN;
+                let labelText = 'Результат:';
+
+                if (!isNaN(number) && !isNaN(power)) {
+                    // Возведение в степень
+                    result = Math.pow(number, power);
+                    labelText = `(${number}) в степени ${power} =`;
+                } else if (!isNaN(number) && !isNaN(root)) {
+                    // Извлечение корня
+                    result = Math.pow(number, 1 / root);
+                    labelText = `${root}-й корень из ${number} =`;
+                } else if (!isNaN(power) && !isNaN(root)) {
+                    // Нахождение основания
+                    result = Math.pow(root, power);
+                    labelText = `Основание для степени ${power} =`;
+                } else {
+                    resultContainer.style.display = 'none';
+                    return;
+                }
+
+                if (isNaN(result)) {
+                    resultValue.textContent = 'Ошибка';
+                    resultValue.style.color = 'var(--accent-danger)';
+                } else {
+                    resultValue.textContent = result.toFixed(6);
+                    resultValue.style.color = 'var(--accent-primary)';
+                }
+
+                resultLabel.textContent = labelText;
+                resultContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

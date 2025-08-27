@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML Форматтер | Neural Wise Wolf</title>
+    <meta name="description" content="Отформатируйте XML-код онлайн. Сделайте нечитаемый XML красивым, структурированным и легко читаемым.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .converter-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .find-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .panel {
+                grid-template-columns: 1fr;
+            }
+
+            textarea {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="xml-formatter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>XML Форматтер</h1>
+                <p class="tool-description">Сделайте XML-код чистым и читаемым. Инструмент форматирует неструктурированный XML, добавляя правильные отступы и переносы строк.</p>
+            </div>
+
+            <div class="converter-container">
+                <div class="panel">
+                    <div class="field">
+                        <label for="xml-input" class="field-label">XML (входные данные)</label>
+                        <textarea id="xml-input" placeholder="Вставьте ваш XML-код сюда..."></textarea>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="format-btn">
+                        ✨ Отформатировать
+                    </button>
+                    <button class="btn btn-secondary" id="clear-btn">
+                        Очистить
+                    </button>
+                    <button class="btn btn-secondary" id="copy-btn">
+                        Скопировать XML
+                    </button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Форматируем ваш XML...</p>
+                </div>
+            </div>
+            
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Быстрая работа</h4>
+                    <p>Мгновенно обрабатывает XML любого размера прямо в браузере.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Приватность</h4>
+                    <p>Весь процесс происходит на стороне клиента, ваши данные остаются в безопасности.</p>
+                </div>
+                <div class="feature">
+                    <h4>✅ Проверка на ошибки</h4>
+                    <p>Автоматически выявляет синтаксические ошибки в XML-коде.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое XML?</h2>
+                <p><strong>XML (Extensible Markup Language)</strong> — это язык разметки, похожий на HTML, который используется для хранения и передачи данных. Главное отличие в том, что XML не имеет предопределенных тегов. Вы сами создаете свои теги для описания структуры данных.</p>
+                
+                <h3>Зачем нужен XML-форматтер?</h3>
+                <p>Часто XML-данные приходят в виде одной длинной строки, без переносов и отступов, что делает их крайне трудными для чтения. Форматтер добавляет правильную иерархию, делая код понятным и аккуратным. Это незаменимый инструмент для разработчиков, которым нужно быстро разобраться с данными.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const xmlInput = document.getElementById('xml-input');
+            const formatBtn = document.getElementById('format-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const loadingIndicator = document.getElementById('loading');
+            
+            formatBtn.addEventListener('click', () => {
+                const xmlCode = xmlInput.value.trim();
+                if (!xmlCode) {
+                    xmlInput.value = '';
+                    return;
+                }
+
+                loadingIndicator.style.display = 'block';
+
+                try {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlCode, "text/xml");
+                    
+                    if (xmlDoc.getElementsByTagName("parsererror").length) {
+                        throw new Error("Неверный формат XML.");
+                    }
+                    
+                    const xsltProcessor = new XSLTProcessor();
+                    const styleSheet = parser.parseFromString(`
+                        <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                            <xsl:output method="xml" indent="yes"/>
+                            <xsl:template match="@* | node()">
+                                <xsl:copy>
+                                    <xsl:apply-templates select="@* | node()"/>
+                                </xsl:copy>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    `, "text/xml");
+                    
+                    xsltProcessor.importStylesheet(styleSheet);
+                    const result = xsltProcessor.transformToFragment(xmlDoc, document);
+                    
+                    const formattedXml = new XMLSerializer().serializeToString(result.firstChild);
+                    xmlInput.value = formattedXml;
+
+                } catch (e) {
+                    xmlInput.value = 'Ошибка: ' + e.message;
+                    xmlInput.style.color = 'var(--accent-danger)';
+                } finally {
+                    loadingIndicator.style.display = 'none';
+                    xmlInput.style.color = 'var(--text-primary)';
+                }
+            });
+
+            clearBtn.addEventListener('click', () => {
+                xmlInput.value = '';
+            });
+
+            copyBtn.addEventListener('click', () => {
+                xmlInput.select();
+                document.execCommand('copy');
+                alert('XML-код скопирован в буфер обмена!');
+            });
+        });
+    </script>
+</body>
+
+</html>

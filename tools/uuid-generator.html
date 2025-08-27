@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUID Генератор | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-генератор UUID (Universally Unique Identifier). Создавайте уникальные идентификаторы для ваших проектов и задач.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .generator-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .result-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .uuid-display {
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            font-size: 1.25rem;
+            word-wrap: break-word;
+            padding: 1rem;
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Новый стиль для разделителя */
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="dev" data-slug="uuid-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>UUID Генератор</h1>
+                <p class="tool-description">Создавайте уникальные и надежные идентификаторы UUID для ваших проектов. Просто нажмите кнопку, чтобы сгенерировать новый UUID.</p>
+            </div>
+
+            <div class="generator-container">
+                <div class="result-box">
+                    <p class="field-label">Сгенерированный UUID</p>
+                    <div id="uuid-result" class="uuid-display"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="generate-btn">
+                        ✨ Сгенерировать новый
+                    </button>
+                    <button class="btn btn-secondary" id="copy-btn">
+                        Скопировать
+                    </button>
+                </div>
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Генерируем...</p>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Мгновенная генерация</h4>
+                    <p>UUID создается за доли секунды, без задержек.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Высокая уникальность</h4>
+                    <p>Алгоритм гарантирует высокую вероятность уникальности каждого идентификатора.</p>
+                </div>
+                <div class="feature">
+                    <h4>💻 Для разработчиков</h4>
+                    <p>Идеально подходит для использования в базах данных, API и веб-приложениях.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое UUID?</h2>
+                <p><strong>UUID (Universally Unique Identifier)</strong>, или универсальный уникальный идентификатор, — это 128-битное число, которое используется для уникальной идентификации информации в распределенных системах. Стандартные UUID обычно отображаются в виде 32 шестнадцатеричных цифр, разделенных дефисами.</p>
+                
+                <h3>Зачем использовать UUID?</h3>
+                <p>UUID нужны там, где требуется гарантированная уникальность, например, в базах данных для первичных ключей, в распределенных системах для предотвращения коллизий или для создания временных файлов и сессий. Они позволяют создавать идентификаторы, не обращаясь к централизованному серверу, что упрощает разработку и масштабирование.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultBox = document.getElementById('uuid-result');
+            const generateBtn = document.getElementById('generate-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const loadingIndicator = document.getElementById('loading');
+
+            function generateUUID() {
+                // v4 UUID generation
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+
+            function generateAndDisplayUUID() {
+                loadingIndicator.style.display = 'block';
+                setTimeout(() => {
+                    resultBox.textContent = generateUUID();
+                    loadingIndicator.style.display = 'none';
+                }, 100);
+            }
+
+            generateBtn.addEventListener('click', generateAndDisplayUUID);
+
+            copyBtn.addEventListener('click', () => {
+                const uuid = resultBox.textContent;
+                if (uuid) {
+                    navigator.clipboard.writeText(uuid).then(() => {
+                        alert('UUID скопирован в буфер обмена!');
+                    }).catch(err => {
+                        console.error('Не удалось скопировать текст: ', err);
+                        alert('Не удалось скопировать UUID. Пожалуйста, скопируйте вручную.');
+                    });
+                }
+            });
+
+            generateAndDisplayUUID(); // Generate one UUID on page load
+        });
+    </script>
+</body>
+
+</html>

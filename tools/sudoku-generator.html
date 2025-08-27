@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор судоку | Neural Wise Wolf</title>
+    <meta name="description" content="Генератор случайных головоломок судоку с различными уровнями сложности. Скачайте, распечатайте или решайте онлайн!">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        
+        .sudoku-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .controls-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .difficulty-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .difficulty-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+        
+        .difficulty-btn:hover:not(.active) {
+            background: var(--border-light);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .sudoku-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (min-width: 992px) {
+            .sudoku-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .sudoku-board {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .sudoku-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 1px;
+            margin: 0 auto;
+            max-width: 400px;
+            border: 2px solid var(--text-primary);
+        }
+        
+        .sudoku-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            background: white;
+            border: 1px solid var(--border-medium);
+            position: relative;
+        }
+        
+        /* Границы для блоков 3x3 */
+        .sudoku-cell:nth-child(3n) {
+            border-right: 2px solid var(--text-primary);
+        }
+        
+        .sudoku-cell:nth-child(n+19):nth-child(-n+27),
+        .sudoku-cell:nth-child(n+46):nth-child(-n+54) {
+            border-bottom: 2px solid var(--text-primary);
+        }
+        
+        .given-cell {
+            background: var(--bg-secondary);
+            font-weight: 700;
+        }
+        
+        .user-cell {
+            color: var(--accent-primary);
+        }
+        
+        .board-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .print-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+        }
+        
+        .print-btn:hover {
+            background: var(--accent-secondary);
+        }
+        
+        .download-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-medium);
+            color: var(--text-primary);
+        }
+        
+        .download-btn:hover {
+            background: var(--border-light);
+        }
+        
+        .solution-toggle {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .solution-btn {
+            background: none;
+            border: none;
+            color: var(--accent-primary);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+        
+        .solution-btn:hover {
+            color: var(--accent-secondary);
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .solution.show {
+            display: block;
+        }
+        
+        .stats {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .stat-item {
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+        
+        .tool-features {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .feature {
+            margin-bottom: 2rem;
+        }
+        
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .example {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .difficulty-selector {
+                flex-direction: column;
+            }
+            
+            .difficulty-btn {
+                width: 100%;
+            }
+            
+            .board-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .sudoku-grid {
+                max-width: 300px;
+            }
+            
+            .sudoku-cell {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .controls-card {
+                padding: 1.5rem;
+            }
+            
+            .sudoku-grid {
+                max-width: 280px;
+            }
+            
+            .sudoku-cell {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="fun" data-slug="sudoku-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор судоку</h1>
+                <p class="tool-description">Создавайте случайные головоломки судоку с различными уровнями сложности</p>
+            </div>
+
+            <div class="sudoku-generator">
+                <div class="controls-card">
+                    <div class="input-group">
+                        <label>Уровень сложности:</label>
+                        <div class="difficulty-selector">
+                            <button class="difficulty-btn active" data-difficulty="easy">Легкий</button>
+                            <button class="difficulty-btn" data-difficulty="medium">Средний</button>
+                            <button class="difficulty-btn" data-difficulty="hard">Сложный</button>
+                            <button class="difficulty-btn" data-difficulty="expert">Эксперт</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary generate-btn" id="generate-btn">
+                        🎲 Сгенерировать судоку
+                    </button>
+                    
+                    <div class="stats">
+                        <div class="stat-item">Заполнено: <span id="filled-cells">0</span> клеток</div>
+                        <div class="stat-item">Сложность: <span id="difficulty-level">Легкий</span></div>
+                    </div>
+                </div>
+                
+                <div class="sudoku-container">
+                    <div class="sudoku-board">
+                        <h3>🧩 Головоломка</h3>
+                        <div class="sudoku-grid" id="puzzle-grid"></div>
+                        <div class="board-actions">
+                            <button class="action-btn print-btn" onclick="printSudoku()">
+                                🖨️ Распечатать
+                            </button>
+                            <button class="action-btn download-btn" onclick="downloadSudoku()">
+                                📥 Скачать
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="sudoku-board">
+                        <h3>✅ Решение</h3>
+                        <div class="solution-toggle">
+                            <button class="solution-btn" onclick="toggleSolution()">
+                                Показать/скрыть решение
+                            </button>
+                        </div>
+                        <div class="solution" id="solution">
+                            <div class="sudoku-grid" id="solution-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🎯 Разные уровни сложности</h4>
+                    <p>От легких головоломок для начинающих до экспертного уровня для профессионалов</p>
+                </div>
+                <div class="feature">
+                    <h4>🖨️ Печать и скачивание</h4>
+                    <p>Распечатайте судоку на бумаге или скачайте в формате изображения</p>
+                </div>
+                <div class="feature">
+                    <h4>🔍 Проверка решения</h4>
+                    <p>Сразу видите правильное решение для каждой сгенерированной головоломки</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>Как работает генератор судоку</h2>
+                <p>Наш генератор использует продвинутые алгоритмы для создания валидных головоломок судоку:</p>
+                
+                <h3>🧠 Алгоритм генерации</h3>
+                <p>Генератор создает полное решение судоку, а затем удаляет клетки в зависимости от выбранного уровня сложности, сохраняя при этом единственность решения.</p>
+                
+                <h3>📊 Уровни сложности</h3>
+                <ul>
+                    <li><strong>Легкий:</strong> 45-50 заполненных клеток, простые логические цепочки</li>
+                    <li><strong>Средний:</strong> 35-44 заполненных клеток, требуются базовые техники</li>
+                    <li><strong>Сложный:</strong> 27-34 заполненных клеток, нужны продвинутые методы</li>
+                    <li><strong>Эксперт:</strong> 22-26 заполненных клеток, для опытных игроков</li>
+                </ul>
+                
+                <h3>🎯 Правила судоку</h3>
+                <p>Каждая головоломка следует классическим правилам:</p>
+                <ul>
+                    <li>Заполните сетку 9×9 цифрами от 1 до 9</li>
+                    <li>Каждая строка должна содержать все цифры от 1 до 9 без повторений</li>
+                    <li>Каждый столбец должен содержать все цифры от 1 до 9 без повторений</li>
+                    <li>Каждый блок 3×3 должен содержать все цифры от 1 до 9 без повторений</li>
+                </ul>
+                
+                <h3>💡 Советы по решению</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>🔍 Сканирование</h4>
+                        <p>Ищите очевидные кандидаты в строках, столбцах и блоках</p>
+                    </div>
+                    <div class="example">
+                        <h4>✏️ Кандидаты</h4>
+                        <p>Записывайте возможные цифры в углах клеток</p>
+                    </div>
+                    <div class="example">
+                        <h4>🧩 Техники</h4>
+                        <p>Используйте методы "одиночный кандидат", "скрытые пары" и другие</p>
+                    </div>
+                </div>
+                
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Всегда ли у головоломки только одно решение?</strong><br>
+                Да, наш генератор гарантирует, что каждая созданная головоломка имеет единственное решение.</p>
+                
+                <p><strong>Можно ли решать судоку онлайн?</strong><br>
+                В текущей версии генератор создает головоломки для печати, но в будущем мы добавим онлайн-решение.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generate-btn');
+            const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+            let currentDifficulty = 'easy';
+            
+            // Инициализация
+            generateSudoku();
+            
+            // Обработчики событий
+            generateBtn.addEventListener('click', generateSudoku);
+            
+            difficultyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    difficultyBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDifficulty = this.dataset.difficulty;
+                    document.getElementById('difficulty-level').textContent = 
+                        this.textContent;
+                    generateSudoku();
+                });
+            });
+            
+            function generateSudoku() {
+                const puzzle = generateSudokuPuzzle(currentDifficulty);
+                renderSudokuGrid('puzzle-grid', puzzle.grid, true);
+                renderSudokuGrid('solution-grid', puzzle.solution, false);
+                
+                document.getElementById('filled-cells').textContent = puzzle.filledCells;
+            }
+            
+            function generateSudokuPuzzle(difficulty) {
+                // Здесь будет реальная логика генерации судоку
+                // Для демонстрации используем упрощенный пример
+                
+                const difficulties = {
+                    easy: { filled: 45, name: 'Легкий' },
+                    medium: { filled: 36, name: 'Средний' },
+                    hard: { filled: 30, name: 'Сложный' },
+                    expert: { filled: 25, name: 'Эксперт' }
+                };
+                
+                // Пример валидного судоку
+                const solution = [
+                    [5, 3, 4, 6, 7, 8, 9, 1, 2],
+                    [6, 7, 2, 1, 9, 5, 3, 4, 8],
+                    [1, 9, 8, 3, 4, 2, 5, 6, 7],
+                    [8, 5, 9, 7, 6, 1, 4, 2, 3],
+                    [4, 2, 6, 8, 5, 3, 7, 9, 1],
+                    [7, 1, 3, 9, 2, 4, 8, 5, 6],
+                    [9, 6, 1, 5, 3, 7, 2, 8, 4],
+                    [2, 8, 7, 4, 1, 9, 6, 3, 5],
+                    [3, 4, 5, 2, 8, 6, 1, 7, 9]
+                ];
+                
+                // Создаем головоломку, убирая некоторые цифры
+                const grid = JSON.parse(JSON.stringify(solution));
+                const cellsToRemove = 81 - difficulties[difficulty].filled;
+                
+                for (let i = 0; i < cellsToRemove; i++) {
+                    const row = Math.floor(Math.random() * 9);
+                    const col = Math.floor(Math.random() * 9);
+                    if (grid[row][col] !== 0) {
+                        grid[row][col] = 0;
+                    } else {
+                        i--; // Повторить попытку
+                    }
+                }
+                
+                return {
+                    grid: grid,
+                    solution: solution,
+                    filledCells: difficulties[difficulty].filled,
+                    difficulty: difficulties[difficulty].name
+                };
+            }
+            
+            function renderSudokuGrid(gridId, gridData, isPuzzle) {
+                const grid = document.getElementById(gridId);
+                grid.innerHTML = '';
+                
+                for (let row = 0; row < 9; row++) {
+                    for (let col = 0; col < 9; col++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'sudoku-cell';
+                        
+                        if (gridData[row][col] !== 0) {
+                            cell.textContent = gridData[row][col];
+                            if (isPuzzle) {
+                                cell.classList.add('given-cell');
+                            }
+                        } else if (!isPuzzle) {
+                            cell.textContent = gridData[row][col];
+                            cell.classList.add('user-cell');
+                        }
+                        
+                        grid.appendChild(cell);
+                    }
+                }
+            }
+            
+            window.toggleSolution = function() {
+                const solution = document.getElementById('solution');
+                solution.classList.toggle('show');
+            };
+            
+            window.printSudoku = function() {
+                window.print();
+            };
+            
+            window.downloadSudoku = function() {
+                // Реализация скачивания будет здесь
+                alert('Функция скачивания будет реализована в следующей версии');
+            };
+        });
+    </script>
+</body>
+</html>

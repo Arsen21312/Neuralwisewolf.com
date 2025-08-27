@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Решатель квадратных уравнений | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-калькулятор для решения квадратных уравнений. Найдите действительные или комплексные корни уравнения ax² + bx + c = 0.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .quadratic-solver {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .solver-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .equation-form {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .equation-form h3 {
+            font-family: var(--font-mono);
+            font-weight: 400;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .input-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input {
+            width: 80px;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+            text-align: center;
+        }
+
+        .value-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .result-value span.root {
+            display: block;
+        }
+        
+        .result-value.error {
+            color: var(--accent-danger);
+        }
+
+        @media (max-width: 768px) {
+            .solver-card {
+                padding: 1.5rem;
+            }
+            .input-grid {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="quadratic-solver">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Решатель квадратных уравнений</h1>
+                <p class="tool-description">Найдите действительные или комплексные корни квадратного уравнения вида ax² + bx + c = 0, используя онлайн-калькулятор.</p>
+            </div>
+
+            <div class="quadratic-solver">
+                <div class="solver-card">
+                    <div class="equation-form">
+                        <h3>ax² + bx + c = 0</h3>
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="aInput">a:</label>
+                                <input type="number" id="aInput" class="value-input" step="any" placeholder="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="bInput">b:</label>
+                                <input type="number" id="bInput" class="value-input" step="any" placeholder="-3">
+                            </div>
+                            <div class="input-group">
+                                <label for="cInput">c:</label>
+                                <input type="number" id="cInput" class="value-input" step="any" placeholder="2">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="solveBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Решить
+                    </button>
+
+                    <div class="result-container" id="resultContainer" style="display: none;">
+                        <span class="result-label" id="resultLabel">Корни уравнения:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🔍 Точные расчеты</h4>
+                        <p>Находит как действительные, так и комплексные корни, обеспечивая полный результат.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Решение вычисляется в реальном времени, без задержек.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎓 Полезно для учебы</h4>
+                        <p>Идеально подходит для студентов и школьников для проверки решений или изучения темы.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Что такое квадратное уравнение?</h2>
+                    <p>Квадратное уравнение — это полиномиальное уравнение второй степени, которое имеет вид **`ax² + bx + c = 0`**, где **a**, **b** и **c** — это коэффициенты, причем `a ≠ 0`.</p>
+                    
+                    <h3>💡 Как работает решатель?</h3>
+                    <p>Для нахождения корней используется формула, основанная на **дискриминанте (`D`)**: `D = b² - 4ac`.</p>
+                    <ul>
+                        <li>**Если `D > 0`:** Существует два разных действительных корня, которые вычисляются по формуле: `x = (-b ± √D) / 2a`.</li>
+                        <li>**Если `D = 0`:** Существует один действительный корень: `x = -b / 2a`.</li>
+                        <li>**Если `D < 0`:** Существует два комплексных корня: `x = (-b ± i√|D|) / 2a`.</li>
+                    </ul>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const aInput = document.getElementById('aInput');
+            const bInput = document.getElementById('bInput');
+            const cInput = document.getElementById('cInput');
+            const solveBtn = document.getElementById('solveBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultValue = document.getElementById('resultValue');
+
+            solveBtn.addEventListener('click', solveQuadratic);
+            [aInput, bInput, cInput].forEach(input => {
+                input.addEventListener('input', solveQuadratic);
+            });
+
+            function solveQuadratic() {
+                const a = parseFloat(aInput.value) || 0;
+                const b = parseFloat(bInput.value) || 0;
+                const c = parseFloat(cInput.value) || 0;
+
+                if (a === 0) {
+                    resultValue.textContent = 'Это не квадратное уравнение.';
+                    resultValue.classList.add('error');
+                    resultContainer.style.display = 'block';
+                    return;
+                }
+                
+                const discriminant = Math.pow(b, 2) - 4 * a * c;
+
+                if (discriminant > 0) {
+                    const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                    const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                    resultValue.innerHTML = `<span class="root">x₁ = ${x1.toFixed(4)}</span><span class="root">x₂ = ${x2.toFixed(4)}</span>`;
+                    resultValue.classList.remove('error');
+                } else if (discriminant === 0) {
+                    const x = -b / (2 * a);
+                    resultValue.innerHTML = `x = ${x.toFixed(4)}`;
+                    resultValue.classList.remove('error');
+                } else {
+                    const realPart = (-b / (2 * a)).toFixed(4);
+                    const imaginaryPart = (Math.sqrt(-discriminant) / (2 * a)).toFixed(4);
+                    resultValue.innerHTML = `<span class="root">x₁ = ${realPart} + ${imaginaryPart}i</span><span class="root">x₂ = ${realPart} - ${imaginaryPart}i</span>`;
+                    resultValue.classList.remove('error');
+                }
+                
+                resultContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

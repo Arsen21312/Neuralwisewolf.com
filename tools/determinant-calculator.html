@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор определителя | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенно вычисляйте определитель матриц 2x2 и 3x3 онлайн. Простой и быстрый инструмент для учёбы и работы.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        .calculator-card {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .article {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: left;
+        }
+        .matrix-size-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+        .size-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid var(--border-light);
+            background: var(--bg-secondary);
+            transition: all 0.2s ease;
+        }
+        .size-btn.active {
+            background: var(--accent-primary);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+        .matrix-grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .matrix-grid input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            text-align: center;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        .matrix-grid input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .matrix-grid-2x2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .matrix-grid-3x3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .result-container {
+            margin-top: 1.5rem;
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+        }
+        .result-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+        .error-text {
+            color: var(--accent-danger);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="determinant-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор определителя</h1>
+                <p class="tool-description">Мгновенно вычисляйте определитель матриц 2x2 и 3x3 онлайн. Простой и быстрый инструмент для учёбы и работы.</p>
+            </div>
+
+            <div class="calculator-card">
+                <div class="matrix-size-selector">
+                    <button class="size-btn active" data-size="2">Матрица 2x2</button>
+                    <button class="size-btn" data-size="3">Матрица 3x3</button>
+                </div>
+
+                <div id="matrix-inputs" class="matrix-grid matrix-grid-2x2"></div>
+
+                <button class="btn btn-primary calculate-btn" id="calculate-btn">
+                    📊 Вычислить
+                </button>
+
+                <div id="result-container" class="result-container" style="display: none;">
+                    <p class="result-label">Определитель матрицы:</p>
+                    <p class="result-value" id="result-value"></p>
+                </div>
+                <div id="error-message" class="error-text" style="display: none;"></div>
+            </div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>⚡️ Мгновенный расчёт</h4>
+                    <p>Получайте определитель в реальном времени, без сложных вычислений вручную.</p>
+                </div>
+                <div class="feature">
+                    <h4>📋 Простой интерфейс</h4>
+                    <p>Просто выберите размер матрицы и введите числа. Всё остальное мы сделаем за вас.</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Для учёбы и работы</h4>
+                    <p>Идеален для студентов и инженеров, которые регулярно работают с матрицами.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое определитель матрицы?</h2>
+                <p>Определитель (детерминант) — это скалярное число, которое можно сопоставить квадратной матрице. Он используется для решения систем линейных уравнений, нахождения обратной матрицы, а также в геометрии для вычисления площади и объёма.</p>
+                
+                <h3>Как вычисляется определитель?</h3>
+                <p><strong>Для матрицы 2x2</strong>, определитель вычисляется по простой формуле: `ad - bc`.</p>
+                <div class="example">
+                    <pre>
+| a b |
+| c d |
+</pre>
+                </div>
+                
+                <p><strong>Для матрицы 3x3</strong>, определитель вычисляется по правилу Саррюса (или треугольников). Это более сложное вычисление, но наш инструмент делает его за вас.</p>
+                
+                <h3>💡 Примеры использования</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>✍️ В линейной алгебре</h4>
+                        <p>Определитель помогает понять, имеет ли система линейных уравнений единственное решение.</p>
+                    </div>
+                    <div class="example">
+                        <h4>👨‍💻 В компьютерной графике</h4>
+                        <p>Определитель используется для масштабирования и вращения объектов в 2D- и 3D-пространстве.</p>
+                    </div>
+                    <div class="example">
+                        <h4>📚 В физике</h4>
+                        <p>Используется в механике, электродинамике и квантовой механике для описания физических систем.</p>
+                    </div>
+                </div>
+
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Можно ли вычислить определитель матрицы 4x4 и больше?</strong><br>
+                Наш инструмент сейчас поддерживает только матрицы 2x2 и 3x3. Вычисление для больших матриц требует более сложных алгоритмов, которые мы планируем добавить в будущем.</p>
+            </div>
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sizeBtns = document.querySelectorAll('.size-btn');
+            const matrixInputs = document.getElementById('matrix-inputs');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultContainer = document.getElementById('result-container');
+            const resultValue = document.getElementById('result-value');
+            const errorMessage = document.getElementById('error-message');
+
+            let currentSize = 2;
+
+            function createMatrixInputs(size) {
+                matrixInputs.innerHTML = '';
+                matrixInputs.className = `matrix-grid matrix-grid-${size}x${size}`;
+                for (let i = 0; i < size * size; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.placeholder = '0';
+                    matrixInputs.appendChild(input);
+                }
+            }
+
+            function updateActiveBtn(selectedSize) {
+                sizeBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (parseInt(btn.dataset.size) === selectedSize) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            sizeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const newSize = parseInt(btn.dataset.size);
+                    if (newSize !== currentSize) {
+                        currentSize = newSize;
+                        updateActiveBtn(currentSize);
+                        createMatrixInputs(currentSize);
+                        hideResult();
+                        hideError();
+                    }
+                });
+            });
+
+            calculateBtn.addEventListener('click', () => {
+                hideResult();
+                hideError();
+
+                const inputs = Array.from(matrixInputs.querySelectorAll('input'));
+                const matrix = inputs.map(input => parseFloat(input.value) || 0);
+
+                if (matrix.some(isNaN)) {
+                    showError('Пожалуйста, введите только числа.');
+                    return;
+                }
+
+                let determinant;
+                if (currentSize === 2) {
+                    determinant = matrix[0] * matrix[3] - matrix[1] * matrix[2];
+                } else if (currentSize === 3) {
+                    determinant = matrix[0] * (matrix[4] * matrix[8] - matrix[5] * matrix[7])
+                                - matrix[1] * (matrix[3] * matrix[8] - matrix[5] * matrix[6])
+                                + matrix[2] * (matrix[3] * matrix[7] - matrix[4] * matrix[6]);
+                }
+
+                showResult(determinant);
+            });
+
+            function showResult(value) {
+                resultValue.textContent = value;
+                resultContainer.style.display = 'block';
+            }
+
+            function hideResult() {
+                resultContainer.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+
+            // Инициализация
+            createMatrixInputs(currentSize);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер веса | Neural Wise Wolf</title>
+    <meta name="description" content="Конвертируйте вес между граммами, килограммами, фунтами, унциями и другими единицами измерения. Быстрый и удобный инструмент онлайн.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .converter-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="convert" data-slug="weight-converter">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Конвертер веса</h1>
+                <p class="tool-description">Конвертируйте вес из одной единицы измерения в другую. Поддерживаются граммы, килограммы, фунты, унции и другие.</p>
+            </div>
+
+            <div class="converter-container">
+                <div class="field">
+                    <label for="input-value" class="field-label">Количество</label>
+                    <input type="number" id="input-value" value="1" min="0" step="any">
+                </div>
+                <div class="field">
+                    <label for="input-unit" class="field-label">Из</label>
+                    <select id="input-unit">
+                        <option value="kg">Килограммы (kg)</option>
+                        <option value="g">Граммы (g)</option>
+                        <option value="mg">Миллиграммы (mg)</option>
+                        <option value="lb">Фунты (lb)</option>
+                        <option value="oz">Унции (oz)</option>
+                        <option value="t">Тонны (t)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="output-unit" class="field-label">В</label>
+                    <select id="output-unit">
+                        <option value="kg">Килограммы (kg)</option>
+                        <option value="g">Граммы (g)</option>
+                        <option value="mg">Миллиграммы (mg)</option>
+                        <option value="lb">Фунты (lb)</option>
+                        <option value="oz">Унции (oz)</option>
+                        <option value="t">Тонны (t)</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="output-value" class="field-label">Результат</label>
+                    <input type="text" id="output-value" readonly>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Конвертируем...</p>
+                </div>
+            </div>
+            
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Быстрые расчеты</h4>
+                    <p>Мгновенно конвертируйте вес без задержек.</p>
+                </div>
+                <div class="feature">
+                    <h4>🌍 Разные единицы</h4>
+                    <p>Поддерживает метрические и имперские системы измерения.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Все операции выполняются локально в вашем браузере.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Что такое единицы веса?</h2>
+                <p>Вес — это мера силы тяжести, действующей на объект. Существуют различные системы измерения веса, которые используются в разных странах и сферах деятельности.</p>
+                
+                <p>Основной единицей веса в Международной системе единиц (СИ) является килограмм (кг), но в быту и торговле часто используются и другие единицы, такие как граммы, тонны, а также фунты и унции в имперской системе измерений.</p>
+                
+                <h3>Как работает конвертация веса?</h3>
+                <p>Конвертация основана на фиксированных коэффициентах. Например, 1 килограмм равен 1000 граммам, а 1 фунт равен 0.45359237 килограммам. Наш инструмент использует эти коэффициенты для точных расчетов, чтобы вы всегда получали верный результат.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputValue = document.getElementById('input-value');
+            const inputUnit = document.getElementById('input-unit');
+            const outputUnit = document.getElementById('output-unit');
+            const outputValue = document.getElementById('output-value');
+            const loadingIndicator = document.getElementById('loading');
+            
+            const conversionRates = {
+                kg: { // Base unit: kilograms
+                    kg: 1,
+                    g: 1000,
+                    mg: 1000000,
+                    lb: 2.20462,
+                    oz: 35.274,
+                    t: 0.001
+                },
+                g: { // grams
+                    kg: 0.001,
+                    g: 1,
+                    mg: 1000,
+                    lb: 0.00220462,
+                    oz: 0.035274,
+                    t: 0.000001
+                },
+                mg: { // milligrams
+                    kg: 0.000001,
+                    g: 0.001,
+                    mg: 1,
+                    lb: 0.0000022046,
+                    oz: 0.000035274,
+                    t: 0.000000001
+                },
+                lb: { // pounds
+                    kg: 0.453592,
+                    g: 453.592,
+                    mg: 453592,
+                    lb: 1,
+                    oz: 16,
+                    t: 0.000453592
+                },
+                oz: { // ounces
+                    kg: 0.0283495,
+                    g: 28.3495,
+                    mg: 28349.5,
+                    lb: 0.0625,
+                    oz: 1,
+                    t: 0.0000283495
+                },
+                t: { // tonnes
+                    kg: 1000,
+                    g: 1000000,
+                    mg: 1000000000,
+                    lb: 2204.62,
+                    oz: 35274,
+                    t: 1
+                }
+            };
+            
+            function convertWeight() {
+                const value = parseFloat(inputValue.value);
+                const fromUnit = inputUnit.value;
+                const toUnit = outputUnit.value;
+
+                if (isNaN(value)) {
+                    outputValue.value = 'Введите число';
+                    return;
+                }
+
+                if (fromUnit === toUnit) {
+                    outputValue.value = value.toFixed(3);
+                    return;
+                }
+
+                loadingIndicator.style.display = 'block';
+
+                setTimeout(() => {
+                    try {
+                        const result = value * conversionRates[fromUnit][toUnit];
+                        outputValue.value = result.toFixed(5);
+                    } catch (e) {
+                        outputValue.value = 'Ошибка: ' + e.message;
+                    } finally {
+                        loadingIndicator.style.display = 'none';
+                    }
+                }, 100);
+            }
+
+            inputValue.addEventListener('input', convertWeight);
+            inputUnit.addEventListener('change', convertWeight);
+            outputUnit.addEventListener('change', convertWeight);
+
+            convertWeight(); // Initial conversion on page load
+        });
+    </script>
+</body>
+
+</html>

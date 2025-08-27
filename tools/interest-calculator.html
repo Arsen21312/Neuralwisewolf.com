@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор процентов | Neural Wise Wolf</title>
+    <meta name="description" content="Расчет простых и сложных процентов по вкладам и кредитам. Планирование инвестиций и вычисление процентных ставок.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .interest-calculator {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .calculator-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .value-input, .unit-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .value-input:focus, .unit-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-primary);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
+        }
+
+        .results-container {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-item {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .summary-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        .summary-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .chart-container {
+            margin-top: 2rem;
+            height: 300px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            padding: 1rem;
+        }
+
+        .comparison {
+            margin-top: 2rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .calculator-card {
+                padding: 1.5rem;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .calculator-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .positive {
+            color: var(--accent-success);
+        }
+
+        .negative {
+            color: var(--accent-danger);
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="interest-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор процентов</h1>
+                <p class="tool-description">Расчет простых и сложных процентов по вкладам, кредитам и инвестициям</p>
+            </div>
+
+            <div class="interest-calculator">
+                <div class="calculator-card">
+                    <div class="calculator-tabs">
+                        <button class="tab active" data-tab="deposit">💰 Вклад</button>
+                        <button class="tab" data-tab="credit">💳 Кредит</button>
+                        <button class="tab" data-tab="investment">📈 Инвестиции</button>
+                    </div>
+
+                    <!-- Вклад -->
+                    <div class="tab-content active" id="deposit-tab">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="depositAmount">Сумма вклада:</label>
+                                <input type="number" id="depositAmount" class="value-input" placeholder="100000" value="100000" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="depositRate">Процентная ставка (% годовых):</label>
+                                <input type="number" id="depositRate" class="value-input" placeholder="8" value="8" step="0.1" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="depositTerm">Срок (месяцев):</label>
+                                <input type="number" id="depositTerm" class="value-input" placeholder="12" value="12" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="depositType">Тип процентов:</label>
+                                <select id="depositType" class="unit-select">
+                                    <option value="simple">Простые проценты</option>
+                                    <option value="compound" selected>Сложные проценты</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="capitalization">Капитализация:</label>
+                                <select id="capitalization" class="unit-select">
+                                    <option value="monthly">Ежемесячная</option>
+                                    <option value="quarterly">Ежеквартальная</option>
+                                    <option value="yearly">Ежегодная</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кредит -->
+                    <div class="tab-content" id="credit-tab">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="creditAmount">Сумма кредита:</label>
+                                <input type="number" id="creditAmount" class="value-input" placeholder="500000" value="500000" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="creditRate">Процентная ставка (% годовых):</label>
+                                <input type="number" id="creditRate" class="value-input" placeholder="12" value="12" step="0.1" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="creditTerm">Срок (месяцев):</label>
+                                <input type="number" id="creditTerm" class="value-input" placeholder="36" value="36" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="paymentType">Тип платежей:</label>
+                                <select id="paymentType" class="unit-select">
+                                    <option value="annuity">Аннуитетные</option>
+                                    <option value="differentiated">Дифференцированные</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Инвестиции -->
+                    <div class="tab-content" id="investment-tab">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="investmentAmount">Начальная сумма:</label>
+                                <input type="number" id="investmentAmount" class="value-input" placeholder="100000" value="100000" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="investmentRate">Ожидаемая доходность (% годовых):</label>
+                                <input type="number" id="investmentRate" class="value-input" placeholder="10" value="10" step="0.1" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label for="investmentTerm">Срок (лет):</label>
+                                <input type="number" id="investmentTerm" class="value-input" placeholder="5" value="5" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="monthlyContribution">Ежемесячное пополнение:</label>
+                                <input type="number" id="monthlyContribution" class="value-input" placeholder="5000" value="5000" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary calculate-btn" id="calculateBtn">
+                        📊 Рассчитать
+                    </button>
+
+                    <div class="results-container">
+                        <h3 style="margin-bottom: 1rem; text-align: center;">Результаты расчета</h3>
+                        <div class="results-grid" id="resultsGrid">
+                            <!-- Результаты будут добавлены через JS -->
+                        </div>
+
+                        <div id="resultsTable">
+                            <!-- Детальная таблица будет добавлена через JS -->
+                        </div>
+
+                        <div class="chart-container" id="chartContainer">
+                            <p style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                График будет отображен после расчета
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Сравнение типов процентов -->
+                <div class="comparison">
+                    <h3>📊 Сравнение простых и сложных процентов</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>💰 Простые проценты</h4>
+                            <p>Начисляются только на первоначальную сумму вклада. Подходят для краткосрочных вкладов.</p>
+                            <ul>
+                                <li>Формула: A = P × (1 + r × t)</li>
+                                <li>Простой расчет</li>
+                                <li>Линейный рост</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🚀 Сложные проценты</h4>
+                            <p>Начисляются на сумму с ранее начисленными процентами. "Восьмое чудо света" (А. Эйнштейн).</p>
+                            <ul>
+                                <li>Формула: A = P × (1 + r/n)^(n×t)</li>
+                                <li>Экспоненциальный рост</li>
+                                <li>Выгодно для долгосрочных вкладов</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Особенности -->
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>💰 Множество расчетов</h4>
+                        <p>Вклады, кредиты, инвестиции с разными типами процентов</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📈 Детальная аналитика</h4>
+                        <p>Графики, таблицы платежей и сравнение вариантов</p>
+                    </div>
+                    <div class="feature">
+                        <h4>💡 Простые формулы</h4>
+                        <p>Понятные математические расчеты с объяснениями</p>
+                    </div>
+                </div>
+
+                <!-- SEO контент -->
+                <div class="article">
+                    <h2>Как работают проценты: полное руководство</h2>
+                    <p>Проценты — это плата за использование денежных средств. Понимание принципов работы процентов поможет принимать взвешенные финансовые решения и maximize ваши доходы.</p>
+                    
+                    <h3>📊 Основные понятия</h3>
+                    <ul>
+                        <li><strong>Основная сумма (Principal)</strong> — первоначальная сумма денег</li>
+                        <li><strong>Процентная ставка (Interest Rate)</strong> — плата за использование денег, выраженная в процентах</li>
+                        <li><strong>Срок (Term)</strong> — период времени, на который берутся/даются деньги</li>
+                        <li><strong>Капитализация (Compounding)</strong> — частота начисления процентов на проценты</li>
+                    </ul>
+                    
+                    <h3>🧮 Формулы расчета</h3>
+                    
+                    <h4>Простые проценты</h4>
+                    <pre>Доход = P × r × t
+Итоговая сумма = P × (1 + r × t)</pre>
+                    
+                    <h4>Сложные проценты</h4>
+                    <pre>Итоговая сумма = P × (1 + r/n)^(n×t)
+Где:
+P - основная сумма
+r - годовая процентная ставка (в десятичных дробях)
+t - срок в годах
+n - количество периодов капитализации в год</pre>
+
+                    <h4>Аннуитетные платежи по кредиту</h4>
+                    <pre>Ежемесячный платеж = P × [r × (1 + r)^n] / [(1 + r)^n - 1]</pre>
+                    
+                    <h3>💡 Практические примеры</h3>
+                    <div class="example-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>💰 Банковский вклад</h4>
+                            <p>100,000 руб под 8% годовых с ежемесячной капитализацией за 5 лет</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>💳 Ипотечный кредит</h4>
+                            <p>2,000,000 руб под 7% годовых на 20 лет с аннуитетными платежами</p>
+                        </div>
+                        <div class="example" style="background: var(--bg-secondary); padding: 1rem; border-radius: 12px;">
+                            <h4>📈 Инвестиционный портфель</h4>
+                            <p>Ежемесячные инвестиции 10,000 руб с доходностью 12% годовых</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Что выгоднее: простые или сложные проценты?</strong><br>
+                    Сложные проценты всегда выгоднее для вкладчиков и инвесторов, так как происходит начисление процентов на проценты.</p>
+                    
+                    <p><strong>Как часто должна происходить капитализация?</strong><br>
+                    Чем чаще капитализация (ежемесячно, ежедневно), тем больше итоговый доход благодаря эффекту сложных процентов.</p>
+                    
+                    <p><strong>Что такое эффективная процентная ставка?</strong><br>
+                    Это реальная годовая ставка с учетом капитализации. Всегда выше номинальной ставки.</p>
+                    
+                    <p><strong>Как снизить переплату по кредиту?</strong><br>
+                    Выбирайте дифференцированные платежи, делайте досрочные погашения и сокращайте срок кредита.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resultsGrid = document.getElementById('resultsGrid');
+            const resultsTable = document.getElementById('resultsTable');
+            const chartContainer = document.getElementById('chartContainer');
+            let chart = null;
+
+            // Переключение вкладок
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    
+                    // Активируем вкладку
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Показываем соответствующий контент
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-tab`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Расчет
+            calculateBtn.addEventListener('click', calculate);
+
+            function calculate() {
+                const activeTab = document.querySelector('.tab.active').dataset.tab;
+                
+                switch (activeTab) {
+                    case 'deposit':
+                        calculateDeposit();
+                        break;
+                    case 'credit':
+                        calculateCredit();
+                        break;
+                    case 'investment':
+                        calculateInvestment();
+                        break;
+                }
+            }
+
+            function calculateDeposit() {
+                const amount = parseFloat(document.getElementById('depositAmount').value);
+                const rate = parseFloat(document.getElementById('depositRate').value) / 100;
+                const term = parseInt(document.getElementById('depositTerm').value);
+                const type = document.getElementById('depositType').value;
+                const capitalization = document.getElementById('capitalization').value;
+
+                if (!amount || !rate || !term) {
+                    alert('Пожалуйста, заполните все поля корректно.');
+                    return;
+                }
+
+                let totalAmount, interestEarned;
+                const years = term / 12;
+
+                if (type === 'simple') {
+                    // Простые проценты
+                    interestEarned = amount * rate * years;
+                    totalAmount = amount + interestEarned;
+                } else {
+                    // Сложные проценты
+                    let n;
+                    switch (capitalization) {
+                        case 'monthly': n = 12; break;
+                        case 'quarterly': n = 4; break;
+                        case 'yearly': n = 1; break;
+                    }
+                    totalAmount = amount * Math.pow(1 + rate/n, n * years);
+                    interestEarned = totalAmount - amount;
+                }
+
+                // Обновляем результаты
+                updateResults([
+                    { label: 'Итоговая сумма', value: formatCurrency(totalAmount) },
+                    { label: 'Начисленные проценты', value: formatCurrency(interestEarned), className: 'positive' },
+                    { label: 'Доходность', value: (interestEarned/amount*100).toFixed(2) + '%' },
+                    { label: 'Рост капитала', value: (totalAmount/amount*100).toFixed(2) + '%' }
+                ]);
+
+                // Строим график
+                createChart(['Начальная сумма', 'Проценты'], [amount, interestEarned]);
+            }
+
+            function calculateCredit() {
+                const amount = parseFloat(document.getElementById('creditAmount').value);
+                const rate = parseFloat(document.getElementById('creditRate').value) / 100;
+                const term = parseInt(document.getElementById('creditTerm').value);
+                const paymentType = document.getElementById('paymentType').value;
+
+                if (!amount || !rate || !term) {
+                    alert('Пожалуйста, заполните все поля корректно.');
+                    return;
+                }
+
+                const monthlyRate = rate / 12;
+                let monthlyPayment, totalPayment, totalInterest;
+
+                if (paymentType === 'annuity') {
+                    // Аннуитетные платежи
+                    monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+                    totalPayment = monthlyPayment * term;
+                    totalInterest = totalPayment - amount;
+                } else {
+                    // Дифференцированные платежи
+                    const mainDebt = amount / term;
+                    let payments = [];
+                    let remaining = amount;
+                    
+                    for (let i = 0; i < term; i++) {
+                        const interest = remaining * monthlyRate;
+                        const payment = mainDebt + interest;
+                        payments.push(payment);
+                        remaining -= mainDebt;
+                    }
+                    
+                    monthlyPayment = payments[0]; // Первый платеж
+                    totalPayment = payments.reduce((a, b) => a + b, 0);
+                    totalInterest = totalPayment - amount;
+                }
+
+                updateResults([
+                    { label: 'Ежемесячный платеж', value: formatCurrency(monthlyPayment) },
+                    { label: 'Общая выплата', value: formatCurrency(totalPayment) },
+                    { label: 'Переплата', value: formatCurrency(totalInterest), className: 'negative' },
+                    { label: 'Эффективная ставка', value: (totalInterest/amount/term*12*100).toFixed(2) + '%' }
+                ]);
+
+                createChart(['Основной долг', 'Проценты'], [amount, totalInterest]);
+            }
+
+            function calculateInvestment() {
+                const amount = parseFloat(document.getElementById('investmentAmount').value);
+                const rate = parseFloat(document.getElementById('investmentRate').value) / 100;
+                const term = parseInt(document.getElementById('investmentTerm').value);
+                const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value);
+
+                if (!amount || !rate || !term) {
+                    alert('Пожалуйста, заполните все поля корректно.');
+                    return;
+                }
+
+                let total = amount;
+                const monthlyRate = rate / 12;
+                const months = term * 12;
+                const contributions = [];
+
+                for (let i = 0; i < months; i++) {
+                    total = total * (1 + monthlyRate) + monthlyContribution;
+                    contributions.push(total);
+                }
+
+                const totalContributions = amount + monthlyContribution * months;
+                const profit = total - totalContributions;
+
+                updateResults([
+                    { label: 'Итоговая сумма', value: formatCurrency(total) },
+                    { label: 'Общие вложения', value: formatCurrency(totalContributions) },
+                    { label: 'Прибыль', value: formatCurrency(profit), className: 'positive' },
+                    { label: 'Доходность', value: (profit/totalContributions*100).toFixed(2) + '%' }
+                ]);
+
+                createChart(['Вложения', 'Прибыль'], [totalContributions, profit]);
+            }
+
+            function updateResults(data) {
+                resultsGrid.innerHTML = '';
+                data.forEach(item => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    if (item.className) {
+                        resultItem.classList.add(item.className);
+                    }
+                    resultItem.innerHTML = `
+                        <p class="result-value">${item.value}</p>
+                        <p class="result-label">${item.label}</p>
+                    `;
+                    resultsGrid.appendChild(resultItem);
+                });
+            }
+
+            function createChart(labels, data) {
+                if (chart) {
+                    chart.destroy();
+                }
+
+                const ctx = document.createElement('canvas');
+                chartContainer.innerHTML = '';
+                chartContainer.appendChild(ctx);
+
+                chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(239, 68, 68, 0.8)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + formatCurrency(context.raw);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('ru-RU', {
+                    style: 'currency',
+                    currency: 'RUB',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            }
+
+            // Первоначальный расчет
+            calculate();
+        });
+    </script>
+</body>
+</html>

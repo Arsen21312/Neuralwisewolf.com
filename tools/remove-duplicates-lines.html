@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удаление дубликатов | Neural Wise Wolf</title>
+    <meta name="description" content="Онлайн-инструмент для удаления повторяющихся строк из любого текста. Идеально для очистки списков, кода или данных.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .input-output-container {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .input-output-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="remove-duplicates-lines">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Удаление дубликатов строк</h1>
+                <p class="tool-description">Быстро и легко удалите повторяющиеся строки из любого текста или списка. Вставьте текст, и мы сделаем всю работу.</p>
+            </div>
+
+            <div class="input-output-container">
+                <div class="field">
+                    <label for="input-text" class="field-label">Входной текст</label>
+                    <textarea id="input-text" placeholder="Вставьте ваш текст здесь..."></textarea>
+                </div>
+                <div class="field">
+                    <label for="output-text" class="field-label">Результат</label>
+                    <textarea id="output-text" readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="remove-btn">
+                    ✍️ Удалить дубликаты
+                </button>
+                <button class="btn btn-secondary" id="copy-btn">
+                    Скопировать
+                </button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p>Удаляем...</p>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Мгновенная очистка</h4>
+                    <p>Обрабатывает большие объемы текста за считанные секунды.</p>
+                </div>
+                <div class="feature">
+                    <h4>💡 Сохранение порядка</h4>
+                    <p>Удаляет дубликаты, сохраняя оригинальный порядок первых вхождений.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Все операции выполняются локально в вашем браузере, без отправки данных на сервер.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Зачем удалять дубликаты строк?</h2>
+                <p>Повторяющиеся строки могут быть проблемой при работе со списками, данными, адресами электронной почты или кодом. Наш инструмент помогает быстро очистить текст от избыточной информации, делая его более читаемым и удобным для дальнейшей обработки. Это особенно полезно для разработчиков, аналитиков и маркетологов.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Инструмент считывает ваш текст построчно и использует `Set` — структуру данных, которая по своей природе хранит только уникальные значения. Это позволяет быстро и эффективно отфильтровать все повторяющиеся строки, оставляя только одну копию каждого уникального значения, а затем выводит результат в отдельное поле.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputText = document.getElementById('input-text');
+            const outputText = document.getElementById('output-text');
+            const removeBtn = document.getElementById('remove-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const loadingIndicator = document.getElementById('loading');
+            
+            function removeDuplicates() {
+                loadingIndicator.style.display = 'block';
+                setTimeout(() => {
+                    const lines = inputText.value.split('\n');
+                    const uniqueLines = [...new Set(lines)];
+                    outputText.value = uniqueLines.join('\n');
+                    loadingIndicator.style.display = 'none';
+                }, 100);
+            }
+
+            removeBtn.addEventListener('click', removeDuplicates);
+            
+            copyBtn.addEventListener('click', () => {
+                const text = outputText.value;
+                if (text) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert('Текст скопирован в буфер обмена!');
+                    }).catch(err => {
+                        console.error('Не удалось скопировать текст: ', err);
+                        alert('Не удалось скопировать текст. Пожалуйста, скопируйте вручную.');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

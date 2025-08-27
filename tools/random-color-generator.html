@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор случайных цветов | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенный генератор случайных цветов в формате HEX. Идеально подходит для веб-дизайна, графики и творчества.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .random-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border: 1px solid var(--border-light);
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary); /* Цвет текста на фоне меняется, поэтому оставим его */
+            word-wrap: break-word;
+            text-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-color-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор случайных цветов</h1>
+                <p class="tool-description">Получите случайный цвет в формате HEX одним нажатием кнопки. Идеально подходит для дизайнеров, разработчиков и художников.</p>
+            </div>
+
+            <div class="random-generator">
+                <div class="generator-card">
+                    <button class="btn btn-primary btn-full" id="generateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-palette"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10c0 1.25-.21 2.45-.6 3.55L18 10a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2h-2a2 2 0 0 0-2-2v-2a2 2 0 0 0-2-2L4.6 15.55A10 10 0 0 1 2 12a10 10 0 0 1 10-10z"></path></svg>
+                        Сгенерировать цвет
+                    </button>
+
+                    <div class="result-container" id="resultContainer">
+                        <span class="result-title" style="display: none;">HEX-код цвета:</span>
+                        <div class="result-value"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🎨 Бесконечное разнообразие</h4>
+                        <p>Наш генератор может создать более 16 миллионов уникальных цветов.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Получите новый цвет за доли секунды вместе с его HEX-кодом.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🖥️ Полезно для дизайна</h4>
+                        <p>Используйте этот инструмент для подбора цветовых схем, прототипирования или просто для вдохновения.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Что такое HEX-код цвета?</h2>
+                    <p><strong>HEX-код</strong> — это способ представления цвета в шестнадцатеричной системе счисления. Он состоит из знака решетки (`#`) и шести символов, где каждые два символа (от `00` до `FF`) обозначают интенсивность красного, зеленого и синего цветов соответственно. Например, `#FF0000` — это ярко-красный, а `#0000FF` — ярко-синий.</p>
+                    
+                    <h3>💡 Как работает генератор?</h3>
+                    <p>Наш инструмент создает случайное число от 0 до 16777215 (что соответствует `FFFFFF` в десятичной системе) и затем преобразует его в 6-значный шестнадцатеричный формат, добавляя при необходимости нули в начале. Это гарантирует, что каждый сгенерированный код будет уникальным и валидным.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultTitle = resultContainer.querySelector('.result-title');
+            const resultValue = resultContainer.querySelector('.result-value');
+
+            generateBtn.addEventListener('click', generateRandomColor);
+            
+            function generateRandomColor() {
+                const randomHex = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
+                
+                resultContainer.style.backgroundColor = randomHex;
+                resultTitle.style.display = 'block';
+                resultValue.textContent = randomHex;
+            }
+        });
+    </script>
+</body>
+</html>

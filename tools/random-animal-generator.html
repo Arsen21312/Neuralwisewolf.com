@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор случайных животных | Neural Wise Wolf</title>
+    <meta name="description" content="Мгновенный генератор случайных названий животных. Идеально подходит для игр, творчества и развлечения.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+
+        .random-generator {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            word-wrap: break-word;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .result-value.visible {
+            opacity: 1;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="random" data-slug="random-animal-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Генератор случайных животных</h1>
+                <p class="tool-description">Получите случайное название животного одним нажатием кнопки. Отлично подходит для придумывания персонажей, игр и развлечения.</p>
+            </div>
+
+            <div class="random-generator">
+                <div class="generator-card">
+                    <button class="btn btn-primary btn-full" id="generateBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.5 15a8.5 8.5 0 1 0 5-12.75"></path><polyline points="23 20 23 14 17 14"></polyline><path d="M20.5 9a8.5 8.5 0 1 0-5 12.75"></path></svg>
+                        Сгенерировать животное
+                    </button>
+
+                    <div class="result-container">
+                        <span class="result-title" id="resultLabel" style="display: none;">Ваше случайное животное:</span>
+                        <div class="result-value" id="resultValue"></div>
+                    </div>
+                </div>
+
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🐾 Огромный список</h4>
+                        <p>Наш генератор выбирает из большого и разнообразного списка животных, от самых обычных до экзотических.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>⚡️ Мгновенный результат</h4>
+                        <p>Животное генерируется за доли секунды, готовое к использованию.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🎲 Полезно для творчества</h4>
+                        <p>Используйте этот инструмент для игр, написания историй или создания уникальных персонажей.</p>
+                    </div>
+                </div>
+
+                <div class="article">
+                    <h2>Зачем нужен генератор случайных животных?</h2>
+                    <p>Иногда для игры, рассказа или просто для развлечения нужен быстрый и неожиданный ответ. Генераторы случайных названий помогают справиться с "творческим ступором" и внести элемент неожиданности. Наш генератор предлагает широкий выбор, чтобы результат всегда был интересным.</p>
+                    
+                    <h3>💡 Как работает генератор?</h3>
+                    <p>Все очень просто: в коде есть заранее подготовленный массив с названиями животных. Когда вы нажимаете кнопку, JavaScript выбирает случайный элемент из этого массива и отображает его на странице. Этот метод гарантирует абсолютно случайный результат при каждом нажатии.</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const resultLabel = document.getElementById('resultLabel');
+            const resultValue = document.getElementById('resultValue');
+
+            const animals = [
+                "Лев", "Тигр", "Слон", "Жираф", "Зебра", "Носорог", "Бегемот", "Медведь", "Волк", "Лиса", "Заяц",
+                "Белка", "Еж", "Олень", "Лось", "Кабан", "Панда", "Коала", "Обезьяна", "Кенгуру", "Крокодил",
+                "Черепаха", "Змея", "Ящерица", "Рыба-клоун", "Акула", "Кит", "Дельфин", "Осьминог", "Медуза",
+                "Пингвин", "Страус", "Орел", "Сокол", "Воробей", "Голубь", "Курица", "Петух", "Утка", "Гусь",
+                "Индейка", "Пчела", "Бабочка", "Муравей", "Паук", "Жук", "Комар", "Муха", "Моль", "Рысь",
+                "Барс", "Гепард", "Пума", "Шакал", "Гиена", "Выдра", "Ласка", "Енот", "Скунс", "Барсук",
+                "Морж", "Тюлень", "Кашалот", "Олень-северный", "Капибара", "Дикобраз", "Бобр", "Сурок",
+                "Крот", "Слон-африканский", "Слон-индийский", "Бизон", "Буйвол", "Як", "Лама", "Альпака",
+                "Верблюд", "Горностай", "Опоссум", "Кошка", "Собака", "Хомяк", "Морская свинка", "Шиншилла",
+                "Единорог", "Дракон", "Грифон", "Кракен", "Пегас"
+            ];
+
+            generateBtn.addEventListener('click', generateRandomAnimal);
+
+            function generateRandomAnimal() {
+                const randomIndex = Math.floor(Math.random() * animals.length);
+                const randomAnimal = animals[randomIndex];
+                
+                resultValue.classList.remove('visible');
+                resultLabel.style.display = 'block';
+
+                setTimeout(() => {
+                    resultValue.textContent = randomAnimal;
+                    resultValue.classList.add('visible');
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

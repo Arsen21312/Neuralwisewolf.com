@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+<link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор процентов | Neural Wise Wolf</title>
+    <meta name="description" content="Расчет процентов, скидок, наценок и долей. Простой и удобный калькулятор процентов онлайн.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+
+        .tool-header {
+  text-align: center;
+  margin-bottom: 1.5rem; /* чтобы отступ вниз был аккуратный */
+}
+.tool-header h1 {
+  margin-bottom: .5rem;
+}
+.tool-header p {
+  max-width: 600px; /* ограничим ширину */
+  margin: 0 auto;
+  color: var(--text-secondary);
+}
+
+            .tool-features{
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-light);
+}
+.tool-features .feature{
+  margin-bottom: 1rem;
+}
+        .percentage-calculator {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .calc-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .calc-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .calc-tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .calc-form {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .form-row label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .result-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--accent-primary);
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+        
+        .result-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .calc-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .calc-tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="math" data-slug="percentage-calculator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Калькулятор процентов</h1>
+                <p class="tool-description">Расчет процентов, скидок, наценок и долей. Просто введите числа — получите результат!</p>
+            </div>
+
+            <div class="percentage-calculator">
+                <div class="calc-tabs">
+                    <button class="calc-tab active" data-tab="basic">Базовый</button>
+                    <button class="calc-tab" data-tab="increase">Увеличение</button>
+                    <button class="calc-tab" data-tab="decrease">Уменьшение</button>
+                    <button class="calc-tab" data-tab="difference">Разница</button>
+                </div>
+
+                <!-- Базовый расчет -->
+                <div class="tab-content active" id="basic-tab">
+                    <div class="calc-form">
+                        <div class="form-row">
+                            <label for="basic-number">Число:</label>
+                            <input type="number" id="basic-number" placeholder="100" value="100">
+                        </div>
+                        <div class="form-row">
+                            <label for="basic-percent">Процент:</label>
+                            <input type="number" id="basic-percent" placeholder="20" value="20">
+                        </div>
+                        <button class="btn btn-primary" id="calculate-basic">Рассчитать</button>
+                    </div>
+                    
+                    <div class="result-card" id="basic-result">
+                        <p class="result-value">20</p>
+                        <p class="result-label">20% от 100</p>
+                    </div>
+                </div>
+
+                <!-- Увеличение на процент -->
+                <div class="tab-content" id="increase-tab">
+                    <div class="calc-form">
+                        <div class="form-row">
+                            <label for="increase-number">Число:</label>
+                            <input type="number" id="increase-number" placeholder="100" value="100">
+                        </div>
+                        <div class="form-row">
+                            <label for="increase-percent">Увеличить на (%):</label>
+                            <input type="number" id="increase-percent" placeholder="20" value="20">
+                        </div>
+                        <button class="btn btn-primary" id="calculate-increase">Рассчитать</button>
+                    </div>
+                    
+                    <div class="result-card" id="increase-result">
+                        <p class="result-value">120</p>
+                        <p class="result-label">100 + 20%</p>
+                    </div>
+                </div>
+
+                <!-- Уменьшение на процент -->
+                <div class="tab-content" id="decrease-tab">
+                    <div class="calc-form">
+                        <div class="form-row">
+                            <label for="decrease-number">Число:</label>
+                            <input type="number" id="decrease-number" placeholder="100" value="100">
+                        </div>
+                        <div class="form-row">
+                            <label for="decrease-percent">Уменьшить на (%):</label>
+                            <input type="number" id="decrease-percent" placeholder="20" value="20">
+                        </div>
+                        <button class="btn btn-primary" id="calculate-decrease">Рассчитать</button>
+                    </div>
+                    
+                    <div class="result-card" id="decrease-result">
+                        <p class="result-value">80</p>
+                        <p class="result-label">100 - 20%</p>
+                    </div>
+                </div>
+
+                <!-- Разница в процентах -->
+                <div class="tab-content" id="difference-tab">
+                    <div class="calc-form">
+                        <div class="form-row">
+                            <label for="from-number">От числа:</label>
+                            <input type="number" id="from-number" placeholder="100" value="100">
+                        </div>
+                        <div class="form-row">
+                            <label for="to-number">До числа:</label>
+                            <input type="number" id="to-number" placeholder="120" value="120">
+                        </div>
+                        <button class="btn btn-primary" id="calculate-difference">Рассчитать</button>
+                    </div>
+                    
+                    <div class="result-card" id="difference-result">
+                        <p class="result-value">+20%</p>
+                        <p class="result-label">Разница от 100 до 120</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🧮 4 режима расчета</h4>
+                    <p>Базовый расчет, увеличение, уменьшение и разница в процентах</p>
+                </div>
+                <div class="feature">
+                    <h4>⚡ Мгновенный результат</h4>
+                    <p>Расчеты происходят в реальном времени без перезагрузки</p>
+                </div>
+                <div class="feature">
+                    <h4>📊 Практические примеры</h4>
+                    <p>Скидки, наценки, налоги, чаевые — все виды процентных расчетов</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>Как работает калькулятор процентов</h2>
+                <p>Наш калькулятор позволяет выполнять четыре основных типа процентных расчетов:</p>
+                
+                <h3>1. Базовый расчет (X% от Y)</h3>
+                <p>Формула: <code>Результат = (X × Y) ÷ 100</code></p>
+                <p>Пример: 20% от 100 = (20 × 100) ÷ 100 = 20</p>
+                
+                <h3>2. Увеличение на процент (X + Y%)</h3>
+                <p>Формула: <code>Результат = X × (1 + Y ÷ 100)</code></p>
+                <p>Пример: 100 + 20% = 100 × (1 + 0.2) = 120</p>
+                
+                <h3>3. Уменьшение на процент (X - Y%)</h3>
+                <p>Формула: <code>Результат = X × (1 - Y ÷ 100)</code></p>
+                <p>Пример: 100 - 20% = 100 × (1 - 0.2) = 80</p>
+                
+                <h3>4. Разница в процентах (от X до Y)</h3>
+                <p>Формула: <code>Результат = ((Y - X) ÷ X) × 100</code></p>
+                <p>Пример: от 100 до 120 = ((120 - 100) ÷ 100) × 100 = +20%</p>
+                
+                <h3>Практическое применение</h3>
+                <ul>
+                    <li>💰 <strong>Финансы:</strong> расчет налогов, чаевых, скидок</li>
+                    <li>🛒 <strong>Покупки:</strong> вычисление размера скидок в магазинах</li>
+                    <li>📈 <strong>Бизнес:</strong> расчет наценок и маржи</li>
+                    <li>📊 <strong>Аналитика:</strong> сравнение показателей в процентах</li>
+                </ul>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Переключение табов
+            const tabs = document.querySelectorAll('.calc-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Деактивируем все табы
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    // Активируем текущий
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Базовый расчет
+            document.getElementById('calculate-basic').addEventListener('click', calculateBasic);
+            document.getElementById('calculate-increase').addEventListener('click', calculateIncrease);
+            document.getElementById('calculate-decrease').addEventListener('click', calculateDecrease);
+            document.getElementById('calculate-difference').addEventListener('click', calculateDifference);
+            
+            // Авторасчет при изменении значений
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const activeTab = document.querySelector('.calc-tab.active').dataset.tab;
+                    if (activeTab === 'basic') calculateBasic();
+                    else if (activeTab === 'increase') calculateIncrease();
+                    else if (activeTab === 'decrease') calculateDecrease();
+                    else if (activeTab === 'difference') calculateDifference();
+                });
+            });
+            
+            function calculateBasic() {
+                const number = parseFloat(document.getElementById('basic-number').value) || 0;
+                const percent = parseFloat(document.getElementById('basic-percent').value) || 0;
+                const result = (number * percent) / 100;
+                
+                document.getElementById('basic-result').innerHTML = `
+                    <p class="result-value">${result.toFixed(2)}</p>
+                    <p class="result-label">${percent}% от ${number}</p>
+                `;
+            }
+            
+            function calculateIncrease() {
+                const number = parseFloat(document.getElementById('increase-number').value) || 0;
+                const percent = parseFloat(document.getElementById('increase-percent').value) || 0;
+                const result = number * (1 + percent / 100);
+                
+                document.getElementById('increase-result').innerHTML = `
+                    <p class="result-value">${result.toFixed(2)}</p>
+                    <p class="result-label">${number} + ${percent}%</p>
+                `;
+            }
+            
+            function calculateDecrease() {
+                const number = parseFloat(document.getElementById('decrease-number').value) || 0;
+                const percent = parseFloat(document.getElementById('decrease-percent').value) || 0;
+                const result = number * (1 - percent / 100);
+                
+                document.getElementById('decrease-result').innerHTML = `
+                    <p class="result-value">${result.toFixed(2)}</p>
+                    <p class="result-label">${number} - ${percent}%</p>
+                `;
+            }
+            
+            function calculateDifference() {
+                const from = parseFloat(document.getElementById('from-number').value) || 0;
+                const to = parseFloat(document.getElementById('to-number').value) || 0;
+                const difference = ((to - from) / from) * 100;
+                
+                const sign = difference >= 0 ? '+' : '';
+                
+                document.getElementById('difference-result').innerHTML = `
+                    <p class="result-value">${sign}${difference.toFixed(2)}%</p>
+                    <p class="result-label">Разница от ${from} до ${to}</p>
+                `;
+            }
+            
+            // Инициализация
+            calculateBasic();
+            calculateIncrease();
+            calculateDecrease();
+            calculateDifference();
+        });
+    </script>
+</body>
+</html>

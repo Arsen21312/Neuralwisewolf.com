@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
+    <link rel="apple-touch-icon" href="/assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сравнение текста | Neural Wise Wolf</title>
+    <meta name="description" content="Инструмент для сравнения двух текстов. Находит и подсвечивает различия между ними, идеально для редактирования и проверки документов.">
+    <base href="/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .tool-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .tool-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .input-container {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .input-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .result-container {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 150px;
+            margin-top: 1.5rem;
+        }
+        
+        .result-title {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .comparison-output {
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .added {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #0d8a57;
+            font-weight: 600;
+        }
+
+        .removed {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #a42c2c;
+            font-weight: 600;
+            text-decoration: line-through;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-light);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="text" data-slug="text-compare">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Сравнение текста</h1>
+                <p class="tool-description">Быстрый инструмент для сравнения двух версий текста. Найдите различия посимвольно или построчно.</p>
+            </div>
+
+            <div class="input-container">
+                <div class="field">
+                    <label for="text-a" class="field-label">Текст A</label>
+                    <textarea id="text-a" placeholder="Вставьте первый текст сюда..."></textarea>
+                </div>
+                <div class="field">
+                    <label for="text-b" class="field-label">Текст B</label>
+                    <textarea id="text-b" placeholder="Вставьте второй текст сюда..."></textarea>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="compare-btn">
+                    ✍️ Сравнить
+                </button>
+            </div>
+            
+            <div class="result-container">
+                <p class="result-title">Результат сравнения</p>
+                <div id="comparison-output" class="comparison-output"></div>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p>Сравниваем...</p>
+            </div>
+            
+            <div class="separator"></div>
+
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🚀 Мгновенное сравнение</h4>
+                    <p>Найдите различия между двумя текстами за считанные секунды.</p>
+                </div>
+                <div class="feature">
+                    <h4>💡 Визуализация различий</h4>
+                    <p>Подсвечивает добавленные и удаленные части текста для удобства.</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 Безопасность</h4>
+                    <p>Все операции выполняются локально в вашем браузере, без отправки данных на сервер.</p>
+                </div>
+            </div>
+
+            <div class="article">
+                <h2>Зачем сравнивать тексты?</h2>
+                <p>Сравнение текста — это незаменимый инструмент для писателей, программистов, редакторов и студентов. Он помогает отслеживать изменения в документах, находить ошибки, сверять версии кода или просто убеждаться, что два документа идентичны. Например, вы можете сравнить черновик с финальной версией, чтобы убедиться, что не пропустили важные правки.</p>
+                
+                <h3>Как это работает?</h3>
+                <p>Этот инструмент использует простой алгоритм, который разбивает оба текста на отдельные слова и сравнивает их. Если слово в одном тексте отличается от слова в другом, оно подсвечивается. Это позволяет вам быстро увидеть, где и какие изменения были внесены, и принять решение о дальнейшей работе с текстом.</p>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+    <script src="js/diff.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textAInput = document.getElementById('text-a');
+            const textBInput = document.getElementById('text-b');
+            const compareBtn = document.getElementById('compare-btn');
+            const comparisonOutput = document.getElementById('comparison-output');
+            const loadingIndicator = document.getElementById('loading');
+            
+            // Теперь jsdiff будет доступен, так как он загружен из локального файла
+            function compareTexts(text1, text2) {
+                const words1 = text1.split(/\s+/).filter(word => word !== '');
+                const words2 = text2.split(/\s+/).filter(word => word !== '');
+                
+                const result = [];
+                const diff = jsdiff.diffWords(words1.join(' '), words2.join(' '));
+                
+                diff.forEach(part => {
+                    const span = document.createElement('span');
+                    span.textContent = part.value + ' ';
+                    if (part.added) {
+                        span.classList.add('added');
+                    }
+                    if (part.removed) {
+                        span.classList.add('removed');
+                    }
+                    result.push(span);
+                });
+                
+                return result;
+            }
+            
+            function compareAndDisplay() {
+                loadingIndicator.style.display = 'block';
+                comparisonOutput.innerHTML = ''; // Clear previous results
+                
+                setTimeout(() => {
+                    const textA = textAInput.value;
+                    const textB = textBInput.value;
+                    
+                    if (!textA && !textB) {
+                        comparisonOutput.textContent = 'Введите текст в оба поля для сравнения.';
+                        loadingIndicator.style.display = 'none';
+                        return;
+                    }
+                    
+                    const diffResult = compareTexts(textA, textB);
+                    
+                    diffResult.forEach(span => comparisonOutput.appendChild(span));
+                    loadingIndicator.style.display = 'none';
+                }, 100);
+            }
+            
+            compareBtn.addEventListener('click', compareAndDisplay);
+        });
+    </script>
+</body>
+
+</html>
