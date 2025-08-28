@@ -1,21 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- авто-вычисляемую база -->
-<script>
-(function(){
-  var isGH = location.hostname.endsWith('github.io');
-  var repo = isGH ? location.pathname.split('/')[1] : '';
-  var href = isGH ? '/' + repo + '/' : '/';
-  var b = document.createElement('base');
-  b.setAttribute('href', href);
-  document.head.prepend(b);
-})();
-</script>
-
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
-<link rel="apple-touch-icon" href="/assets/logowolf.png">
+  <base href="/Neuralwisewolf.com/">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+<link rel="apple-touch-icon" href="assets/logowolf.png">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -195,7 +184,7 @@
 
     <div data-include="footer"></div>
 
-    <script src="/js/loader.js"></script>
+    <script src="js/loader.js"></script>
     <script>
         // Базовая инициализация
         document.addEventListener('DOMContentLoaded', function() {
@@ -215,6 +204,7 @@
 </body>
 
 </html>
+
 
 
 
