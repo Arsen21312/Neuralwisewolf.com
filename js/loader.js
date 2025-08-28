@@ -1,7 +1,7 @@
 // CONFIG - АБСОЛЮТНЫЕ ПУТИ!
 const CONFIG = {
-    fragmentsPath: '/fragments/',
-    toolsDataPath: '/data/tools.json'
+  fragmentsPath: 'fragments/',
+  toolsDataPath: 'data/tools.json'
 };
 
 // Главная функция загрузки фрагментов
@@ -91,7 +91,7 @@ function populateSidebar(tools) {
             const toolsList = category.tools
                 .slice(0, 6)
                 .map(tool => `
-                    <a href="/tools/${tool.slug}.html" class="sidebar-tool">
+                    <a href="tools/${tool.slug}.html" class="sidebar-tool">
                         <span class="tool-icon">${tool.icon}</span>
                         <span class="tool-title">${tool.title}</span>
                         ${tool.popular ? '<span class="tool-badge popular">🔥</span>' : ''}
@@ -100,11 +100,11 @@ function populateSidebar(tools) {
                 `).join('');
             
             return `
-                <div class="side-cat">
+                <div class="side-cat" data-category="${categoryId}">
                     <h4>${category.name}</h4>
                     ${toolsList}
                     ${category.tools.length > 6 ? 
-                        `<a href="/index.html?category=${categoryId}" class="see-all">
+                        `<a href="index.html?category=${categoryId}" class="see-all">
                             Все инструменты →
                         </a>` : ''}
                 </div>
@@ -180,7 +180,7 @@ async function initRelatedTools() {
         }
         
         relatedGrid.innerHTML = tools.map(tool => `
-            <a href="/tools/${tool.slug}.html" class="related-card">
+            <a href="tools/${tool.slug}.html" class="related-card">
                 ${tool.popular ? '<span class="related-badge badge-popular">Популярный</span>' : ''}
                 ${tool.new ? '<span class="related-badge badge-new">Новый</span>' : ''}
                 
@@ -340,7 +340,7 @@ function setupSearch(tools) {
         }
 
         toolsGrid.innerHTML = toolsToShow.map(tool => `
-            <a href="/tools/${tool.slug}.html" class="card tool-card">
+            <a href="tools/${tool.slug}.html" class="card tool-card">
                 ${tool.popular ? '<span class="card-badge popular">Популярный</span>' : ''}
                 ${tool.new ? '<span class="card-badge new">Новый</span>' : ''}
                 <div class="card-icon">${tool.icon}</div>
@@ -358,8 +358,8 @@ function setupSearch(tools) {
 
     window.initRelated = async function initRelated(containerEl, category, jsonUrl){
   try {
-    const url = jsonUrl || (location.pathname.startsWith('/tools/'))
-      ? '../data/tools.json' : '/data/tools.json';
+    const url = jsonUrl || (location.pathname.startsWith('/tools/')
+      ? '../data/tools.json' : 'data/tools.json');
     const res = await fetch(url, {cache:'no-store'});
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
@@ -412,3 +412,4 @@ function toTarget({sign,intVal,frac}, base, precision, trimZeros, grouping){
 }
 
 }
+
