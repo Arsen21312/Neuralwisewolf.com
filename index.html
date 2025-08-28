@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <base href="/Neuralwisewolf.com/">
+    <!-- авто-вычисляемую база -->
+<script>
+(function(){
+  var isGH = location.hostname.endsWith('github.io');
+  var repo = isGH ? location.pathname.split('/')[1] : '';
+  var href = isGH ? '/' + repo + '/' : '/';
+  var b = document.createElement('base');
+  b.setAttribute('href', href);
+  document.head.prepend(b);
+})();
+</script>
+
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/logowolf.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/logowolf.png">
 <link rel="apple-touch-icon" href="/assets/logowolf.png">
@@ -204,5 +215,6 @@
 </body>
 
 </html>
+
 
 
