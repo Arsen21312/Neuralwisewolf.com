@@ -1,3 +1,15 @@
+// База для GitHub Pages (repo: Neuralwisewolf.com)
+const REPO = 'Neuralwisewolf.com';
+const BASE = location.hostname.endsWith('github.io') ? `/${REPO}/` : '/';
+
+// относительный префикс от текущей страницы до корня сайта (нужен для fetch)
+const REL = location.pathname.startsWith(`${BASE}tools/`) ? '../' : '';
+
+// хелперы
+const fromRoot = (p) => BASE + p.replace(/^\//,'');   // для href
+const fromHere = (p) => REL + p.replace(/^\//,'');    // для fetch
+
+
 // CONFIG - АБСОЛЮТНЫЕ ПУТИ!
 const CONFIG = {
   fragmentsPath: 'fragments/',
@@ -412,4 +424,5 @@ function toTarget({sign,intVal,frac}, base, precision, trimZeros, grouping){
 }
 
 }
+
 
