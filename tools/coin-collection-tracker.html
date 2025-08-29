@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<script>
+    <script>
 (function () {
   var isGH = location.hostname.endsWith('github.io');
   var repo = isGH ? location.pathname.split('/')[1] : '';
@@ -11,24 +11,194 @@
   document.head.prepend(b);
 })();
 </script>
-    
+
+    <base href="/Neuralwisewolf.com/">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
     <link rel="apple-touch-icon" href="assets/logowolf.png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Трекер коллекции монет | Neural Wise Wolf</title>
     <meta name="description" content="Отслеживайте и каталогизируйте свою коллекцию монет. Добавляйте описания, фотографии и ценность каждой монеты.">
-    <base href="/Neuralwisewolf.com/">
+
     <link rel="stylesheet" href="assets/styles.css">
     <style>
-        .tool-container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; text-align: center; }
-        .coming-soon { background: var(--bg-secondary); padding: 3rem 2rem; border-radius: 20px; border: 2px dashed var(--border-medium); margin: 2rem 0; }
-        .coming-soon-icon { font-size: 4rem; margin-bottom: 1rem; }
-        .article {
-            max-width: 800px;
-            margin: 2rem auto;
-            text-align: left;
+        .coin-tracker {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+
+        .add-coin-form {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .image-upload {
+            border: 2px dashed var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 1rem auto;
+            display: none;
+            border-radius: var(--radius-md);
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .coin-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .coin-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .coin-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+        }
+
+        .coin-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .coin-details {
+            margin-bottom: 1rem;
+        }
+
+        .coin-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .coin-detail:last-child {
+            border-bottom: none;
+        }
+
+        .coin-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .coin-value {
+            font-weight: 700;
+            color: var(--accent-success);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .collection-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .add-coin-form {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -37,44 +207,216 @@
     <div data-include="sidebar"></div>
     <div id="overlay" class="overlay"></div>
 
-    <main class="tool" data-category="fun" data-slug="coin-collection-tracker">
+    <main class="tool" data-category="collection" data-slug="coin-tracker">
         <div class="tool-container">
             <div class="tool-header">
                 <h1>Трекер коллекции монет</h1>
                 <p class="tool-description">Отслеживайте и каталогизируйте свою коллекцию монет. Добавляйте описания, фотографии и ценность каждой монеты.</p>
             </div>
 
-            <div class="coming-soon">
-                <div class="coming-soon-icon">🚧</div>
-                <h2>Скоро будет доступно!</h2>
-                <p>Мы работаем над созданием идеального инструмента для коллекционеров. Он поможет вам организовать и управлять вашей коллекцией монет, добавляя важную информацию по каждой из них.</p>
-                <p>Ожидайте этот и другие полезные инструменты в ближайших обновлениях! 🐺</p>
-                
-                <div style="margin-top: 2rem;">
-                    <a href="/" class="btn btn-primary">На главную</a>
-                    <a href="/index.html" class="btn btn-secondary">Другие инструменты</a>
+            <div class="coin-tracker">
+                <!-- Статистика -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <p class="stat-value" id="total-coins">0</p>
+                        <p class="stat-label">Всего монет</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-value" id="total-value">0 ₽</p>
+                        <p class="stat-label">Общая стоимость</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-value" id="avg-value">0 ₽</p>
+                        <p class="stat-label">Средняя стоимость</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-value" id="oldest-coin">-</p>
+                        <p class="stat-label">Самая старая монета</p>
+                    </div>
+                </div>
+
+                <!-- Форма добавления -->
+                <div class="add-coin-form">
+                    <h3>➕ Добавить новую монету</h3>
+                    <form id="coin-form">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label for="coin-name">Название монеты *</label>
+                                <input type="text" id="coin-name" required class="date-input" placeholder="Например: 1 рубль 1997 года">
+                            </div>
+                            <div class="input-group">
+                                <label for="coin-country">Страна</label>
+                                <input type="text" id="coin-country" class="date-input" placeholder="Россия">
+                            </div>
+                            <div class="input-group">
+                                <label for="coin-year">Год выпуска *</label>
+                                <input type="number" id="coin-year" required class="date-input" min="1000" max="2024" placeholder="1997">
+                            </div>
+                            <div class="input-group">
+                                <label for="coin-value">Примерная стоимость (₽)</label>
+                                <input type="number" id="coin-value" class="date-input" placeholder="1000">
+                            </div>
+                            <div class="input-group">
+                                <label for="coin-material">Материал</label>
+                                <select id="coin-material" class="date-input">
+                                    <option value="">Выберите материал</option>
+                                    <option value="золото">Золото</option>
+                                    <option value="серебро">Серебро</option>
+                                    <option value="медь">Медь</option>
+                                    <option value="никель">Никель</option>
+                                    <option value="бронза">Бронза</option>
+                                    <option value="латунь">Латунь</option>
+                                    <option value="сталь">Сталь</option>
+                                    <option value="биметалл">Биметалл</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="coin-condition">Состояние</label>
+                                <select id="coin-condition" class="date-input">
+                                    <option value="">Выберите состояние</option>
+                                    <option value="UNC">UNC (идеальное)</option>
+                                    <option value="XF">XF (отличное)</option>
+                                    <option value="VF">VF (очень хорошее)</option>
+                                    <option value="F">F (хорошее)</option>
+                                    <option value="VG">VG (удовлетворительное)</option>
+                                    <option value="G">G (плохое)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="coin-description">Описание</label>
+                            <textarea id="coin-description" class="date-input" rows="3" placeholder="Особенности, история, интересные факты..."></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Фотография монеты</label>
+                            <div class="image-upload" id="image-upload">
+                                <p>📷 Перетащите сюда фото или кликните для выбора</p>
+                                <img id="image-preview" class="image-preview" alt="Превью фотографии">
+                                <input type="file" id="coin-image" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary calculate-btn">
+                            💾 Сохранить монету
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Фильтры -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="filter-country">Страна</label>
+                        <select id="filter-country" class="date-input">
+                            <option value="">Все страны</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-material">Материал</label>
+                        <select id="filter-material" class="date-input">
+                            <option value="">Все материалы</option>
+                            <option value="золото">Золото</option>
+                            <option value="серебро">Серебро</option>
+                            <option value="медь">Медь</option>
+                            <option value="никель">Никель</option>
+                            <option value="бронза">Бронза</option>
+                            <option value="латунь">Латунь</option>
+                            <option value="сталь">Сталь</option>
+                            <option value="биметалл">Биметалл</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-condition">Состояние</label>
+                        <select id="filter-condition" class="date-input">
+                            <option value="">Все состояния</option>
+                            <option value="UNC">UNC (идеальное)</option>
+                            <option value="XF">XF (отличное)</option>
+                            <option value="VF">VF (очень хорошее)</option>
+                            <option value="F">F (хорошее)</option>
+                            <option value="VG">VG (удовлетворительное)</option>
+                            <option value="G">G (плохое)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-sort">Сортировка</label>
+                        <select id="filter-sort" class="date-input">
+                            <option value="newest">Сначала новые</option>
+                            <option value="oldest">Сначала старые</option>
+                            <option value="expensive">Дорогие</option>
+                            <option value="cheap">Дешевые</option>
+                            <option value="name">По названию</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Коллекция -->
+                <div id="coin-collection" class="collection-grid">
+                    <div class="empty-state">
+                        <h3>🪙 Ваша коллекция пуста</h3>
+                        <p>Добавьте первую монету, чтобы начать коллекцию!</p>
+                    </div>
                 </div>
             </div>
-            
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>📁 Умный каталог</h4>
+                    <p>Систематизируйте коллекцию по странам, годам и материалам</p>
+                </div>
+                <div class="feature">
+                    <h4>💰 Оценка стоимости</h4>
+                    <p>Отслеживайте общую и среднюю стоимость вашей коллекции</p>
+                </div>
+                <div class="feature">
+                    <h4>🖼 Фотоархив</h4>
+                    <p>Добавляйте фотографии для визуального учета монет</p>
+                </div>
+                <div class="feature">
+                    <h4>📊 Статистика</h4>
+                    <p>Анализируйте свою коллекцию с помощью подробной статистики</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
             <div class="article">
-                <h2>Почему полезно вести трекер коллекции монет?</h2>
-                <p>Ведение каталога вашей коллекции монет — это не просто хобби, а важный шаг для любого нумизмата. Это помогает не только поддерживать порядок, но и эффективно управлять вашими активами. </p>
+                <h2>Как вести коллекцию монет</h2>
                 
-                <h3>Основные преимущества трекера:</h3>
+                <h3>📋 Основные принципы коллекционирования</h3>
+                <p>Систематический подход к коллекционированию монет помогает сохранить и приумножить ценность коллекции:</p>
+                
+                <h3>🎯 Ключевые параметры для учета:</h3>
                 <ul>
-                    <li><strong>Учёт и организация:</strong> Легко добавляйте новые монеты, сортируйте их по годам, странам или другим параметрам.</li>
-                    <li><strong>Оценка стоимости:</strong> Отслеживайте текущую рыночную стоимость ваших монет, чтобы понимать ценность всей коллекции.</li>
-                    <li><strong>Безопасность:</strong> Храните полную информацию о вашей коллекции в одном месте. Это будет полезно для страхования или в случае утери.</li>
-                    <li><strong>Обмен и продажа:</strong> Быстрый доступ к данным о монетах облегчает поиск нужных экземпляров и сделки с другими коллекционерами.</li>
+                    <li><strong>Страна и номинал</strong> - базовая информация о монете</li>
+                    <li><strong>Год выпуска</strong> - определяет историческую ценность</li>
+                    <li><strong>Материал</strong> - влияет на сохранность и стоимость</li>
+                    <li><strong>Состояние (градация по Шелдону)</strong> - ключевой фактор ценообразования</li>
+                    <li><strong>Рыночная стоимость</strong> - для страховки и инвестиционного учета</li>
                 </ul>
-            
-                <p>Наш будущий трекер будет иметь удобный интерфейс и все необходимые функции, чтобы сделать управление вашей коллекцией простым и приятным занятием.</p>
+
+                <h3>💡 Советы по сохранности:</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>👐 Правильное хранение</h4>
+                        <p>Используйте капсулы и альбомы для защиты от повреждений</p>
+                    </div>
+                    <div class="example">
+                        <h4>📝 Детальное описание</h4>
+                        <p>Фиксируйте особенности чеканки и уникальные детали</p>
+                    </div>
+                    <div class="example">
+                        <h4>🔄 Регулярный аудит</h4>
+                        <p>Периодически перепроверяйте состояние и стоимость монет</p>
+                    </div>
+                </div>
                 
-                <h3>❓ Вопросы и ответы</h3>
-                <p><strong>Будет ли инструмент поддерживать монеты разных стран?</strong><br>
-                Да, мы планируем сделать его универсальным, чтобы вы могли добавлять монеты из любой страны мира.</p>
-                <p><strong>Смогу ли я загружать свои фотографии монет?</strong><br>
-                Конечно. Эта функция будет одной из ключевых, так как позволяет вести максимально подробный учёт.</p>
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Как определить состояние монеты?</strong><br>
+                Используйте международную шкалу Шелдона (от G до UNC) с описанием степени сохранности.</p>
+                
+                <p><strong>Где узнать примерную стоимость?</strong><br>
+                Сверяйтесь с каталогами, аукционными проходами и специализированными ресурсами.</p>
             </div>
             
             <div data-include="related"></div>
@@ -84,5 +426,287 @@
     <div data-include="footer"></div>
     
     <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const coinForm = document.getElementById('coin-form');
+            const imageUpload = document.getElementById('image-upload');
+            const imageInput = document.getElementById('coin-image');
+            const imagePreview = document.getElementById('image-preview');
+            const coinCollection = document.getElementById('coin-collection');
+            let coins = JSON.parse(localStorage.getItem('coinCollection')) || [];
+
+            // Загрузка изображения
+            imageUpload.addEventListener('click', () => imageInput.click());
+            
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Drag and drop для изображения
+            imageUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                imageUpload.style.borderColor = 'var(--accent-primary)';
+                imageUpload.style.background = 'var(--bg-secondary)';
+            });
+
+            imageUpload.addEventListener('dragleave', () => {
+                imageUpload.style.borderColor = 'var(--border-light)';
+                imageUpload.style.background = 'var(--bg-primary)';
+            });
+
+            imageUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                imageUpload.style.borderColor = 'var(--border-light)';
+                imageUpload.style.background = 'var(--bg-primary)';
+                
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    imageInput.files = e.dataTransfer.files;
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Добавление монеты
+            coinForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const coin = {
+                    id: Date.now(),
+                    name: document.getElementById('coin-name').value,
+                    country: document.getElementById('coin-country').value,
+                    year: parseInt(document.getElementById('coin-year').value),
+                    value: document.getElementById('coin-value').value ? parseInt(document.getElementById('coin-value').value) : 0,
+                    material: document.getElementById('coin-material').value,
+                    condition: document.getElementById('coin-condition').value,
+                    description: document.getElementById('coin-description').value,
+                    image: imagePreview.style.display !== 'none' ? imagePreview.src : null,
+                    addedDate: new Date().toISOString()
+                };
+
+                coins.push(coin);
+                saveCoins();
+                renderCoins();
+                updateStats();
+                coinForm.reset();
+                imagePreview.style.display = 'none';
+                
+                // Показать уведомление
+                showNotification('Монета успешно добавлена в коллекцию!', 'success');
+            });
+
+            // Фильтрация и сортировка
+            document.getElementById('filter-country').addEventListener('change', renderCoins);
+            document.getElementById('filter-material').addEventListener('change', renderCoins);
+            document.getElementById('filter-condition').addEventListener('change', renderCoins);
+            document.getElementById('filter-sort').addEventListener('change', renderCoins);
+
+            function saveCoins() {
+                localStorage.setItem('coinCollection', JSON.stringify(coins));
+            }
+
+            function renderCoins() {
+                let filteredCoins = [...coins];
+                
+                // Применяем фильтры
+                const countryFilter = document.getElementById('filter-country').value;
+                const materialFilter = document.getElementById('filter-material').value;
+                const conditionFilter = document.getElementById('filter-condition').value;
+                const sortFilter = document.getElementById('filter-sort').value;
+
+                if (countryFilter) {
+                    filteredCoins = filteredCoins.filter(coin => coin.country === countryFilter);
+                }
+
+                if (materialFilter) {
+                    filteredCoins = filteredCoins.filter(coin => coin.material === materialFilter);
+                }
+
+                if (conditionFilter) {
+                    filteredCoins = filteredCoins.filter(coin => coin.condition === conditionFilter);
+                }
+
+                // Применяем сортировку
+                switch (sortFilter) {
+                    case 'newest':
+                        filteredCoins.sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate));
+                        break;
+                    case 'oldest':
+                        filteredCoins.sort((a, b) => new Date(a.addedDate) - new Date(b.addedDate));
+                        break;
+                    case 'expensive':
+                        filteredCoins.sort((a, b) => b.value - a.value);
+                        break;
+                    case 'cheap':
+                        filteredCoins.sort((a, b) => a.value - b.value);
+                        break;
+                    case 'name':
+                        filteredCoins.sort((a, b) => a.name.localeCompare(b.name));
+                        break;
+                }
+
+                // Обновляем опции фильтра стран
+                updateCountryFilter();
+
+                if (filteredCoins.length === 0) {
+                    coinCollection.innerHTML = `
+                        <div class="empty-state">
+                            <h3>🔍 Монеты не найдены</h3>
+                            <p>Попробуйте изменить параметры фильтрации</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                coinCollection.innerHTML = filteredCoins.map(coin => `
+                    <div class="coin-card">
+                        ${coin.image ? `<img src="${coin.image}" alt="${coin.name}" class="coin-image">` : 
+                          '<div class="coin-image" style="background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">🪙 Нет фото</div>'}
+                        
+                        <h3 class="coin-title">${coin.name}</h3>
+                        
+                        <div class="coin-details">
+                            <div class="coin-detail">
+                                <span>Страна:</span>
+                                <span>${coin.country || 'Не указана'}</span>
+                            </div>
+                            <div class="coin-detail">
+                                <span>Год:</span>
+                                <span>${coin.year}</span>
+                            </div>
+                            <div class="coin-detail">
+                                <span>Материал:</span>
+                                <span>${coin.material || 'Не указан'}</span>
+                            </div>
+                            <div class="coin-detail">
+                                <span>Состояние:</span>
+                                <span>${coin.condition || 'Не указано'}</span>
+                            </div>
+                            <div class="coin-detail">
+                                <span>Стоимость:</span>
+                                <span class="coin-value">${coin.value ? coin.value + ' ₽' : 'Не оценена'}</span>
+                            </div>
+                        </div>
+                        
+                        ${coin.description ? `<p>${coin.description}</p>` : ''}
+                        
+                        <div class="coin-actions">
+                            <button class="btn btn-secondary btn-sm" onclick="editCoin(${coin.id})">✏️ Редактировать</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteCoin(${coin.id})">🗑️ Удалить</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            function updateCountryFilter() {
+                const countryFilter = document.getElementById('filter-country');
+                const countries = [...new Set(coins.map(coin => coin.country).filter(Boolean))];
+                
+                // Сохраняем текущее значение
+                const currentValue = countryFilter.value;
+                
+                // Обновляем опции
+                countryFilter.innerHTML = '<option value="">Все страны</option>' +
+                    countries.map(country => 
+                        `<option value="${country}">${country}</option>`
+                    ).join('');
+                
+                // Восстанавливаем значение
+                if (countries.includes(currentValue)) {
+                    countryFilter.value = currentValue;
+                }
+            }
+
+            function updateStats() {
+                document.getElementById('total-coins').textContent = coins.length;
+                
+                const totalValue = coins.reduce((sum, coin) => sum + (coin.value || 0), 0);
+                document.getElementById('total-value').textContent = totalValue.toLocaleString() + ' ₽';
+                
+                const avgValue = coins.length ? Math.round(totalValue / coins.length) : 0;
+                document.getElementById('avg-value').textContent = avgValue.toLocaleString() + ' ₽';
+                
+                const oldestCoin = coins.length ? Math.min(...coins.map(coin => coin.year)) : '-';
+                document.getElementById('oldest-coin').textContent = oldestCoin !== '-' ? oldestCoin : '-';
+            }
+
+            window.editCoin = function(id) {
+                const coin = coins.find(c => c.id === id);
+                if (coin) {
+                    document.getElementById('coin-name').value = coin.name;
+                    document.getElementById('coin-country').value = coin.country;
+                    document.getElementById('coin-year').value = coin.year;
+                    document.getElementById('coin-value').value = coin.value;
+                    document.getElementById('coin-material').value = coin.material;
+                    document.getElementById('coin-condition').value = coin.condition;
+                    document.getElementById('coin-description').value = coin.description;
+                    
+                    if (coin.image) {
+                        imagePreview.src = coin.image;
+                        imagePreview.style.display = 'block';
+                    }
+                    
+                    // Удаляем старую монету
+                    coins = coins.filter(c => c.id !== id);
+                    saveCoins();
+                    renderCoins();
+                    updateStats();
+                    
+                    // Прокручиваем к форме
+                    document.getElementById('coin-form').scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            window.deleteCoin = function(id) {
+                if (confirm('Удалить эту монету из коллекции?')) {
+                    coins = coins.filter(coin => coin.id !== id);
+                    saveCoins();
+                    renderCoins();
+                    updateStats();
+                    showNotification('Монета удалена из коллекции', 'success');
+                }
+            };
+
+            function showNotification(message, type) {
+                // Простая реализация уведомления
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 1rem 1.5rem;
+                    background: ${type === 'success' ? 'var(--accent-success)' : 'var(--accent-danger)'};
+                    color: white;
+                    border-radius: var(--radius-md);
+                    box-shadow: var(--shadow-lg);
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease;
+                `;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+
+            // Инициализация
+            renderCoins();
+            updateStats();
+        });
+    </script>
 </body>
 </html>
