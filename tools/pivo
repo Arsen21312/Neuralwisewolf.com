@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <script>
+(function () {
+  var isGH = location.hostname.endsWith('github.io');
+  var repo = isGH ? location.pathname.split('/')[1] : '';
+  var href = isGH ? '/' + repo + '/' : '/';
+  var b = document.createElement('base');
+  b.setAttribute('href', href);
+  document.head.prepend(b);
+})();
+</script>
+
+    <base href="/Neuralwisewolf.com/">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+    <link rel="apple-touch-icon" href="assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор пива | Neural Wise Wolf</title>
+    <meta name="description" content="Что сегодня выпить? Рандомный выбор пива с волчьим вайбом и пацанским юмором!">
+
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .beer-generator {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .beer-machine {
+            background: var(--bg-primary);
+            padding: 3rem 2rem;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .beer-machine::before {
+            content: '🐺';
+            font-size: 4rem;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            opacity: 0.1;
+            transform: rotate(-20deg);
+        }
+
+        .beer-machine::after {
+            content: '🍻';
+            font-size: 4rem;
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
+        .generate-btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-xl);
+            margin: 2rem 0;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-2xl);
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .generate-btn:active {
+            transform: translateY(1px);
+        }
+
+        .beer-result {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--border-medium);
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .beer-result.show {
+            display: block;
+            animation: beerPour 0.8s ease;
+        }
+
+        @keyframes beerPour {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .beer-name {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-warning);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .beer-style {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .beer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .beer-stat {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0.25rem 0 0;
+        }
+
+        .beer-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--accent-warning);
+        }
+
+        .wolf-comment {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--bg-dark), #1e293b);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            position: relative;
+        }
+
+        .wolf-comment::before {
+            content: '🐺 Волчий совет:';
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .share-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .share-vk {
+            background: #0077FF;
+            color: white;
+        }
+
+        .share-tg {
+            background: #0088cc;
+            color: white;
+        }
+
+        .beer-history {
+            margin-top: 3rem;
+        }
+
+        .history-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .history-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .history-item {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            font-size: 0.9rem;
+        }
+
+        /* Анимации */
+        @keyframes wolfHowl {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            75% { transform: rotate(3deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .wolf-howling {
+            animation: wolfHowl 1s ease-in-out;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .beer-name {
+                font-size: 2rem;
+            }
+            
+            .generate-btn {
+                padding: 1.25rem 2rem;
+                font-size: 1.25rem;
+            }
+            
+            .beer-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .beer-machine {
+                padding: 2rem 1rem;
+            }
+            
+            .beer-name {
+                font-size: 1.75rem;
+            }
+            
+            .beer-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Специальные стили для волчьего вайба */
+        .wolf-theme {
+            font-family: var(--font-sans);
+        }
+
+        .accent-wolf {
+            color: #f59e0b;
+            font-weight: 800;
+        }
+
+        .beer-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="fun" data-slug="beer-generator">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>🍻 Генератор пива</h1>
+                <p class="tool-description">Что сегодня выпить? Волк знает толк в хорошем пиве! Рандомный выбор с пацанским юмором</p>
+            </div>
+
+            <div class="beer-generator">
+                <div class="beer-machine">
+                    <div class="beer-emoji">🐺🍺</div>
+                    <h2>Волчий пивной оракул</h2>
+                    <p>Нажми на кнопку — получишь результат! Волк не подведет 🐾</p>
+                    
+                    <button class="generate-btn" id="generate-beer">
+                        🎲 Сгенерировать пиво!
+                    </button>
+
+                    <div class="beer-result" id="beer-result">
+                        <span class="beer-emoji" id="beer-emoji">🍺</span>
+                        <h3 class="beer-name" id="beer-name">Название пива</h3>
+                        <p class="beer-style" id="beer-style">Стиль пива</p>
+                        
+                        <div class="beer-stats">
+                            <div class="beer-stat">
+                                <p class="stat-value" id="beer-abv">5.0%</p>
+                                <p class="stat-label">Крепость</p>
+                            </div>
+                            <div class="beer-stat">
+                                <p class="stat-value" id="beer-ibu">25</p>
+                                <p class="stat-label">Горечь (IBU)</p>
+                            </div>
+                            <div class="beer-stat">
+                                <p class="stat-value" id="beer-rating">4.2</p>
+                                <p class="stat-label">Рейтинг</p>
+                            </div>
+                            <div class="beer-stat">
+                                <p class="stat-value" id="beer-price">250 ₽</p>
+                                <p class="stat-label">Цена</p>
+                            </div>
+                        </div>
+
+                        <div class="beer-description" id="beer-description">
+                            Описание пива будет здесь...
+                        </div>
+
+                        <div class="wolf-comment" id="wolf-comment">
+                            Волк одобряет этот выбор! Идеально для вечера с братанами.
+                        </div>
+
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn share-vk" id="share-vk">📤 Поделиться в VK</a>
+                            <a href="#" class="share-btn share-tg" id="share-tg">📤 Поделиться в Telegram</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- История генераций -->
+                <div class="beer-history" id="beer-history">
+                    <h3 class="history-title">📜 Последние варианты:</h3>
+                    <div class="history-list" id="history-list">
+                        <!-- История будет добавляться через JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🐺 Волчий вкус</h4>
+                    <p>Только проверенные сорта, которые одобрила бы стая</p>
+                </div>
+                <div class="feature">
+                    <h4>🎯 Точный подбор</h4>
+                    <p>Крепость, горечь, цена и рейтинг — все как у взрослых</p>
+                </div>
+                <div class="feature">
+                    <h4>😎 Пацанский вайб</h>
+                    <p>Комментарии от волка с чувством юмора</p>
+                </div>
+                <div class="feature">
+                    <h4>📱 Делитесь с братанами</h4>
+                    <p>Кнопки для быстрого分享 в соцсетях</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>🎲 Как работает волчий генератор пива</h2>
+                
+                <h3>🐾 Волк знает толк в пиве!</h3>
+                <p>Наш генератор использует древние волчьи алгоритмы для подбора идеального пива под твое настроение:</p>
+                
+                <h3>🍻 База данных сортов:</h3>
+                <ul>
+                    <li><strong>Классика жанра</strong> - проверенные временем сорта</li>
+                    <li><strong>Крафтовые шедевры</strong> - для ценителей эксперимента</li>
+                    <li><strong>Местные хиты</strong> - пивоварни со всей страны</li>
+                    <li><strong>Сезонные предложения</strong> - под любой время года</li>
+                </ul>
+
+                <h3>💡 Волчьи советы по выбору:</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>🌅 Для расслабона</h4>
+                        <p>Лайтовые лагеры и пшеничные сорта после тяжелого дня</p>
+                    </div>
+                    <div class="example">
+                        <h4>🎉 Для тусы</h4>
+                        <p>IPA и APA с ярким хмелевым характером</p>
+                    </div>
+                    <div class="example">
+                        <h4>❄️ Для холодного вечера</h4>
+                        <p>Крепкие стауты и портеры с глубоким вкусом</p>
+                    </div>
+                </div>
+                
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Почему именно волк?</strong><br>
+                Потому что волк — символ мудрости и отличного вкуса! Да и просто мы любим волков 🐺</p>
+                
+                <p><strong>Можно доверять выбору?</strong><br>
+                Абсолютно! Волк никогда не предложит плохое пиво. Проверено стаей!</p>
+
+                <div class="wolf-comment">
+                    "Помни, братан: хорошее пиво — это не просто напиток, это состояние души. Пей с умом, делись с друзьями, и пусть каждый глоток будет в кайф! 🐺🍻"
+                </div>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generate-beer');
+            const beerResult = document.getElementById('beer-result');
+            const beerEmoji = document.getElementById('beer-emoji');
+            const beerName = document.getElementById('beer-name');
+            const beerStyle = document.getElementById('beer-style');
+            const beerAbv = document.getElementById('beer-abv');
+            const beerIbu = document.getElementById('beer-ibu');
+            const beerRating = document.getElementById('beer-rating');
+            const beerPrice = document.getElementById('beer-price');
+            const beerDescription = document.getElementById('beer-description');
+            const wolfComment = document.getElementById('wolf-comment');
+            const historyList = document.getElementById('history-list');
+            const beerHistory = document.getElementById('beer-history');
+            const shareVk = document.getElementById('share-vk');
+            const shareTg = document.getElementById('share-tg');
+
+            let history = JSON.parse(localStorage.getItem('beerHistory')) || [];
+
+            // База данных пива с волчьим юмором
+            const beerDatabase = [
+                {
+                    name: "Волчий IPA",
+                    style: "India Pale Ale",
+                    abv: "6.5%",
+                    ibu: "65",
+                    rating: "4.5",
+                    price: "350 ₽",
+                    emoji: "🐺🍺",
+                    description: "Хмельная бомба с цитрусовым ароматом. Идеально для тех, кто не ищет легких путей!",
+                    comment: "Этот IPA такой же дерзкий, как волк в полнолуние! 🐺🌕"
+                },
+                {
+                    name: "Стаут Одинокого Волка",
+                    style: "Imperial Stout",
+                    abv: "8.2%",
+                    ibu: "45",
+                    rating: "4.8",
+                    price: "450 ₽",
+                    emoji: "🌑🍫",
+                    description: "Бархатный стаут с нотами шоколада, кофе и карамели. Для истинных ценителей темных сортов.",
+                    comment: "Темное как ночь, крепкое как волчья хватка! Идеально под разговоры у костра. 🔥"
+                },
+                {
+                    name: "Пшеничное АУФ",
+                    style: "Hefeweizen",
+                    abv: "5.0%",
+                    ibu: "12",
+                    rating: "4.2",
+                    price: "280 ₽",
+                    emoji: "🌾🍋",
+                    description: "Освежающее пшеничное пиво с бананово-гвоздичными нотами. Легкое и пьющееся.",
+                    comment: "АУФ! Идеально для жаркого дня. Освежает лучше, чем прыжок в горное озеро! 💦"
+                },
+                {
+                    name: "Лагер Альфа-самца",
+                    style: "Pilsner",
+                    abv: "4.8%",
+                    ibu: "25",
+                    rating: "4.0",
+                    price: "220 ₽",
+                    emoji: "👑🍺",
+                    description: "Классический лагер с чистым вкусом и хмельной горчинкой. Проверено временем!",
+                    comment: "Пиво для тех, кто ведет стаю! Классика, которая никогда не подводит. 🐺👑"
+                },
+                {
+                    name: "Портер Полной Луны",
+                    style: "Baltic Porter",
+                    abv: "7.0%",
+                    ibu: "35",
+                    rating: "4.6",
+                    price: "380 ₽",
+                    emoji: "🌕☕",
+                    description: "Балтийский портер с нотами темных фруктов, лакрицы и жженого солода.",
+                    comment: "Когда луна полная, только такой портер и стоит пить! Завоет от удовольствия. 🌕🐺"
+                },
+                {
+                    name: "Крафт от Братана",
+                    style: "New England IPA",
+                    abv: "6.8%",
+                    ibu: "40",
+                    rating: "4.7",
+                    price: "420 ₽",
+                    emoji: "👊🍊",
+                    description: "Мутный NEIPA с соковым телом и взрывом тропических ароматов.",
+                    comment: "Братан, это тот самый крафт, ради которого стоит собрать стаю! 👊🍻"
+                },
+                {
+                    name: "Светлое Волчонок",
+                    style: "Blonde Ale",
+                    abv: "4.5%",
+                    ibu: "18",
+                    rating: "3.9",
+                    price: "190 ₽",
+                    emoji: "🐾🌞",
+                    description: "Легкое светлое пиво с мягким солодовым профилем. Отлично для начала вечера.",
+                    comment: "Идеально для молодых волчат! Легкое, но уже с характером. 🐾"
+                },
+                {
+                    name: "Двойной IPA 'Волчий клык'",
+                    style: "Double IPA",
+                    abv: "8.5%",
+                    ibu: "85",
+                    rating: "4.9",
+                    price: "480 ₽",
+                    emoji: "🦷🔥",
+                    description: "Мощный DIPA с тройной дозой хмеля и алкогольной крепостью. Только для опытных!",
+                    comment: "Осторожно! Кусается как голодный волк! Не для слабаков. 🦷💥"
+                }
+            ];
+
+            // Случайные комментарии волка
+            const wolfComments = [
+                "Волк одобряет! Идеально для вечера с братанами. 🐺👊",
+                "Этот выбор достоин альфа-самца! Запускай в стаю. 🌕",
+                "Пиво на котором выросла не одна волчья стая! Проверено временем. 🐾",
+                "Осторожно! После третьего начнешь выть на луну! 🌕🎶",
+                "Идеально для охоты... в смысле, для отдыха после работы! 🏹",
+                "Волк бы выбрал именно это! Мудрый выбор, братан. 🧠",
+                "Такой же крутой, как волк в кожаной куртке! 😎",
+                "Настоящий мужской выбор! Волчья стая одобряет. 🐺🍻",
+                "Пиво с характером! Как у настоящего волка-одиночки. 🌑",
+                "Идеально под шашлык и разговоры о жизни у костра! 🔥"
+            ];
+
+            generateBtn.addEventListener('click', generateBeer);
+
+            function generateBeer() {
+                // Анимация кнопки
+                generateBtn.classList.add('wolf-howling');
+                setTimeout(() => {
+                    generateBtn.classList.remove('wolf-howling');
+                }, 1000);
+
+                // Случайный выбор пива
+                const randomBeer = beerDatabase[Math.floor(Math.random() * beerDatabase.length)];
+                const randomComment = wolfComments[Math.floor(Math.random() * wolfComments.length)];
+
+                // Обновление UI
+                beerEmoji.textContent = randomBeer.emoji;
+                beerName.textContent = randomBeer.name;
+                beerStyle.textContent = randomBeer.style;
+                beerAbv.textContent = randomBeer.abv;
+                beerIbu.textContent = randomBeer.ibu;
+                beerRating.textContent = randomBeer.rating;
+                beerPrice.textContent = randomBeer.price;
+                beerDescription.textContent = randomBeer.description;
+                wolfComment.textContent = randomComment;
+
+                // Показываем результат
+                beerResult.classList.add('show');
+
+                // Добавляем в историю
+                addToHistory(randomBeer);
+
+                // Обновляем ссылки для分享
+                updateShareLinks(randomBeer);
+            }
+
+            function addToHistory(beer) {
+                // Добавляем в начало истории
+                history.unshift({
+                    name: beer.name,
+                    style: beer.style,
+                    timestamp: new Date().toLocaleTimeString()
+                });
+
+                // Ограничиваем историю 6 элементами
+                history = history.slice(0, 6);
+
+                // Сохраняем в localStorage
+                localStorage.setItem('beerHistory', JSON.stringify(history));
+
+                // Обновляем отображение истории
+                updateHistory();
+            }
+
+            function updateHistory() {
+                if (history.length === 0) {
+                    beerHistory.style.display = 'none';
+                    return;
+                }
+
+                beerHistory.style.display = 'block';
+                historyList.innerHTML = history.map(item => `
+                    <div class="history-item">
+                        <strong>${item.name}</strong><br>
+                        <span>${item.style}</span><br>
+                        <small>${item.timestamp}</small>
+                    </div>
+                `).join('');
+            }
+
+            function updateShareLinks(beer) {
+                const shareText = `🐺 Волчий генератор пива предлагает: ${beer.name} - ${beer.style}! ${beer.emoji}\n\nЧто сегодня будем пить? 🍻\n\n`;
+                const shareUrl = encodeURIComponent(window.location.href);
+
+                shareVk.href = `https://vk.com/share.php?url=${shareUrl}&title=${encodeURIComponent(shareText)}`;
+                shareTg.href = `https://t.me/share/url?url=${shareUrl}&text=${encodeURIComponent(shareText)}`;
+            }
+
+            // Инициализация истории
+            updateHistory();
+        });
+    </script>
+</body>
+</html>
