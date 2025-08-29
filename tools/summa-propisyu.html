@@ -217,108 +217,71 @@
     <div id="overlay" class="overlay"></div>
 
     <main class="tool" data-category="utils" data-slug="amount-to-words">
-        <div class="tool-container">
-            <div class="tool-header">
-                <h1>Сумма Прописью Онлайн</h1>
-                <p class="tool-description">Мгновенно преобразуйте числовую сумму в текст с правильным склонением на русском языке. Поддержка рублей, долларов, евро и гривен.</p>
-            </div>
+  <div class="tool-container">
+    <div class="tool-header">
+      <h1>Сумма Прописью Онлайн</h1>
+      <p class="tool-description">Русский язык. Рубли, доллары, евро, гривны и тенге. Варианты с НДС.</p>
+    </div>
 
-            <div class="amount-converter">
-                <div class="converter-card">
-                    <div class="input-group">
-                        <label for="amount-input">Введите сумму:</label>
-                        <input type="text" id="amount-input" class="amount-input" placeholder="12345.67" value="12345.67">
-                    </div>
-                    
-                    <div class="currency-selector">
-                        <div class="currency-btn active" data-currency="RUB">Рубли (RUB)</div>
-                        <div class="currency-btn" data-currency="USD">Доллары (USD)</div>
-                        <div class="currency-btn" data-currency="EUR">Евро (EUR)</div>
-                        <div class="currency-btn" data-currency="UAH">Гривны (UAH)</div>
-                    </div>
-                    
-                    <button class="btn btn-primary convert-btn" id="convert-btn">
-                        🔄 Преобразовать в текст
-                    </button>
-                    
-                    <div class="results-container">
-                        <button class="copy-btn" id="copy-btn" title="Копировать">
-                            📋
-                        </button>
-                        <div class="result-text" id="result-text">
-                            Результат преобразования появится здесь...
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="examples-grid">
-                    <div class="example-card" data-amount="1000">
-                        <div class="example-amount">1 000.00 RUB</div>
-                        <div class="example-text">Одна тысяча рублей 00 копеек</div>
-                    </div>
-                    <div class="example-card" data-amount="2451.30">
-                        <div class="example-amount">2 451.30 USD</div>
-                        <div class="example-text">Две тысячи четыреста пятьдесят один доллар 30 центов</div>
-                    </div>
-                    <div class="example-card" data-amount="1234567.89">
-                        <div class="example-amount">1 234 567.89 EUR</div>
-                        <div class="example-text">Один миллион двести тридцать четыре тысячи пятьсот шестьдесят семь евро 89 центов</div>
-                    </div>
-                </div>
+    <div class="amount-converter">
+      <div class="converter-card">
+        <div class="input-group">
+          <label for="amount-input">Введите сумму:</label>
+          <input type="text" id="amount-input" class="amount-input" placeholder="12345.67" value="475.96">
+        </div>
 
-                <!-- Особенности -->
-                <div class="tool-features">
-                    <div class="feature">
-                        <h4>🎯 Мгновенное преобразование</h4>
-                        <p>Мгновенный перевод чисел в текст с правильным склонением слов</p>
-                    </div>
-                    <div class="feature">
-                        <h4>🌍 Мультивалютность</h4>
-                        <p>Поддержка рублей, долларов, евро и гривен с правильными формами склонения</p>
-                    </div>
-                    <div class="feature">
-                        <h4>📋 Простое копирование</h4>
-                        <p>Копируйте результат одним кликом для использования в документах</p>
-                    </div>
-                </div>
+        <div class="currency-selector">
+          <div class="currency-btn active" data-currency="RUB">Рубли (RUB)</div>
+          <div class="currency-btn" data-currency="USD">Доллары (USD)</div>
+          <div class="currency-btn" data-currency="EUR">Евро (EUR)</div>
+          <div class="currency-btn" data-currency="UAH">Гривны (UAH)</div>
+          <div class="currency-btn" data-currency="KZT">Тенге (KZT)</div>
+        </div>
 
-                <!-- SEO контент -->
-                <div class="article">
-                    <h2>Как работает конвертер суммы прописью</h2>
-                    <p>Наш инструмент использует интеллектуальный алгоритм преобразования чисел в текстовое представление с учетом правил русского языка и финансовых стандартов.</p>
-                    
-                    <h3>🔢 Правильное склонение числительных</h3>
-                    <p>Алгоритм учитывает род, падеж и число для правильного образования слов:</p>
-                    <ul>
-                        <li>1 рубль, 2 рубля, 5 рублей</li>
-                        <li>1 доллар, 2 доллара, 5 долларов</li>
-                        <li>1 копейка, 2 копейки, 5 копеек</li>
-                    </ul>
-                    
-                    <h3>💱 Поддержка различных валют</h3>
-                    <p>Инструмент поддерживает основные мировые валюты с правильным склонением:</p>
-                    <ul>
-                        <li><strong>RUB</strong> - Российский рубль (рубль, рубля, рублей)</li>
-                        <li><strong>USD</strong> - Доллар США (доллар, доллара, долларов)</li>
-                        <li><strong>EUR</strong> - Евро (евро, евро, евро)</li>
-                        <li><strong>UAH</strong> - Украинская гривна (гривна, гривны, гривен)</li>
-                    </ul>
-                    
-                    <h3>💡 Примеры использования</h3>
-                    <div class="example-grid">
-                        <div class="example">
-                            <h4>📄 Финансовые документы</h4>
-                            <p>Для заполнения договоров, счетов и накладных</p>
-                        </div>
-                        <div class="example">
-                            <h4>🏦 Банковские операции</h4>
-                            <p>При оформлении платежных поручений и квитанций</p>
-                        </div>
-                        <div class="example">
-                            <h4>📊 Бухгалтерия</h4>
-                            <p>Для правильного отображения сумм в отчетности</p>
-                        </div>
-                    </div>
+        <div class="input-group" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div>
+            <label for="vat-select">Налог:</label>
+            <select id="vat-select" class="amount-input" style="text-align:left;font-weight:500;font-size:1rem">
+              <option value="none" selected>Без НДС</option>
+              <option value="12">НДС 12%</option>
+              <option value="20">НДС 20%</option>
+              <option value="custom">Своя ставка…</option>
+            </select>
+          </div>
+          <div id="vat-custom-wrap" style="display:none">
+            <label for="vat-custom">Своя ставка НДС, %</label>
+            <input id="vat-custom" class="amount-input" type="number" step="0.01" placeholder="Напр. 8">
+          </div>
+          <div>
+            <label for="decimal-select">Разделитель дроби:</label>
+            <select id="decimal-select" class="amount-input" style="text-align:left;font-weight:500;font-size:1rem">
+              <option value=".">точка (.)</option>
+              <option value=",">запятая (,)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary convert-btn" id="convert-btn">🔄 Преобразовать</button>
+
+        <div class="results-container">
+          <button class="copy-btn" id="copy-btn" title="Копировать все">📋</button>
+          <div id="results-list" class="results-list" style="display:flex;flex-direction:column;gap:12px"></div>
+        </div>
+      </div>
+
+      <div class="examples-grid">
+        <div class="example-card" data-amount="1000"> <div class="example-amount">1 000.00 KZT</div>
+          <div class="example-text">Одна тысяча тенге 00 тиын</div>
+        </div>
+        <div class="example-card" data-amount="2451.30">
+          <div class="example-amount">2 451.30 USD</div>
+          <div class="example-text">Две тысячи четыреста пятьдесят один доллар 30 центов</div>
+        </div>
+        <div class="example-card" data-amount="1234567.89">
+          <div class="example-amount">1 234 567.89 EUR</div>
+          <div class="example-text">Один миллион двести тридцать четыре тысячи пятьсот шестьдесят семь евро 89 центов</div>
+        </div>
+      </div>
                     
                     <h3>❓ Частые вопросы</h3>
                     <p><strong>Почему важно правильное склонение?</strong><br>
@@ -337,196 +300,229 @@
     
     <script src="js/loader.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const amountInput = document.getElementById('amount-input');
-            const convertBtn = document.getElementById('convert-btn');
-            const copyBtn = document.getElementById('copy-btn');
-            const resultText = document.getElementById('result-text');
-            const currencyBtns = document.querySelectorAll('.currency-btn');
-            const exampleCards = document.querySelectorAll('.example-card');
-            
-            let currentCurrency = 'RUB';
-            
-            // Обработчики выбора валюты
-            currencyBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    currencyBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentCurrency = this.getAttribute('data-currency');
-                    convertAmount();
-                });
-            });
-            
-            // Обработчики примеров
-            exampleCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const amount = this.getAttribute('data-amount');
-                    amountInput.value = amount;
-                    convertAmount();
-                });
-            });
-            
-            // Конвертация по кнопке
-            convertBtn.addEventListener('click', convertAmount);
-            
-            // Автоконвертация при вводе
-            amountInput.addEventListener('input', debounce(convertAmount, 300));
-            
-            // Копирование результата
-            copyBtn.addEventListener('click', function() {
-                const text = resultText.textContent;
-                navigator.clipboard.writeText(text).then(() => {
-                    const originalHtml = copyBtn.innerHTML;
-                    copyBtn.innerHTML = '✅';
-                    setTimeout(() => {
-                        copyBtn.innerHTML = originalHtml;
-                    }, 2000);
-                });
-            });
-            
-            // Первый запуск
-            convertAmount();
-            
-            function convertAmount() {
-                const amount = parseFloat(amountInput.value.replace(',', '.'));
-                
-                if (isNaN(amount)) {
-                    resultText.textContent = 'Введите корректную сумму';
-                    return;
-                }
-                
-                try {
-                    const result = amountToWords(amount, currentCurrency);
-                    resultText.textContent = result;
-                } catch (error) {
-                    resultText.textContent = 'Ошибка преобразования';
-                }
-            }
-            
-            function amountToWords(amount, currency) {
-                const integerPart = Math.floor(amount);
-                const fractionalPart = Math.round((amount - integerPart) * 100);
-                
-                const integerWords = numberToWords(integerPart);
-                const fractionalWords = numberToWords(fractionalPart, true);
-                
-                // Получаем правильные формы валюты
-                const currencyForms = getCurrencyForms(currency);
-                const fractionalCurrencyForms = getFractionalCurrencyForms(currency);
-                
-                // Выбираем правильную форму для целой части
-                const integerForm = getCurrencyForm(integerPart, currencyForms);
-                
-                // Выбираем правильную форму для дробной части
-                const fractionalForm = getCurrencyForm(fractionalPart, fractionalCurrencyForms);
-                
-                return `${integerWords} ${integerForm} ${fractionalPart.toString().padStart(2, '0')} ${fractionalForm}`;
-            }
-            
-            function numberToWords(number, isFractional = false) {
-                if (number === 0) return isFractional ? '00' : 'ноль';
-                
-                const units = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
-                const teens = ['десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'];
-                const tens = ['', 'десять', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
-                const hundreds = ['', 'сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот'];
-                
-                const thousands = ['', 'тысяча', 'тысячи', 'тысяч'];
-                const millions = ['', 'миллион', 'миллиона', 'миллионов'];
-                const billions = ['', 'миллиард', 'миллиарда', 'миллиардов'];
-                
-                if (number < 10 && isFractional) {
-                    return number === 0 ? '00' : '0' + number;
-                }
-                
-                if (number < 10) return units[number];
-                if (number < 20) return teens[number - 10];
-                
-                let words = '';
-                let num = number;
-                
-                // Миллиарды
-                if (num >= 1000000000) {
-                    const billionsPart = Math.floor(num / 1000000000);
-                    words += numberToWords(billionsPart) + ' ' + getForm(billionsPart, billions) + ' ';
-                    num %= 1000000000;
-                }
-                
-                // Миллионы
-                if (num >= 1000000) {
-                    const millionsPart = Math.floor(num / 1000000);
-                    words += numberToWords(millionsPart) + ' ' + getForm(millionsPart, millions) + ' ';
-                    num %= 1000000;
-                }
-                
-                // Тысячи
-                if (num >= 1000) {
-                    const thousandsPart = Math.floor(num / 1000);
-                    words += numberToWords(thousandsPart, false, true) + ' ' + getForm(thousandsPart, thousands) + ' ';
-                    num %= 1000;
-                }
-                
-                // Сотни
-                if (num >= 100) {
-                    words += hundreds[Math.floor(num / 100)] + ' ';
-                    num %= 100;
-                }
-                
-                // Десятки и единицы
-                if (num >= 20) {
-                    words += tens[Math.floor(num / 10)] + ' ';
-                    num %= 10;
-                }
-                
-                if (num > 0) {
-                    words += units[num] + ' ';
-                }
-                
-                return words.trim();
-            }
-            
-            function getForm(number, forms) {
-                if (number % 10 === 1 && number % 100 !== 11) return forms[1];
-                if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) return forms[2];
-                return forms[3];
-            }
-            
-            function getCurrencyForms(currency) {
-                switch (currency) {
-                    case 'USD': return ['доллар', 'доллара', 'долларов'];
-                    case 'EUR': return ['евро', 'евро', 'евро'];
-                    case 'UAH': return ['гривна', 'гривны', 'гривен'];
-                    default: return ['рубль', 'рубля', 'рублей'];
-                }
-            }
-            
-            function getFractionalCurrencyForms(currency) {
-                switch (currency) {
-                    case 'USD': return ['цент', 'цента', 'центов'];
-                    case 'EUR': return ['цент', 'цента', 'центов'];
-                    case 'UAH': return ['копейка', 'копейки', 'копеек'];
-                    default: return ['копейка', 'копейки', 'копеек'];
-                }
-            }
-            
-            function getCurrencyForm(number, forms) {
-                if (number % 10 === 1 && number % 100 !== 11) return forms[0];
-                if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) return forms[1];
-                return forms[2];
-            }
-            
-            function debounce(func, wait) {
-                let timeout;
-                return function executedFunction(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            }
-        });
-    </script>
+document.addEventListener('DOMContentLoaded', function () {
+  const amountInput = document.getElementById('amount-input');
+  const convertBtn = document.getElementById('convert-btn');
+  const copyBtn = document.getElementById('copy-btn');
+  const resultsList = document.getElementById('results-list');
+  const currencyBtns = document.querySelectorAll('.currency-btn');
+  const exampleCards = document.querySelectorAll('.example-card');
+  const vatSelect = document.getElementById('vat-select');
+  const vatCustomWrap = document.getElementById('vat-custom-wrap');
+  const vatCustom = document.getElementById('vat-custom');
+  const decimalSelect = document.getElementById('decimal-select');
+
+  let currentCurrency = 'RUB';
+
+  currencyBtns.forEach(btn => {
+    btn.addEventListener('click', function () {
+      currencyBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentCurrency = this.getAttribute('data-currency');
+      convert();
+    });
+  });
+
+  vatSelect.addEventListener('change', () => {
+    vatCustomWrap.style.display = vatSelect.value === 'custom' ? 'block' : 'none';
+    convert();
+  });
+  [amountInput, vatCustom, decimalSelect].forEach(el => el.addEventListener('input', debounce(convert, 250)));
+  convertBtn.addEventListener('click', convert);
+
+  exampleCards.forEach(card => {
+    card.addEventListener('click', function () {
+      amountInput.value = this.getAttribute('data-amount');
+      if (this.querySelector('.example-amount')?.textContent.includes('KZT')) {
+        setCurrency('KZT');
+      }
+      convert();
+    });
+  });
+
+  copyBtn.addEventListener('click', function () {
+    const text = Array.from(resultsList.querySelectorAll('.result-text'))
+      .map(div => div.textContent.trim()).join('\n');
+    navigator.clipboard.writeText(text).then(() => {
+      const o = copyBtn.innerHTML; copyBtn.innerHTML = '✅'; setTimeout(()=>copyBtn.innerHTML=o,1600);
+    });
+  });
+
+  function setCurrency(code){
+    currencyBtns.forEach(b => b.classList.remove('active'));
+    const btn = Array.from(currencyBtns).find(b=>b.dataset.currency===code);
+    if (btn) btn.classList.add('active');
+    currentCurrency = code;
+  }
+
+  function convert(){
+    const raw = amountInput.value.replace(/\s/g,'').replace(',', '.');
+    const amount = parseFloat(raw);
+    resultsList.innerHTML = '';
+    if (isNaN(amount)) { addRow('Введите корректную сумму'); return; }
+
+    const rate = vatSelect.value==='none' ? null :
+                 (vatSelect.value==='custom' ? parseFloat(vatCustom.value||'0') : parseFloat(vatSelect.value));
+    const vatPart = rate!=null ? round2(amount * rate/100) : 0;
+    const withVat = rate!=null ? round2(amount + vatPart) : amount;
+
+    const decSep = decimalSelect.value;
+    const fmt = (n)=> formatAmount(n, decSep);
+
+    // базовые слова
+    const integer = Math.floor(amount);
+    const fractional = Math.round((amount - integer)*100);
+    const words = amountToWords(amount, currentCurrency);
+    const forms = currencyMeta(currentCurrency);
+
+    // варианты строк
+    const simple = lowerFirst(words);
+    const simpleCap = upperFirst(words);
+
+    // без НДС
+    if (rate==null){
+      addRow(simple);
+      addRow(simpleCap);
+      addRow(`${fmt(amount)} ${forms.short}. (${simpleCap})`);
+    } else {
+      const vatStr = `НДС ${rate}%`;
+      addRow(`${simple}, ${vatStr} не выделен`);
+      addRow(`${simple}, в т.ч. ${vatStr} ${fmt(vatPart)} ${forms.shortFrac}. (${numberToWords2(vatPart)} ${currencyMeta(currentCurrency, true).main3})`);
+      addRow(`${fmt(amount)} ${forms.short}. (${simpleCap}), в т.ч. ${vatStr} ${fmt(vatPart)} ${forms.shortFrac}.`);
+      addRow(`${fmt(withVat)} ${forms.short} с ${vatStr}. (${upperFirst(amountToWords(withVat, currentCurrency))})`);
+    }
+
+    // альтернативная форма для KZT: «тиын/тыйын»
+    if (currentCurrency==='KZT'){
+      const alt = amountToWords(amount, currentCurrency, {tiynVariant:'тыйын'});
+      addRow(lowerFirst(alt));
+    }
+  }
+
+  function addRow(text){
+    const div = document.createElement('div');
+    div.className = 'result-text';
+    div.textContent = text;
+    resultsList.appendChild(div);
+  }
+
+  function formatAmount(n, decSep){
+    const parts = n.toFixed(2).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+    return parts[0] + decSep + parts[1];
+  }
+  function round2(n){ return Math.round((n+Number.EPSILON)*100)/100; }
+  function upperFirst(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+  function lowerFirst(s){ return s.charAt(0).toLowerCase() + s.slice(1); }
+
+  // ======= ЛИНГВИСТИКА =======
+  function currencyMeta(code, fractional=false){
+    const map = {
+      RUB: {main:['рубль','рубля','рублей'],'frac':['копейка','копейки','копеек'], short:'руб.', shortFrac:'коп.'},
+      USD: {main:['доллар','доллара','долларов'],'frac':['цент','цента','центов'], short:'долл.', shortFrac:'¢'},
+      EUR: {main:['евро','евро','евро'],'frac':['цент','цента','центов'], short:'€', shortFrac:'¢'},
+      UAH: {main:['гривна','гривны','гривен'],'frac':['копейка','копейки','копеек'], short:'грн', shortFrac:'коп'},
+      KZT: {main:['тенге','тенге','тенге'],'frac':['тиын','тиына','тиынов'], short:'тг.', shortFrac:'тиын'}
+    };
+    const obj = map[code] || map.RUB;
+    return fractional
+      ? {main:obj.frac, main1:obj.frac[0], main2:obj.frac[1], main3:obj.frac[2], short:obj.shortFrac}
+      : {main:obj.main, main1:obj.main[0], main2:obj.main[1], main3:obj.main[2], short:obj.short, shortFrac:obj.shortFrac};
+  }
+
+  function getForm(number, forms){
+    if (number%10===1 && number%100!==11) return forms[0];
+    if ([2,3,4].includes(number%10) && ![12,13,14].includes(number%100)) return forms[1];
+    return forms[2];
+  }
+
+  function amountToWords(amount, currency, opts={}){
+    const integerPart = Math.floor(amount);
+    const fractionalPart = Math.round((amount - integerPart) * 100);
+
+    const integerWords = numberToWords(integerPart, {female:false, thousandsFemale:true});
+    const fracWords = numberToWords(fractionalPart);
+
+    const cur = currencyMeta(currency);
+    const curFrac = currencyMeta(currency, true);
+
+    // особый случай KZT: вариант «тыйын»
+    let fracFormSet = curFrac.main;
+    if (currency==='KZT' && opts.tiynVariant==='тыйын'){
+      fracFormSet = ['тыйын','тыйына','тыйынов'];
+    }
+
+    const integerForm = (currency==='KZT' && cur.main[0]==='тенге')
+      ? 'тенге' // несклоняемое
+      : getForm(integerPart, cur.main);
+    const fractionalForm = getForm(fractionalPart, fracFormSet);
+
+    const fracPadded = fractionalPart.toString().padStart(2,'0');
+    return `${integerWords} ${integerForm} ${fracPadded} ${fractionalForm}`;
+  }
+
+  function numberToWords2(n){
+    const i = Math.floor(n);
+    return numberToWords(i);
+  }
+
+  function numberToWords(number, opts={}){
+    if (number===0) return 'ноль';
+    const unitsMale = ['','один','два','три','четыре','пять','шесть','семь','восемь','девять'];
+    const unitsFemale = ['','одна','две','три','четыре','пять','шесть','семь','восемь','девять'];
+    const teens = ['десять','одиннадцать','двенадцать','тринадцать','четырнадцать','пятнадцать','шестнадцать','семнадцать','восемнадцать','девятнадцать'];
+    const tens = ['','десять','двадцать','тридцать','сорок','пятьдесят','шестьдесят','семьдесят','восемьдесят','девяносто'];
+    const hundreds = ['','сто','двести','триста','четыреста','пятьсот','шестьсот','семьсот','восемьсот','девятьсот'];
+
+    const ranks = [
+      {one:'', few:'', many:'', female:false}, // единицы
+      {one:'тысяча', few:'тысячи', many:'тысяч', female:true},
+      {one:'миллион', few:'миллиона', many:'миллионов', female:false},
+      {one:'миллиард', few:'миллиарда', many:'миллиардов', female:false},
+    ];
+
+    let words = [];
+    let rank = 0;
+    let num = number;
+
+    while (num > 0){
+      let chunk = num % 1000;
+      if (chunk){
+        let chunkWords = [];
+        // сотни
+        chunkWords.push(hundreds[Math.floor(chunk/100)]);
+        chunk %= 100;
+        // десятки/подростки
+        if (chunk>=10 && chunk<20){
+          chunkWords.push(teens[chunk-10]);
+          chunk = 0;
+        } else {
+          if (Math.floor(chunk/10)>0) chunkWords.push(tens[Math.floor(chunk/10)]);
+          const u = chunk%10;
+          const useFemale = (rank===1); // тысячи — женский род
+          if (u>0) chunkWords.push((useFemale?unitsFemale:unitsMale)[u]);
+        }
+        // форма ранга
+        const n = num % 1000;
+        const form = (n%10===1 && n%100!==11) ? ranks[rank].one :
+                     ([2,3,4].includes(n%10) && ![12,13,14].includes(n%100)) ? ranks[rank].few : ranks[rank].many;
+        if (form) chunkWords.push(form);
+
+        words.unshift(chunkWords.filter(Boolean).join(' ').trim());
+      }
+      num = Math.floor(num/1000);
+      rank++;
+    }
+    return words.join(' ').replace(/\s+/g,' ').trim();
+  }
+
+  function debounce(fn, wait){
+    let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); };
+  }
+
+  // старт
+  convert();
+});
+</script>
 </body>
 </html>
