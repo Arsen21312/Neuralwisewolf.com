@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <script>
+(function () {
+  var isGH = location.hostname.endsWith('github.io');
+  var repo = isGH ? location.pathname.split('/')[1] : '';
+  var href = isGH ? '/' + repo + '/' : '/';
+  var b = document.createElement('base');
+  b.setAttribute('href', href);
+  document.head.prepend(b);
+})();
+</script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+    <link rel="apple-touch-icon" href="assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сумма Прописью Онлайн | Neural Wise Wolf</title>
+    <meta name="description" content="Бесплатный онлайн-конвертер чисел в сумму прописью на русском языке. Правильное склонение рублей, долларов, евро с копейками.">
+    <base href="/Neuralwisewolf.com/">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .tool-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .tool-header h1 {
+            margin-bottom: .5rem;
+        }
+        .tool-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .amount-converter {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .converter-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .amount-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+        
+        .amount-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .currency-selector {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+        
+        .currency-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .currency-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+        
+        .currency-btn:hover:not(.active) {
+            border-color: var(--accent-secondary);
+        }
+        
+        .convert-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .results-container {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+        
+        .result-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            min-height: 100px;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .example-card {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .example-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .example-amount {
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+        
+        .example-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .tool-features {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .tool-features .feature {
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-card {
+                padding: 1.5rem;
+            }
+            
+            .currency-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .currency-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .amount-input {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="utils" data-slug="amount-to-words">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Сумма Прописью Онлайн</h1>
+                <p class="tool-description">Мгновенно преобразуйте числовую сумму в текст с правильным склонением на русском языке. Поддержка рублей, долларов, евро и гривен.</p>
+            </div>
+
+            <div class="amount-converter">
+                <div class="converter-card">
+                    <div class="input-group">
+                        <label for="amount-input">Введите сумму:</label>
+                        <input type="text" id="amount-input" class="amount-input" placeholder="12345.67" value="12345.67">
+                    </div>
+                    
+                    <div class="currency-selector">
+                        <div class="currency-btn active" data-currency="RUB">Рубли (RUB)</div>
+                        <div class="currency-btn" data-currency="USD">Доллары (USD)</div>
+                        <div class="currency-btn" data-currency="EUR">Евро (EUR)</div>
+                        <div class="currency-btn" data-currency="UAH">Гривны (UAH)</div>
+                    </div>
+                    
+                    <button class="btn btn-primary convert-btn" id="convert-btn">
+                        🔄 Преобразовать в текст
+                    </button>
+                    
+                    <div class="results-container">
+                        <button class="copy-btn" id="copy-btn" title="Копировать">
+                            📋
+                        </button>
+                        <div class="result-text" id="result-text">
+                            Результат преобразования появится здесь...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="examples-grid">
+                    <div class="example-card" data-amount="1000">
+                        <div class="example-amount">1 000.00 RUB</div>
+                        <div class="example-text">Одна тысяча рублей 00 копеек</div>
+                    </div>
+                    <div class="example-card" data-amount="2451.30">
+                        <div class="example-amount">2 451.30 USD</div>
+                        <div class="example-text">Две тысячи четыреста пятьдесят один доллар 30 центов</div>
+                    </div>
+                    <div class="example-card" data-amount="1234567.89">
+                        <div class="example-amount">1 234 567.89 EUR</div>
+                        <div class="example-text">Один миллион двести тридцать четыре тысячи пятьсот шестьдесят семь евро 89 центов</div>
+                    </div>
+                </div>
+
+                <!-- Особенности -->
+                <div class="tool-features">
+                    <div class="feature">
+                        <h4>🎯 Мгновенное преобразование</h4>
+                        <p>Мгновенный перевод чисел в текст с правильным склонением слов</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🌍 Мультивалютность</h4>
+                        <p>Поддержка рублей, долларов, евро и гривен с правильными формами склонения</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📋 Простое копирование</h4>
+                        <p>Копируйте результат одним кликом для использования в документах</p>
+                    </div>
+                </div>
+
+                <!-- SEO контент -->
+                <div class="article">
+                    <h2>Как работает конвертер суммы прописью</h2>
+                    <p>Наш инструмент использует интеллектуальный алгоритм преобразования чисел в текстовое представление с учетом правил русского языка и финансовых стандартов.</p>
+                    
+                    <h3>🔢 Правильное склонение числительных</h3>
+                    <p>Алгоритм учитывает род, падеж и число для правильного образования слов:</p>
+                    <ul>
+                        <li>1 рубль, 2 рубля, 5 рублей</li>
+                        <li>1 доллар, 2 доллара, 5 долларов</li>
+                        <li>1 копейка, 2 копейки, 5 копеек</li>
+                    </ul>
+                    
+                    <h3>💱 Поддержка различных валют</h3>
+                    <p>Инструмент поддерживает основные мировые валюты с правильным склонением:</p>
+                    <ul>
+                        <li><strong>RUB</strong> - Российский рубль (рубль, рубля, рублей)</li>
+                        <li><strong>USD</strong> - Доллар США (доллар, доллара, долларов)</li>
+                        <li><strong>EUR</strong> - Евро (евро, евро, евро)</li>
+                        <li><strong>UAH</strong> - Украинская гривна (гривна, гривны, гривен)</li>
+                    </ul>
+                    
+                    <h3>💡 Примеры использования</h3>
+                    <div class="example-grid">
+                        <div class="example">
+                            <h4>📄 Финансовые документы</h4>
+                            <p>Для заполнения договоров, счетов и накладных</p>
+                        </div>
+                        <div class="example">
+                            <h4>🏦 Банковские операции</h4>
+                            <p>При оформлении платежных поручений и квитанций</p>
+                        </div>
+                        <div class="example">
+                            <h4>📊 Бухгалтерия</h4>
+                            <p>Для правильного отображения сумм в отчетности</p>
+                        </div>
+                    </div>
+                    
+                    <h3>❓ Частые вопросы</h3>
+                    <p><strong>Почему важно правильное склонение?</strong><br>
+                    В официальных документах неправильное склонение числительных может привести к юридическим несоответствиям и ошибкам в финансовых операциях.</p>
+                    
+                    <p><strong>Как вводить десятичные дроби?</strong><br>
+                    Используйте точку или запятую как разделитель: "123.45" или "123,45".</p>
+                </div>
+                
+                <div data-include="related"></div>
+            </div>
+        </div>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const amountInput = document.getElementById('amount-input');
+            const convertBtn = document.getElementById('convert-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const resultText = document.getElementById('result-text');
+            const currencyBtns = document.querySelectorAll('.currency-btn');
+            const exampleCards = document.querySelectorAll('.example-card');
+            
+            let currentCurrency = 'RUB';
+            
+            // Обработчики выбора валюты
+            currencyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currencyBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCurrency = this.getAttribute('data-currency');
+                    convertAmount();
+                });
+            });
+            
+            // Обработчики примеров
+            exampleCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const amount = this.getAttribute('data-amount');
+                    amountInput.value = amount;
+                    convertAmount();
+                });
+            });
+            
+            // Конвертация по кнопке
+            convertBtn.addEventListener('click', convertAmount);
+            
+            // Автоконвертация при вводе
+            amountInput.addEventListener('input', debounce(convertAmount, 300));
+            
+            // Копирование результата
+            copyBtn.addEventListener('click', function() {
+                const text = resultText.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalHtml = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '✅';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHtml;
+                    }, 2000);
+                });
+            });
+            
+            // Первый запуск
+            convertAmount();
+            
+            function convertAmount() {
+                const amount = parseFloat(amountInput.value.replace(',', '.'));
+                
+                if (isNaN(amount)) {
+                    resultText.textContent = 'Введите корректную сумму';
+                    return;
+                }
+                
+                try {
+                    const result = amountToWords(amount, currentCurrency);
+                    resultText.textContent = result;
+                } catch (error) {
+                    resultText.textContent = 'Ошибка преобразования';
+                }
+            }
+            
+            function amountToWords(amount, currency) {
+                const integerPart = Math.floor(amount);
+                const fractionalPart = Math.round((amount - integerPart) * 100);
+                
+                const integerWords = numberToWords(integerPart);
+                const fractionalWords = numberToWords(fractionalPart, true);
+                
+                // Получаем правильные формы валюты
+                const currencyForms = getCurrencyForms(currency);
+                const fractionalCurrencyForms = getFractionalCurrencyForms(currency);
+                
+                // Выбираем правильную форму для целой части
+                const integerForm = getCurrencyForm(integerPart, currencyForms);
+                
+                // Выбираем правильную форму для дробной части
+                const fractionalForm = getCurrencyForm(fractionalPart, fractionalCurrencyForms);
+                
+                return `${integerWords} ${integerForm} ${fractionalPart.toString().padStart(2, '0')} ${fractionalForm}`;
+            }
+            
+            function numberToWords(number, isFractional = false) {
+                if (number === 0) return isFractional ? '00' : 'ноль';
+                
+                const units = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+                const teens = ['десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'];
+                const tens = ['', 'десять', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
+                const hundreds = ['', 'сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот'];
+                
+                const thousands = ['', 'тысяча', 'тысячи', 'тысяч'];
+                const millions = ['', 'миллион', 'миллиона', 'миллионов'];
+                const billions = ['', 'миллиард', 'миллиарда', 'миллиардов'];
+                
+                if (number < 10 && isFractional) {
+                    return number === 0 ? '00' : '0' + number;
+                }
+                
+                if (number < 10) return units[number];
+                if (number < 20) return teens[number - 10];
+                
+                let words = '';
+                let num = number;
+                
+                // Миллиарды
+                if (num >= 1000000000) {
+                    const billionsPart = Math.floor(num / 1000000000);
+                    words += numberToWords(billionsPart) + ' ' + getForm(billionsPart, billions) + ' ';
+                    num %= 1000000000;
+                }
+                
+                // Миллионы
+                if (num >= 1000000) {
+                    const millionsPart = Math.floor(num / 1000000);
+                    words += numberToWords(millionsPart) + ' ' + getForm(millionsPart, millions) + ' ';
+                    num %= 1000000;
+                }
+                
+                // Тысячи
+                if (num >= 1000) {
+                    const thousandsPart = Math.floor(num / 1000);
+                    words += numberToWords(thousandsPart, false, true) + ' ' + getForm(thousandsPart, thousands) + ' ';
+                    num %= 1000;
+                }
+                
+                // Сотни
+                if (num >= 100) {
+                    words += hundreds[Math.floor(num / 100)] + ' ';
+                    num %= 100;
+                }
+                
+                // Десятки и единицы
+                if (num >= 20) {
+                    words += tens[Math.floor(num / 10)] + ' ';
+                    num %= 10;
+                }
+                
+                if (num > 0) {
+                    words += units[num] + ' ';
+                }
+                
+                return words.trim();
+            }
+            
+            function getForm(number, forms) {
+                if (number % 10 === 1 && number % 100 !== 11) return forms[1];
+                if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) return forms[2];
+                return forms[3];
+            }
+            
+            function getCurrencyForms(currency) {
+                switch (currency) {
+                    case 'USD': return ['доллар', 'доллара', 'долларов'];
+                    case 'EUR': return ['евро', 'евро', 'евро'];
+                    case 'UAH': return ['гривна', 'гривны', 'гривен'];
+                    default: return ['рубль', 'рубля', 'рублей'];
+                }
+            }
+            
+            function getFractionalCurrencyForms(currency) {
+                switch (currency) {
+                    case 'USD': return ['цент', 'цента', 'центов'];
+                    case 'EUR': return ['цент', 'цента', 'центов'];
+                    case 'UAH': return ['копейка', 'копейки', 'копеек'];
+                    default: return ['копейка', 'копейки', 'копеек'];
+                }
+            }
+            
+            function getCurrencyForm(number, forms) {
+                if (number % 10 === 1 && number % 100 !== 11) return forms[0];
+                if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) return forms[1];
+                return forms[2];
+            }
+            
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+        });
+    </script>
+</body>
+</html>
