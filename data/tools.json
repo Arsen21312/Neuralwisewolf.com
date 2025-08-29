@@ -1,7 +1,7 @@
 {
   "tools": [
     {
-  "slug": "beer-generator",
+  "slug": "pivo",
   "title": "Генератор пива",
   "description": "Случайный выбор сорта или бренда пива",
   "category": "fun",
@@ -10,7 +10,7 @@
   "new": true
 },
 {
-  "slug": "number-to-words",
+  "slug": "summa-propisyu",
   "title": "Сумма прописью",
   "description": "Преобразование числа в текстовое написание суммы",
   "category": "math",
@@ -913,3 +913,4 @@
   ]
 
 }
+
