@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    
+    <script>
+(function () {
+  var isGH = location.hostname.endsWith('github.io');
+  var repo = isGH ? location.pathname.split('/')[1] : '';
+  var href = isGH ? '/' + repo + '/' : '/';
+  var b = document.createElement('base');
+  b.setAttribute('href', href);
+  document.head.prepend(b);
+})();
+</script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор дробей | Neural Wise Wolf</title>
