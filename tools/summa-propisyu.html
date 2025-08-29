@@ -400,11 +400,29 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function addRow(text){
-    const div = document.createElement('div');
-    div.className = 'result-text';
-    div.textContent = text;
-    resultsList.appendChild(div);
-  }
+  const wrap = document.createElement('div');
+  wrap.className = 'result-row';
+  wrap.style.position = 'relative';
+
+  const div = document.createElement('div');
+  div.className = 'result-text';
+  div.textContent = text;
+
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.innerHTML = '📋';
+  btn.title = 'Копировать';
+  btn.addEventListener('click', ()=> {
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.innerHTML = '✅'; setTimeout(()=>btn.innerHTML='📋',1200);
+    });
+  });
+
+  wrap.appendChild(btn);
+  wrap.appendChild(div);
+  resultsList.appendChild(wrap);
+}
+
 
   function formatAmount(n, decSep){
     const parts = n.toFixed(2).split('.');
