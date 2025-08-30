@@ -6,7 +6,7 @@
   "description": "Случайный выбор сорта или бренда пива",
   "category": "fun",
   "icon": "🍺",
-  "popular": false,
+  "popular": true,
   "new": true
 },
 {
@@ -25,7 +25,7 @@
       "description": "Расчет процентов, скидок, наценок и долей",
       "category": "math",
       "icon": "📊",
-      "popular": false,
+      "popular": true,
       "new": false
     },
     {
@@ -913,4 +913,5 @@
   ]
 
 }
+
 
