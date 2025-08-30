@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-      <script>
+    <script>
 (function () {
   var isGH = location.hostname.endsWith('github.io');
   var repo = isGH ? location.pathname.split('/')[1] : '';
@@ -12,7 +12,7 @@
 })();
 </script>
 
-      <base href="/Neuralwisewolf.com/">
+    <base href="/Neuralwisewolf.com/">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
 <link rel="apple-touch-icon" href="assets/logowolf.png">
@@ -22,15 +22,16 @@
     <title>Neural Wise Wolf — Умные инструменты для быстрых решений</title>
     <meta name="description" content="Онлайн-калькуляторы, конвертеры и инструменты для расчётов. Быстро, точно, удобно.">
     <link rel="stylesheet" href="assets/styles.css">
-      
-      <style>
-        
+    <style>
+
+        /* ================== Стили главной страницы ================== */
+
         .hero {
             text-align: center;
             padding: var(--space-2xl) 0;
             background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
         }
-        
+
         .hero h1 {
             font-size: 3rem;
             margin-bottom: var(--space-md);
@@ -39,7 +40,7 @@
             background-clip: text;
             color: transparent;
         }
-        
+
         .hero-subtitle {
             font-size: 1.2rem;
             color: var(--text-secondary);
@@ -48,18 +49,18 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .main-search {
             max-width: 500px;
             margin: 0 auto var(--space-xl);
         }
-        
+
         .main-search input {
             width: 100%;
             padding: var(--space-md);
             font-size: 1.1rem;
         }
-        
+
         .wolf-stats {
             display: flex;
             justify-content: center;
@@ -67,7 +68,7 @@
             margin: var(--space-xl) 0;
             flex-wrap: wrap;
         }
-        
+
         .stat {
             background: var(--bg-primary);
             padding: var(--space-lg);
@@ -76,79 +77,154 @@
             text-align: center;
             min-width: 120px;
         }
-        
+
         .stat-number {
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--accent-primary);
             display: block;
         }
-        
+
         .stat-label {
             font-size: 0.9rem;
             color: var(--text-muted);
         }
-        
+
         .tools-section {
             padding: var(--space-2xl) 0;
         }
-        
+
         .section-title {
             text-align: center;
             margin-bottom: var(--space-xl);
             font-size: 2rem;
         }
 
-        .card-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
+        /* ================== Стили сетки и карточек ================== */
 
-.card-badge.popular {
-    background: var(--accent-warning);
-    color: white;
-}
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+        }
 
-.card-badge.new {
-    background: var(--accent-success);
-    color: white;
-}
+        @media (max-width: 1280px) {
+            .tools-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
 
-.tool-card {
-    position: relative;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    color: inherit;
-}
+        @media (max-width: 960px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
 
-.tool-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-}
+        @media (max-width: 600px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tool-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-xl);
+            background: #fff;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-icon {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            background: #f1f5f9;
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .tool-body {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .tool-body h3 {
+            margin: 0 0 6px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .tool-body p {
+            margin: 0;
+            color: #6b7280;
+            line-height: 1.35;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        .tool-badges {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .badge.new {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.popular {
+            background: #fde68a;
+            color: #92400e;
+        }
     </style>
 </head>
 <body>
-    
+
     <div data-include="header"></div>
     <div data-include="sidebar"></div>
     <div id="overlay" class="overlay"></div>
 
-       <main>
+    <main>
         <section class="hero">
             <div class="container">
                 <h1>НЕЙРОННЫЕ ИНСТРУМЕНТЫ</h1>
                 <p class="hero-subtitle">Волчья подборка утилит для решения повседневных задач</p>
-                
+
                 <div class="main-search">
                     <input type="search" placeholder="Найди свой инструмент..." id="mainSearch">
                 </div>
-                
+
                 <div class="wolf-stats">
                     <div class="stat">
                         <span class="stat-number">100+</span>
@@ -170,24 +246,84 @@
             <div class="container">
                 <h2 class="section-title">У нас есть ВСЁ и даже больше:</h2>
                 
-                <div class="grid grid-3" id="toolsGrid">
-                    <div class="card tool-card">
+                <div class="tools-grid" id="toolsGrid">
+                    <a class="tool-card" href="/tools/generator">
+                        <div class="card-icon">🎲</div>
+                        <div class="tool-body">
+                            <h3>Генератор пива</h3>
+                            <p>Случайный выбор сорта или бренда пива</p>
+                        </div>
+                        <div class="tool-badges">
+                            <span class="badge new">новый</span>
+                            <span class="badge popular">популярный</span>
+                        </div>
+                    </a>
+
+                    <a class="tool-card" href="/tools/sum-to-text">
+                        <div class="card-icon">✍️</div>
+                        <div class="tool-body">
+                            <h3>Сумма прописью</h3>
+                            <p>Преобразование числа в текстовое написание суммы</p>
+                        </div>
+                        <div class="tool-badges">
+                            <span class="badge new">новый</span>
+                        </div>
+                    </a>
+                    
+                    <a class="tool-card" href="/tools/calc">
                         <div class="card-icon">🧮</div>
-                        <h3>Калькулятор</h3>
-                        <p>Простой и удобный калькулятор для базовых вычислений</p>
-                    </div>
-                    
-                    <div class="card tool-card">
-                        <div class="card-icon">📏</div>
-                        <h3>Конвертер длины</h3>
-                        <p>Конвертируйте метры, футы, дюймы и другие единицы длины</p>
-                    </div>
-                    
-                    <div class="card tool-card">
-                        <div class="card-icon">🎨</div>
-                        <h3>Смешивание цветов</h3>
-                        <p>Создавайте идеальные цветовые сочетания с помощью микшера</p>
-                    </div>
+                        <div class="tool-body">
+                            <h3>Калькулятор</h3>
+                            <p>Простой и удобный калькулятор для базовых вычислений</p>
+                        </div>
+                    </a>
+
+                    <a class="tool-card" href="/tools/percent-calc">
+                        <div class="card-icon">📈</div>
+                        <div class="tool-body">
+                            <h3>Калькулятор процентов</h3>
+                            <p>Расчет процентов, скидок, наценок и долей</p>
+                        </div>
+                        <div class="tool-badges">
+                            <span class="badge popular">популярный</span>
+                        </div>
+                    </a>
+
+                    <a class="tool-card" href="/tools/fractions">
+                        <div class="card-icon">➗</div>
+                        <div class="tool-body">
+                            <h3>Калькулятор дробей</h3>
+                            <p>Вычисления с дробями</p>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/decimal-to-fractions">
+                        <div class="card-icon">🔢</div>
+                        <div class="tool-body">
+                            <h3>Десятичные в дроби</h3>
+                            <p>Преобразование десятичных в обыкновенные дроби</p>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/roman-numerals">
+                        <div class="card-icon">🏛️</div>
+                        <div class="tool-body">
+                            <h3>Римские цифры</h3>
+                            <p>Конвертер арабских и римских чисел</p>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/nod-nok">
+                        <div class="card-icon">➕</div>
+                        <div class="tool-body">
+                            <h3>НОД и НОК</h3>
+                            <p>Калькулятор наибольшего общего делителя и наименьшего общего кратного</p>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/prime-numbers">
+                        <div class="card-icon">🔎</div>
+                        <div class="tool-body">
+                            <h3>Простое число</h3>
+                            <p>Проверка числа на простоту</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -200,21 +336,31 @@
         // Базовая инициализация
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🐺 Neural Wise Wolf загружен!');
-            
-            // Здесь будет логика поиска и фильтрации
+
+            // Логика поиска и фильтрации
             const searchInput = document.getElementById('mainSearch');
-            if (searchInput) {
+            const toolsGrid = document.getElementById('toolsGrid');
+
+            if (searchInput && toolsGrid) {
                 searchInput.addEventListener('input', function() {
-                    console.log('Поиск:', this.value);
-                    // Логика поиска будет добавлена
+                    const filter = this.value.toLowerCase();
+                    const cards = toolsGrid.getElementsByClassName('tool-card');
+
+                    for (let i = 0; i < cards.length; i++) {
+                        const card = cards[i];
+                        const title = card.querySelector('h3').textContent.toLowerCase();
+                        const sub = card.querySelector('p').textContent.toLowerCase();
+
+                        if (title.includes(filter) || sub.includes(filter)) {
+                            card.style.display = 'flex'; // Показываем карточку
+                        } else {
+                            card.style.display = 'none'; // Скрываем карточку
+                        }
+                    }
                 });
             }
         });
     </script>
     
 </body>
-
 </html>
-
-
-
