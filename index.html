@@ -22,214 +22,225 @@
     <title>Neural Wise Wolf — Умные инструменты для быстрых решений</title>
     <meta name="description" content="Онлайн-калькуляторы, конвертеры и инструменты для расчётов. Быстро, точно, удобно.">
     <link rel="stylesheet" href="assets/styles.css">
-      
+
       <style>
-
-        .hero {
-            text-align: center;
-            padding: var(--space-2xl) 0;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: var(--space-md);
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xl);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .main-search {
-            max-width: 500px;
-            margin: 0 auto var(--space-xl);
-        }
-
-        .main-search input {
-            width: 100%;
-            padding: var(--space-md);
-            font-size: 1.1rem;
-        }
-
-        .wolf-stats {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-xl);
-            margin: var(--space-xl) 0;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            background: var(--bg-primary);
-            padding: var(--space-lg);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-light);
-            text-align: center;
-            min-width: 120px;
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-primary);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .tools-section {
-            padding: var(--space-2xl) 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: var(--space-xl);
-            font-size: 2rem;
-        }
-
-        .card-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.card-badge.popular {
-    background: var(--accent-warning);
-    color: white;
-}
-
-.card-badge.new {
-    background: var(--accent-success);
-    color: white;
-}
-
-.tool-card {
-    position: relative;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    color: inherit;
-}
-
-.tool-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-}
-
-            /* Обновленная сетка для 4 колонок и адаптивности */
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-lg); /* Отступы между карточками */
-}
-
-/* Медиа-запросы для адаптивности на разных экранах */
-@media (max-width: 1200px) {
-    .tools-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* Стили для Hero-секции */
+    .hero {
+        text-align: center;
+        padding: var(--space-2xl) 0;
+        background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
     }
-}
 
-@media (max-width: 960px) {
-    .tools-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: var(--space-md);
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
     }
-}
 
-@media (max-width: 600px) {
-    .tools-grid {
-        grid-template-columns: 1fr;
+    .hero-subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-xl);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
-}
 
+    .main-search {
+        max-width: 500px;
+        margin: 0 auto var(--space-xl);
+    }
 
-/* Измененный стиль для самой карточки */
-.tool-card {
-    position: relative;
-    display: flex;
-    align-items: center; /* Выравнивает элементы по центру вертикали */
-    gap: 16px;
-    padding: 24px; /* Увеличенный padding для лучшего вида */
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-xl);
-    background: var(--bg-primary); /* Используем переменную для фона */
-    box-shadow: var(--shadow-sm);
-    text-decoration: none;
-    color: inherit;
-    transition: transform .2s ease, box-shadow .2s ease;
-}
+    .main-search input {
+        width: 100%;
+        padding: var(--space-md);
+        font-size: 1.1rem;
+    }
 
-.tool-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
+    .wolf-stats {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-xl);
+        margin: var(--space-xl) 0;
+        flex-wrap: wrap;
+    }
 
-/* Стиль для большого смайлика слева */
-.tool-emoji {
-    width: 64px; /* Увеличенный размер для смайлика */
-    height: 64px;
-    flex-shrink: 0; /* Чтобы не сжимался */
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    background: var(--bg-secondary);
-    font-size: 3rem; /* Крупный размер шрифта */
-    line-height: 1;
-}
+    .stat {
+        background: var(--bg-primary);
+        padding: var(--space-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-light);
+        text-align: center;
+        min-width: 120px;
+    }
 
-/* Стиль для блока с заголовком и описанием */
-.tool-body {
-    flex-grow: 1; /* Занимает всё доступное место */
-    min-width: 0;
-    padding-right: 20px; /* Убрано 72px, чтобы не было лишних отступов */
-}
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--accent-primary);
+        display: block;
+    }
 
-/* Стиль для плашек "новый" и "популярный" */
-.tool-badges {
-    position: absolute; /* Остаётся абсолютное позиционирование */
-    top: 15px;
-    right: 15px; /* Размещение справа от карточки */
-    display: flex; /* Флексбокс для плашек */
-    gap: 8px; /* Отступ между плашками */
-    z-index: 10;
-}
+    .stat-label {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
 
-/* Стиль для стрелки, чтобы не наезжала на текст */
-.tool-chevron {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 44px;
-    height: 44px;
-    border-radius: 999px;
-    background: var(--bg-secondary);
-    display: grid;
-    place-items: center;
-    pointer-events: none;
-}
-.tool-chevron svg {
-    width: 20px;
-    height: 20px;
-    color: var(--text-muted);
-}
-    </style>
+    .tools-section {
+        padding: var(--space-2xl) 0;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: var(--space-xl);
+        font-size: 2rem;
+    }
+
+    /* ======================================================= */
+    /* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ КАРТОЧЕК И ПЛАШЕК */
+    /* ======================================================= */
+
+    /* Обновленная сетка для 4 колонок и адаптивности */
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--space-lg);
+    }
+
+    @media (max-width: 1200px) {
+        .tools-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 960px) {
+        .tools-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 600px) {
+        .tools-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Обновленный стиль для самой карточки */
+    .tool-card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 18px;
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-xl);
+        background: #fff;
+        box-shadow: var(--shadow-sm);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tool-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Стиль для смайлика */
+    .tool-emoji {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        background: #f1f5f9;
+        font-size: 28px;
+        line-height: 1;
+    }
+
+    /* Стиль для блока с заголовком и описанием */
+    .tool-body {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding-right: 72px; /* чтобы не наезжала стрелка */
+    }
+
+    .tool-body h3 {
+        margin: 0 0 6px;
+        font: 800 1.05rem/1.2 system-ui, -apple-system, Segoe UI, Roboto;
+        color: #111827;
+    }
+
+    .tool-body p {
+        margin: 0;
+        color: #6b7280;
+        line-height: 1.35;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    /* Стиль для плашек "новый" и "популярный" */
+    .tool-badges {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        z-index: 10;
+    }
+
+    .badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        white-space: nowrap;
+        box-shadow: var(--shadow-md);
+    }
+
+    .badge.new {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .badge.popular {
+        background: #fde68a;
+        color: #92400e;
+    }
+
+    /* Стиль для стрелки */
+    .tool-chevron {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+    }
+
+    .tool-chevron svg {
+        width: 20px;
+        height: 20px;
+        color: #374151;
+    }
+</style>
+      
+      
 </head>
 <body>
 
@@ -268,26 +279,54 @@
             <div class="container">
                 <h2 class="section-title">У нас есть ВСЁ и даже больше:</h2>
 
-                <div class="grid grid-3" id="toolsGrid">
-                    <div class="card tool-card">
-                        <div class="card-icon">🧮</div>
-                        <h3>Калькулятор</h3>
-                        <p>Простой и удобный калькулятор для базовых вычислений</p>
-                    </div>
+                  <div class="tools-grid" id="toolsGrid">
+    <a class="tool-card" href="/tools/calc">
+        <div class="tool-badges">
+            <span class="badge new">новый</span>
+            <span class="badge popular">популярный</span>
+        </div>
+        <div class="tool-emoji">🧮</div>
+        <div class="tool-body">
+            <h3>Калькулятор</h3>
+            <p>Простой и удобный калькулятор для базовых вычислений</p>
+        </div>
+        <div class="tool-chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+    </a>
 
-                    <div class="card tool-card">
-                        <div class="card-icon">📏</div>
-                        <h3>Конвертер длины</h3>
-                        <p>Конвертируйте метры, футы, дюймы и другие единицы длины</p>
-                    </div>
+    <a class="tool-card" href="/tools/length">
+        <div class="tool-badges">
+            <span class="badge new">новый</span>
+        </div>
+        <div class="tool-emoji">📏</div>
+        <div class="tool-body">
+            <h3>Конвертер длины</h3>
+            <p>Конвертируйте метры, футы, дюймы и другие единицы длины</p>
+        </div>
+        <div class="tool-chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+    </a>
 
-                    <div class="card tool-card">
-                        <div class="card-icon">🎨</div>
-                        <h3>Смешивание цветов</h3>
-                        <p>Создавайте идеальные цветовые сочетания с помощью микшера</p>
-                    </div>
-                </div>
-            </div>
+    <a class="tool-card" href="/tools/colors">
+        <div class="tool-emoji">🎨</div>
+        <div class="tool-body">
+            <h3>Смешивание цветов</h3>
+            <p>Создавайте идеальные цветовые сочетания с помощью микшера</p>
+        </div>
+        <div class="tool-chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+    </a>
+</div>
+
         </section>
     </main>
 
@@ -313,4 +352,5 @@
 </body>
 
 </html>
+
 
