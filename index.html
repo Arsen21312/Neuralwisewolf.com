@@ -1,544 +1,182 @@
 <!DOCTYPE html>
-
 <html lang="ru">
-
 <head>
-
-      <script>
-
-(function () {
-
-  var isGH = location.hostname.endsWith('github.io');
-
-  var repo = isGH ? location.pathname.split('/')[1] : '';
-
-  var href = isGH ? '/' + repo + '/' : '/';
-
-  var b = document.createElement('base');
-
-  b.setAttribute('href', href);
-
-  document.head.prepend(b);
-
-})();
-
-</script>
-
-
-
-      <base href="/Neuralwisewolf.com/">
-
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
-
-<link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
-
-<link rel="apple-touch-icon" href="assets/logowolf.png">
-
-
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Neural Wise Wolf — Умные инструменты для быстрых решений</title>
-
-    <meta name="description" content="Онлайн-калькуляторы, конвертеры и инструменты для расчётов. Быстро, точно, удобно.">
-
-    <link rel="stylesheet" href="assets/styles.css">
-
-   <style>
-
-        
-
-        .hero {
-
-            text-align: center;
-
-            padding: var(--space-2xl) 0;
-
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-
-        }
-
-        
-
-        .hero h1 {
-
-            font-size: 3rem;
-
-            margin-bottom: var(--space-md);
-
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-
-            -webkit-background-clip: text;
-
-            background-clip: text;
-
-            color: transparent;
-
-        }
-
-        
-
-        .hero-subtitle {
-
-            font-size: 1.2rem;
-
-            color: var(--text-secondary);
-
-            margin-bottom: var(--space-xl);
-
-            max-width: 600px;
-
-            margin-left: auto;
-
-            margin-right: auto;
-
-        }
-
-        
-
-        .main-search {
-
-            max-width: 500px;
-
-            margin: 0 auto var(--space-xl);
-
-        }
-
-        
-
-        .main-search input {
-
-            width: 100%;
-
-            padding: var(--space-md);
-
-            font-size: 1.1rem;
-
-        }
-
-        
-
-        .wolf-stats {
-
-            display: flex;
-
-            justify-content: center;
-
-            gap: var(--space-xl);
-
-            margin: var(--space-xl) 0;
-
-            flex-wrap: wrap;
-
-        }
-
-        
-
-        .stat {
-
-            background: var(--bg-primary);
-
-            padding: var(--space-lg);
-
-            border-radius: var(--radius-lg);
-
-            border: 1px solid var(--border-light);
-
-            text-align: center;
-
-            min-width: 120px;
-
-        }
-
-        
-
-        .stat-number {
-
-            font-size: 1.5rem;
-
-            font-weight: bold;
-
-            color: var(--accent-primary);
-
-            display: block;
-
-        }
-
-        
-
-        .stat-label {
-
-            font-size: 0.9rem;
-
-            color: var(--text-muted);
-
-        }
-
-        
-
-        .tools-section {
-
-            padding: var(--space-2xl) 0;
-
-        }
-
-        
-
-        .section-title {
-
-            text-align: center;
-
-            margin-bottom: var(--space-xl);
-
-            font-size: 2rem;
-
-        }
-
-
-
-        .card-badge {
-
-    position: absolute;
-
-    top: 12px;
-
-    right: 12px;
-
-    padding: 4px 8px;
-
-    border-radius: 12px;
-
-    font-size: 0.7rem;
-
-    font-weight: 600;
-
-    text-transform: uppercase;
-
-}
-
-
-
-.card-badge.popular {
-
-    background: var(--accent-warning);
-
-    color: white;
-
-}
-
-
-
-.card-badge.new {
-
-    background: var(--accent-success);
-
-    color: white;
-
-}
-
-
-
-.tool-card {
-
-    position: relative;
-
-    transition: all 0.3s ease;
-
-    text-decoration: none;
-
-    color: inherit;
-
-}
-
-
-
-.tool-card:hover {
-
-    transform: translateY(-4px);
-
-    box-shadow: var(--shadow-lg);
-
-}
-
-
-
-         .tools-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-
-  @media (max-width:960px){.tools-grid{grid-template-columns:1fr}}
-
-  .tool-card{
-
-    position:relative;display:flex;align-items:center;gap:16px;
-
-    padding:18px 18px;border:1px solid var(--border-light);border-radius:var(--radius-xl);
-
-    background:#fff;box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;
-
-    transition:transform .2s ease, box-shadow .2s ease;
-
-  }
-
-  .tool-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-
-  .tool-emoji{
-
-    flex:0 0 56px;height:56px;display:grid;place-items:center;border-radius:12px;
-
-    background:#f1f5f9;font-size:28px;line-height:1;
-
-  }
-
-  .tool-body{flex:1 1 auto;min-width:0;padding-right:72px}
-
-  .tool-title{margin:0 0 6px;font:800 1.05rem/1.2 system-ui, -apple-system, Segoe UI, Roboto; color:#111827}
-
-  .tool-sub{margin:0;color:#6b7280;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
-
-  .tool-chevron{
-
-    position:absolute;right:16px;top:50%;transform:translateY(-50%);
-
-    width:44px;height:44px;border-radius:999px;background:#f1f5f9;display:grid;place-items:center;pointer-events:none
-
-  }
-
-  .tool-chevron svg{width:20px;height:20px;color:#374151}
-
-  .tool-badges{position:absolute;top:10px;right:72px;display:flex;gap:8px}
-
-  .badge{padding:4px 8px;border-radius:999px;font-size:.65rem;font-weight:700;text-transform:uppercase;white-space:nowrap}
-
-  .badge.new{background:#d1fae5;color:#065f46}
-
-  .badge.popular{background:#fde68a;color:#92400e}
-
-    </style>
-
+    <base href="/Neuralwisewolf.com/">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+    <link rel="apple-touch-icon" href="assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Wise Wolf — Умные инструменты для быстрых решений</title>
+    <meta name="description" content="Онлайн-калькуляторы, конвертеры и инструменты для расчётов. Быстро, точно, удобно.">
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
-
 <body>
 
-    
-
-    <div data-include="header"></div>
-
-    <div data-include="sidebar"></div>
-
-    <div id="overlay" class="overlay"></div>
-
-    
-
-
-
-<main>
-
-        <section class="hero">
-
-            <div class="container">
-
-                <h1>НЕЙРОННЫЕ ИНСТРУМЕНТЫ</h1>
-
-                <p class="hero-subtitle">Волчья подборка утилит для решения повседневных задач</p>
-
-                
-
-                <div class="main-search">
-
-                    <input type="search" placeholder="Найди свой инструмент..." id="mainSearch">
-
-                </div>
-
-                
-
-                <div class="wolf-stats">
-
-                    <div class="stat">
-
-                        <span class="stat-number">100+</span>
-
-                        <span class="stat-label">инструментов</span>
-
-                    </div>
-
-                    <div class="stat">
-
-                        <span class="stat-number">50k+</span>
-
-                        <span class="stat-label">пользователей</span>
-
-                    </div>
-
-                    <div class="stat">
-
-                        <span class="stat-number">24/7</span>
-
-                        <span class="stat-label">работает</span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        
-
-
-
-    <div class="tools-grid" id="toolsGrid">
-
-      <!-- Карточка с двумя флажками -->
-
-      <a class="tool-card" href="/tools/calc">
-
-        <div class="tool-emoji">🧮</div>
-
-        <div class="tool-body">
-
-          <h3 class="tool-title">Калькулятор</h3>
-
-          <p class="tool-sub">Простой и удобный калькулятор для базовых вычислений без лишних кликов</p>
-
-        </div>
-
-        <div class="tool-badges">
-
-          <span class="badge new">новый</span>
-
-          <span class="badge popular">популярный</span>
-
-        </div>
-
-        <div class="tool-chevron" aria-hidden="true">
-
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-
-            <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
-
-          </svg>
-
-        </div>
-
-      </a>
-
-
-
-      <!-- Карточка только с “новый” -->
-
-      <a class="tool-card" href="/tools/length">
-
-        <div class="tool-emoji">📏</div>
-
-        <div class="tool-body">
-
-          <h3 class="tool-title">Конвертер длины</h3>
-
-          <p class="tool-sub">Метры, футы, дюймы и другие единицы. Точный перевод за секунды</p>
-
-        </div>
-
-        <div class="tool-badges">
-
-          <span class="badge new">новый</span>
-
-        </div>
-
-        <div class="tool-chevron" aria-hidden="true">
-
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-
-            <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
-
-          </svg>
-
-        </div>
-
-      </a>
-
-
-
-      <!-- Карточка без флажков -->
-
-      <a class="tool-card" href="/tools/colors">
-
-        <div class="tool-emoji">🎨</div>
-
-        <div class="tool-body">
-
-          <h3 class="tool-title">Смешивание цветов</h3>
-
-          <p class="tool-sub">Создавай сочетания и палитры. Микшируй оттенки и сохраняй результаты</p>
-
-        </div>
-
-        <div class="tool-chevron" aria-hidden="true">
-
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-
-            <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
-
-          </svg>
-
-        </div>
-
-      </a>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-    </main>
-
-
-
-    <div data-include="footer"></div>
-
-
-
-    <script src="js/loader.js"></script>
-
-    <script>
-
-        // Базовая инициализация
-
-        document.addEventListener('DOMContentLoaded', function() {
-
-            console.log('🐺 Neural Wise Wolf загружен!');
-
-            
-
-            // Здесь будет логика поиска и фильтрации
-
-            const searchInput = document.getElementById('mainSearch');
-
-            if (searchInput) {
-
-                searchInput.addEventListener('input', function() {
-
-                    console.log('Поиск:', this.value);
-
-                    // Логика поиска будет добавлена
-
-                });
-
-            }
-
-        });
-
-    </script>
-
-    
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>НЕЙРОННЫЕ ИНСТРУМЕНТЫ</h1>
+                <p class="hero-subtitle">Волчья подборка утилит для решения повседневных задач</p>
+
+                <div class="main-search">
+                    <input type="search" placeholder="Найди свой инструмент..." id="mainSearch">
+                </div>
+
+                <div class="wolf-stats">
+                    <div class="stat">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">инструментов</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50k+</span>
+                        <span class="stat-label">пользователей</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">работает</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tools-section">
+            <div class="container">
+                <h2 class="section-title">У нас есть ВСЁ и даже больше:</h2>
+
+                <div class="tools-grid" id="toolsGrid">
+                    <a class="tool-card" href="/tools/generator">
+                        <div class="tool-badges">
+                            <span class="badge new">новый</span>
+                            <span class="badge popular">популярный</span>
+                        </div>
+                        <div class="tool-emoji">🎲</div>
+                        <div class="tool-body">
+                            <h3>Генератор пива</h3>
+                            <p>Случайный выбор сорта или бренда пива</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/sum-to-text">
+                        <div class="tool-badges">
+                            <span class="badge new">новый</span>
+                        </div>
+                        <div class="tool-emoji">✍️</div>
+                        <div class="tool-body">
+                            <h3>Сумма прописью</h3>
+                            <p>Преобразование числа в текстовое написание суммы</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/calc">
+                        <div class="tool-emoji">🧮</div>
+                        <div class="tool-body">
+                            <h3>Калькулятор</h3>
+                            <p>Простой и удобный калькулятор для базовых вычислений</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/percent-calc">
+                        <div class="tool-badges">
+                            <span class="badge popular">популярный</span>
+                        </div>
+                        <div class="tool-emoji">📈</div>
+                        <div class="tool-body">
+                            <h3>Калькулятор процентов</h3>
+                            <p>Расчет процентов, скидок, наценок и долей</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/fractions">
+                        <div class="tool-emoji">➗</div>
+                        <div class="tool-body">
+                            <h3>Калькулятор дробей</h3>
+                            <p>Вычисления с дробями</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/decimal-to-fractions">
+                        <div class="tool-emoji">🔢</div>
+                        <div class="tool-body">
+                            <h3>Десятичные в дроби</h3>
+                            <p>Преобразование десятичных в обыкновенные дроби</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/roman-numerals">
+                        <div class="tool-emoji">🏛️</div>
+                        <div class="tool-body">
+                            <h3>Римские цифры</h3>
+                            <p>Конвертер арабских и римских чисел</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/nod-nok">
+                        <div class="tool-emoji">➕</div>
+                        <div class="tool-body">
+                            <h3>НОД и НОК</h3>
+                            <p>Калькулятор наибольшего общего делителя и наименьшего общего кратного</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <a class="tool-card" href="/tools/prime-numbers">
+                        <div class="tool-emoji">🔎</div>
+                        <div class="tool-body">
+                            <h3>Простое число</h3>
+                            <p>Проверка числа на простоту</p>
+                        </div>
+                        <div class="tool-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
 
 </body>
-
-
 </html>
