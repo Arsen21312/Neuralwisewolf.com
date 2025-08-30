@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+      <script>
+(function () {
+  var isGH = location.hostname.endsWith('github.io');
+  var repo = isGH ? location.pathname.split('/')[1] : '';
+  var href = isGH ? '/' + repo + '/' : '/';
+  var b = document.createElement('base');
+  b.setAttribute('href', href);
+  document.head.prepend(b);
+})();
+</script>
+
+      <base href="/Neuralwisewolf.com/">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+<link rel="apple-touch-icon" href="assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Wise Wolf — Умные инструменты для быстрых решений</title>
+    <meta name="description" content="Онлайн-калькуляторы, конвертеры и инструменты для расчётов. Быстро, точно, удобно.">
+    <link rel="stylesheet" href="assets/styles.css">
+      
       <style>
         
         .hero {
@@ -193,5 +215,6 @@
 </body>
 
 </html>
+
 
 
