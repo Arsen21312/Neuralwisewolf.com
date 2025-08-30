@@ -22,9 +22,116 @@
     <title>Neural Wise Wolf — Умные инструменты для быстрых решений</title>
     <meta name="description" content="Онлайн-калькуляторы, конвертеры и инструменты для расчётов. Быстро, точно, удобно.">
     <link rel="stylesheet" href="assets/styles.css">
-    <!-- + Добавь эти стили (или замени старые для .tool-card) -->
-<style>
-  .tools-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+   <style>
+        
+        .hero {
+            text-align: center;
+            padding: var(--space-2xl) 0;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .main-search {
+            max-width: 500px;
+            margin: 0 auto var(--space-xl);
+        }
+        
+        .main-search input {
+            width: 100%;
+            padding: var(--space-md);
+            font-size: 1.1rem;
+        }
+        
+        .wolf-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: var(--bg-primary);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .tools-section {
+            padding: var(--space-2xl) 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            font-size: 2rem;
+        }
+
+        .card-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.card-badge.popular {
+    background: var(--accent-warning);
+    color: white;
+}
+
+.card-badge.new {
+    background: var(--accent-success);
+    color: white;
+}
+
+.tool-card {
+    position: relative;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+         .tools-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
   @media (max-width:960px){.tools-grid{grid-template-columns:1fr}}
   .tool-card{
     position:relative;display:flex;align-items:center;gap:16px;
@@ -49,11 +156,43 @@
   .badge{padding:4px 8px;border-radius:999px;font-size:.65rem;font-weight:700;text-transform:uppercase;white-space:nowrap}
   .badge.new{background:#d1fae5;color:#065f46}
   .badge.popular{background:#fde68a;color:#92400e}
-</style>
+    </style>
+</head>
+<body>
+    
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+    
 
-<section class="tools-section">
-  <div class="container">
-    <h2 class="section-title">У нас есть ВСЁ и даже больше:</h2>
+<main>
+        <section class="hero">
+            <div class="container">
+                <h1>НЕЙРОННЫЕ ИНСТРУМЕНТЫ</h1>
+                <p class="hero-subtitle">Волчья подборка утилит для решения повседневных задач</p>
+                
+                <div class="main-search">
+                    <input type="search" placeholder="Найди свой инструмент..." id="mainSearch">
+                </div>
+                
+                <div class="wolf-stats">
+                    <div class="stat">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">инструментов</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50k+</span>
+                        <span class="stat-label">пользователей</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">работает</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
 
     <div class="tools-grid" id="toolsGrid">
       <!-- Карточка с двумя флажками -->
@@ -132,12 +271,4 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
 
