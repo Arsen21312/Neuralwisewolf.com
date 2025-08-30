@@ -131,6 +131,104 @@
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
 }
+
+            /* Обновленная сетка для 4 колонок и адаптивности */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-lg); /* Отступы между карточками */
+}
+
+/* Медиа-запросы для адаптивности на разных экранах */
+@media (max-width: 1200px) {
+    .tools-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 960px) {
+    .tools-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Измененный стиль для самой карточки */
+.tool-card {
+    position: relative;
+    display: flex;
+    align-items: center; /* Выравнивает элементы по центру вертикали */
+    gap: 16px;
+    padding: 24px; /* Увеличенный padding для лучшего вида */
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    background: var(--bg-primary); /* Используем переменную для фона */
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Стиль для большого смайлика слева */
+.tool-emoji {
+    width: 64px; /* Увеличенный размер для смайлика */
+    height: 64px;
+    flex-shrink: 0; /* Чтобы не сжимался */
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    font-size: 3rem; /* Крупный размер шрифта */
+    line-height: 1;
+}
+
+/* Стиль для блока с заголовком и описанием */
+.tool-body {
+    flex-grow: 1; /* Занимает всё доступное место */
+    min-width: 0;
+    padding-right: 20px; /* Убрано 72px, чтобы не было лишних отступов */
+}
+
+/* Стиль для плашек "новый" и "популярный" */
+.tool-badges {
+    position: absolute; /* Остаётся абсолютное позиционирование */
+    top: 15px;
+    right: 15px; /* Размещение справа от карточки */
+    display: flex; /* Флексбокс для плашек */
+    gap: 8px; /* Отступ между плашками */
+    z-index: 10;
+}
+
+/* Стиль для стрелки, чтобы не наезжала на текст */
+.tool-chevron {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+.tool-chevron svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+}
     </style>
 </head>
 <body>
@@ -215,3 +313,4 @@
 </body>
 
 </html>
+
