@@ -168,17 +168,20 @@ a:hover {
 }
 
 .tool-card {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    padding: var(--space-xl) var(--space-lg);
 }
 
 .tool-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--accent-secondary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
 /* 05) КНОПКИ И ФОРМЫ */
@@ -973,5 +976,37 @@ th {
   accent-color: var(--accent-primary); /* подсветка галочки */
 }
 
+.card-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
 
+.tool-card h3 {
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+    font-size: 1.25rem;
+}
 
+.tool-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.card-icon {
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+}
+
+[data-category="math"] .card-icon { background-color: #e3f2fd; color: #1e88e5; }
+[data-category="convert"] .card-icon { background-color: #e8f5e9; color: #43a047; }
+[data-category="text"] .card-icon { background-color: #fce4ec; color: #d81b60; }
+[data-category="dev"] .card-icon { background-color: #e0f2f1; color: #00897b; }
+[data-category="random"] .card-icon { background-color: #fff3e0; color: #fb8c00; }
+[data-category="life"] .card-icon { background-color: #f3e5f5; color: #8e24aa; }
+[data-category="fun"] .card-icon { background-color: #ffebee; color: #e53935; }
