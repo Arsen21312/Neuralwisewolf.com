@@ -1010,3 +1010,25 @@ th {
 [data-category="random"] .card-icon { background-color: #fff3e0; color: #fb8c00; }
 [data-category="life"] .card-icon { background-color: #f3e5f5; color: #8e24aa; }
 [data-category="fun"] .card-icon { background-color: #ffebee; color: #e53935; }
+
+.main-content {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        padding-left: var(--space-xl);
+        padding-right: var(--space-xl);
+    }
+}
+
+@media (min-width: 1024px) {
+    .main-content {
+        padding-left: var(--space-2xl);
+        padding-right: var(--space-2xl);
+    }
+}

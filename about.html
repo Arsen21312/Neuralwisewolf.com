@@ -777,6 +777,7 @@
 
 
     <!-- Контент + оглавление -->
+    <main class="main-content">
     <section class="hero-about">
     <div class="hero-content">        
         <h1>О проекте</h1>
@@ -904,7 +905,6 @@
                 <span class="button-icon">📨</span>
                 Написать в Telegram
             </a>
-            <span class="cta-alternative">или напишите на: neural.wolf@proton.me</span>
         </div>
     </div>
     
@@ -1044,9 +1044,9 @@
     </div>
 </section>
 
-      </article>
+        </article>
 
-      <aside class="toc" id="tocPanel">
+        <aside class="toc" id="tocPanel">
         <h3>Оглавление</h3>
         <a href="#idea">Зачем мы это делаем</a>
         <a href="#principles">Принципы</a>
@@ -1054,57 +1054,57 @@
         <a href="#news">Новости и апдейты</a>
         <a href="#socials">Соцсети и бот</a>
         <a href="#faq">FAQ</a>
-      </aside>
+        </aside>
     </div>
-  </main>
+    </main>
 
-  <div data-include="footer"></div>
-  
-  <script src="js/loader.js"></script>
-  <script>
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
     // Активное оглавление
     document.addEventListener('DOMContentLoaded', function() {
-      const sections = document.querySelectorAll('.article-content > section');
-      const tocLinks = document.querySelectorAll('.toc a');
-      const headerHeight = 80;
+        const sections = document.querySelectorAll('.article-content > section');
+        const tocLinks = document.querySelectorAll('.toc a');
+        const headerHeight = 80;
 
-      function updateActiveToc() {
+        function updateActiveToc() {
         let current = '';
         
         sections.forEach(section => {
-          const sectionTop = section.offsetTop - headerHeight;
-          if (window.scrollY >= sectionTop - 50) {
+            const sectionTop = section.offsetTop - headerHeight;
+            if (window.scrollY >= sectionTop - 50) {
             current = section.getAttribute('id');
-          }
+            }
         });
 
         tocLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
             link.classList.add('active');
-          }
+            }
         });
-      }
+        }
 
       // Плавная прокрутка для оглавления
-      tocLinks.forEach(link => {
+        tocLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href');
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
             window.scrollTo({
-              top: targetElement.offsetTop - headerHeight,
-              behavior: 'smooth'
+                top: targetElement.offsetTop - headerHeight,
+                behavior: 'smooth'
             });
-          }
+            }
         });
-      });
+        });
 
-      window.addEventListener('scroll', updateActiveToc);
+        window.addEventListener('scroll', updateActiveToc);
       updateActiveToc(); // Инициализация
     });
-  </script>
+    </script>
 </body>
 
 </html>
