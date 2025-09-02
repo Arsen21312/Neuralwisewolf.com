@@ -360,6 +360,55 @@ input:focus, select:focus, textarea:focus {
   color: var(--accent-primary);
 }
 
+/* 03) САЙДБАР (БОКОВОЕ МЕНЮ) */
+.sidebar {
+    /* Оставляем все стили, что у тебя уже есть:
+       position, top, right, width, height, etc. */
+    display: flex; /* Добавляем Flexbox для вертикального расположения элементов */
+    flex-direction: column;
+    gap: var(--space-xs); /* Отступ между элементами */
+}
+
+.sidebar h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: var(--space-md) 0 var(--space-sm); /* Отступы для заголовков */
+    padding: 0 var(--space-sm);
+    color: var(--text-primary);
+}
+
+.sidebar h3:first-of-type {
+    margin-top: 0;
+}
+
+.tool-link {
+    display: flex; /* Используем Flexbox для выравнивания иконки и текста */
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.tool-link:hover {
+    background-color: var(--bg-secondary);
+    color: var(--accent-primary);
+}
+
+.tool-link .tool-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+/* Стили для активной ссылки в меню */
+.tool-link.active {
+    background-color: var(--accent-secondary);
+    color: var(--bg-primary);
+    font-weight: 600;
+}
+
 /* 08) ГЛАВНАЯ СТРАНИЦА */
 .hero {
   text-align: center;

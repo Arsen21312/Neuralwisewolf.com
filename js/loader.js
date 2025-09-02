@@ -100,27 +100,16 @@ function populateSidebar(tools) {
         .map(([categoryId, category]) => {
             if (category.tools.length === 0) return '';
             
-            const toolsList = category.tools
-                .slice(0, 6)
-                .map(tool => `
-                    <a href="tools/${tool.slug}.html" class="sidebar-tool">
-                        <span class="tool-icon">${tool.icon}</span>
-                        <span class="tool-title">${tool.title}</span>
-                        ${tool.popular ? '<span class="tool-badge popular">🔥</span>' : ''}
-                        ${tool.new ? '<span class="tool-badge new">🆕</span>' : ''}
-                    </a>
-                `).join('');
-            
-            return `
-                <div class="side-cat" data-category="${categoryId}">
-                    <h4>${category.name}</h4>
-                    ${toolsList}
-                    ${category.tools.length > 6 ? 
-                        `<a href="index.html?category=${categoryId}" class="see-all">
-                            Все инструменты →
-                        </a>` : ''}
-                </div>
-            `;
+            // Новый код
+return `
+    <h3>${category.name}</h3>
+    ${category.tools.map(tool => `
+        <a href="tools/${tool.slug}.html" class="tool-link">
+            <span class="tool-icon">${tool.icon}</span>
+            ${tool.title}
+        </a>
+    `).join('')}
+`;
         })
         .join('');
 }
