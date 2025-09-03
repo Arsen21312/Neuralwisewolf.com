@@ -18,6 +18,15 @@
   "popular": false,
   "new": true
 },
+{
+  "slug": "hronomer",
+  "title": "Хронометр текста",
+  "description": "Количество слов, символов, время чтения и произнесения",
+  "category": "text",
+  "icon": "🕐",
+  "popular": false,
+  "new": true
+},
 
     {
       "slug": "percentage-calculator",
