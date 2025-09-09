@@ -35,8 +35,24 @@
     <title>Бросок монеты | Neural Wise Wolf</title>
     <meta name="description" content="Принимайте быстрые решения, бросив виртуальную монету. Орел или решка — мгновенный результат!">
     <base href="/Neuralwisewolf.com/">
+    <link rel="preload" href="/assets/heads.png" as="image">
+    <link rel="preload" href="/assets/tails.png" as="image">
     <link rel="stylesheet" href="assets/styles.css">
     <style>
+
+        .coin-container { perspective:1000px; position:relative; }
+        .coin { width:150px; height:150px; position:relative; transform-style:preserve-3d; border-radius:50%; }
+        .coin.flip { animation:flip 1.2s cubic-bezier(.4,0,.2,1) forwards; }
+        .coin-face { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; backface-visibility:hidden; border-radius:50%; overflow:hidden; }
+        .coin-face img { width:100%; height:100%; object-fit:contain; border-radius:50%; }
+        .coin-back { transform:rotateY(180deg); }
+
+        @keyframes flip { from{transform:rotateY(0)} to{transform:rotateY(1800deg)} } /* 5 оборотов */
+
+        @media (prefers-reduced-motion: reduce) {
+        .coin.flip { animation:none; }
+        }
+
         .tool-header {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -137,6 +153,10 @@
         #flip-btn {
             width: 100%;
         }
+
+        .stats{margin-top:1rem;font-size:1.05rem}
+        .stats span{display:block;margin:.2rem 0}
+
     </style>
 </head>
 <body>
@@ -152,14 +172,24 @@
             </div>
 
             <div class="coin-flip-card">
-                <div id="coin" class="coin-container">
-                    <div id="coin-face" class="coin-initial-state">?</div>
-                </div>
-                <div id="coin-result" class="result-text">Нажмите кнопку, чтобы подбросить монету!</div>
-                <button class="btn btn-primary calculate-btn" id="flip-btn">
-                    🪙 Подбросить монету
-                </button>
-            </div>
+                <div class="coin-container" aria-label="Виртуальная монета">
+                    <div id="coin" class="coin" role="img" aria-live="off">
+                    <div id="face-front" class="coin-face coin-front">?</div>
+                    <div id="face-back"  class="coin-face coin-back">?</div>
+                        </div>
+                            </div>
+                        <div id="coin-result" class="result-text" aria-live="polite">Нажми, чтобы подбросить.</div>
+                        <button class="btn btn-primary calculate-btn" id="flip-btn">Подбросить монету</button>
+                    <div class="stats">
+                    <span id="count-heads">Орлов: 0</span>
+                    <span id="count-tails">Решек: 0</span>
+                    <span id="count-total">Всего бросков: 0</span>
+                    </div>
+                    </div>
+
+                    
+
+
 
             <div class="tool-features">
                 <div class="feature">
@@ -272,48 +302,83 @@
     <div data-include="footer"></div>
     <script src="js/loader.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const flipBtn = document.getElementById('flip-btn');
-            const coin = document.getElementById('coin');
-            const coinFace = document.getElementById('coin-face');
-            const resultText = document.getElementById('coin-result');
-            
-            // Изначальное состояние монеты (знак вопроса)
-            coinFace.innerHTML = '?';
-            coinFace.classList.add('coin-initial-state');
+document.addEventListener('DOMContentLoaded', () => {
+  const flipBtn = document.getElementById('flip-btn');
+  const coin = document.getElementById('coin');
+  const front = document.getElementById('face-front');
+  const back  = document.getElementById('face-back');
+  const resultText = document.getElementById('coin-result');
+  const headsEl = document.getElementById('count-heads');
+const tailsEl = document.getElementById('count-tails');
+const totalEl = document.getElementById('count-total');
+let heads = 0, tails = 0, total = 0;
 
-            flipBtn.addEventListener('click', () => {
-                const isHeads = Math.random() < 0.5; // true для орла, false для решки
-                
-                flipBtn.disabled = true;
-                resultText.textContent = 'Подбрасываем монету...';
-                
-                // Удаляем начальное состояние, если оно есть
-                coinFace.classList.remove('coin-initial-state');
-                
-                // Сброс анимации и содержимого
-                coin.classList.remove('flip');
-                coinFace.innerHTML = ''; // Очищаем содержимое перед анимацией
-                void coin.offsetWidth; // Force reflow для перезапуска анимации
-                
-                // Запуск анимации
-                coin.classList.add('flip');
-                
-                setTimeout(() => {
-                    // После анимации, устанавливаем изображение
-                    const img = document.createElement('img');
-                    if (isHeads) {
-                        img.src = 'assets/heads.png'; // Путь к твоей картинке Орла
-                        resultText.textContent = `Выпало: Орёл!`;
-                    } else {
-                        img.src = 'assets/tails.png'; // Путь к твоей картинке Решки
-                        resultText.textContent = `Выпало: Решка!`;
-                    }
-                    coinFace.appendChild(img);
-                    flipBtn.disabled = false;
-                }, 1500); // 1.5s, чтобы совпадало с анимацией
-            });
-        });
-    </script>
+function updateStats(isHeads) {
+  total++;
+  if (isHeads) {
+    heads++;
+  } else {
+    tails++;
+  }
+  headsEl.textContent = `Орлов: ${heads}`;
+  tailsEl.textContent = `Решек: ${tails}`;
+  totalEl.textContent = `Всего бросков: ${total}`;
+}
+
+
+  // Предзагрузка изображений
+  const headsImg = new Image(); headsImg.src = '/assets/heads.png';
+  const tailsImg = new Image(); tailsImg.src = '/assets/tails.png';
+
+  function secureRandomBool() {
+    const buf = new Uint8Array(1);
+    crypto.getRandomValues(buf);
+    // равновероятно 0–255 → чёт/нечёт
+    return (buf[0] & 1) === 0;
+  }
+
+  function renderFaces(isHeads) {
+    const frontImg = document.createElement('img');
+    const backImg  = document.createElement('img');
+    if (isHeads) {
+      frontImg.src = '/assets/heads.png';
+      backImg.src  = '/assets/tails.png';
+    } else {
+      frontImg.src = '/assets/tails.png';
+      backImg.src  = '/assets/heads.png';
+    }
+    front.replaceChildren(frontImg);
+    back.replaceChildren(backImg);
+  }
+
+  function flipOnce() {
+    flipBtn.disabled = true;
+    resultText.textContent = 'Подбрасываем монету...';
+    
+    const isHeads = secureRandomBool();
+    renderFaces(isHeads);
+
+    // Перезапуск анимации
+    coin.classList.remove('flip');
+    void coin.offsetWidth;
+    coin.classList.add('flip');
+
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1200;
+    setTimeout(() => {
+      resultText.textContent = isHeads ? 'Выпало: Орёл!' : 'Выпало: Решка!';
+      flipBtn.disabled = false;
+      flipBtn.focus();
+      updateStats(isHeads);
+
+    }, duration);
+  }
+
+  flipBtn.addEventListener('click', flipOnce);
+  flipBtn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipOnce(); }
+  });
+});
+</script>
+
 </body>
 </html>
