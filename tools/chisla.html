@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <script>
+(function () {
+  var isGH = location.hostname.endsWith('github.io');
+  var repo = isGH ? location.pathname.split('/')[1] : '';
+  var href = isGH ? '/' + repo + '/' : '/';
+  var b = document.createElement('base');
+  b.setAttribute('href', href);
+  document.head.prepend(b);
+})();
+</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=103991776', 'ym');
+
+    ym(103991776, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/103991776" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+    <base href="/Neuralwisewolf.com/">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+    <link rel="apple-touch-icon" href="assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рандомайзер чисел | Neural Wise Wolf</title>
+    <meta name="description" content="Генератор случайных чисел с волчьим интеллектом. Настрой диапазон, количество чисел и получи идеальный рандом!">
+
+      <!-- Canonical -->
+      <link rel="canonical" href="https://neuralwisewolf.com/tools/chisla" />
+      <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+
+      <!-- Open Graph -->
+      <meta property="og:type" content="website">
+      <meta property="og:locale" content="ru_RU">
+      <meta property="og:title" content="Рандомайзер чисел онлайн — генератор случайных чисел | Neural Wise Wolf">
+      <meta property="og:description" content="Онлайн-генератор случайных чисел: настрой диапазон, количество, уникальность и получи честный результат. Для розыгрышей, игр, тестов.">
+      <meta property="og:url" content="https://neuralwisewolf.com/tools/chisla">
+      <meta property="og:site_name" content="Neural Wise Wolf">
+      <meta property="og:image" content="https://neuralwisewolf.com/assets/og-randomizer.png">
+      <meta property="og:image:alt" content="Онлайн рандомайзер чисел Neural Wise Wolf">
+
+      <!-- Twitter -->
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="Рандомайзер чисел онлайн — генератор случайных чисел | Neural Wise Wolf">
+      <meta name="twitter:description" content="Генерация случайных чисел для розыгрышей, игр, тестов. Гибкие настройки диапазона, уникальности и точности.">
+      <meta name="twitter:image" content="https://neuralwisewolf.com/assets/og-randomizer.png">
+
+
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+      .tool-header {
+        text-align: center;
+      }
+      .tool-header h1, 
+      .tool-header p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+        .number-generator {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .number-machine {
+            background: var(--bg-primary);
+            padding: 3rem 2rem;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .number-machine::before {
+            content: '🐺';
+            font-size: 4rem;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            opacity: 0.1;
+            transform: rotate(-20deg);
+        }
+
+        .number-machine::after {
+            content: '🎲';
+            font-size: 4rem;
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .control-group {
+            text-align: left;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .control-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .control-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .generate-btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-xl);
+            margin: 2rem 0;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-2xl);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+        }
+
+        .generate-btn:active {
+            transform: translateY(1px);
+        }
+
+        .number-result {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--border-medium);
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .number-result.show {
+            display: block;
+            animation: numberReveal 0.8s ease;
+        }
+
+        @keyframes numberReveal {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .result-numbers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .number-bubble {
+            background: var(--accent-primary);
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .number-bubble:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .wolf-comment {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--bg-dark), #1e293b);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            position: relative;
+        }
+
+        .wolf-comment::before {
+            content: '🐺 Волчий совет:';
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .share-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .share-vk {
+            background: #0077FF;
+            color: white;
+        }
+
+        .share-tg {
+            background: #0088cc;
+            color: white;
+        }
+
+        .number-history {
+            margin-top: 3rem;
+        }
+
+        .history-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .history-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .history-item {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            font-size: 0.9rem;
+        }
+
+        /* Анимации */
+        @keyframes wolfHowl {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            75% { transform: rotate(3deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .wolf-howling {
+            animation: wolfHowl 1s ease-in-out;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .generate-btn {
+                padding: 1.25rem 2rem;
+                font-size: 1.25rem;
+            }
+            
+            .result-numbers {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            }
+            
+            .number-bubble {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .number-machine {
+                padding: 2rem 1rem;
+            }
+            
+            .result-numbers {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Специальные стили для волчьего вайба */
+        .wolf-theme {
+            font-family: var(--font-sans);
+        }
+
+        .accent-wolf {
+            color: #1e3a8a;
+            font-weight: 800;
+        }
+
+        .number-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-separator {
+            border: none;
+            border-top: 1px solid var(--border-light);
+            margin: var(--space-2xl) 0;
+            width: 100%;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .article {
+  text-align: left;
+}
+.article h2,
+.article h3,
+.article p,
+.article ul,
+.article li,
+.article div {
+  text-align: left;
+}
+
+.tool-features {
+  text-align: left;
+}
+.tool-features h4,
+.tool-features p {
+  text-align: left;
+}
+
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="fun" data-slug="chisla">
+        <div class="tool-container">
+            <div class="tool-header">
+
+              <nav class="breadcrumbs" aria-label="Хлебные крошки">
+              <a href="/">Главная</a>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">Рандомайзер чисел</span>
+            </nav>
+
+            <script type="application/ld+json">
+            {
+              "@context":"https://schema.org",
+              "@type":"BreadcrumbList",
+              "itemListElement":[
+                {"@type":"ListItem","position":1,"name":"Главная","item":"https://neuralwisewolf.com/"},
+                {"@type":"ListItem","position":2,"name":"Рандомайзер чисел","item":"https://neuralwisewolf.com/tools/chisla"}
+              ]
+            }
+            </script>
+
+                <h1>🎲 Рандомайзер чисел онлайн</h1>
+                <p class="tool-description">
+                Бесплатный генератор случайных чисел: задай диапазон, количество и уникальность, и получи честный результат. 
+                Подходит для розыгрышей, лотерей, игр, тестов и любых задач, где нужен настоящий рандом с волчьим вайбом.
+                </p>
+
+
+            <div class="number-generator">
+                <div class="number-machine">
+                    <div class="number-emoji">🐺🔢</div>
+                    <h2>Волчий генератор чисел</h2>
+                    <p>Настрой параметры и получи свои случайные числа! Волк гарантирует честный рандом 🐾</p>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="min-number">Минимальное число:</label>
+                            <input type="number" id="min-number" value="1" min="-999999" max="999999">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="max-number">Максимальное число:</label>
+                            <input type="number" id="max-number" value="100" min="-999999" max="999999">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="count">Количество чисел:</label>
+                            <input type="number" id="count" value="5" min="1" max="100">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="decimals">Знаков после запятой:</label>
+                            <input type="number" id="decimals" value="0" min="0" max="10">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="unique-only" checked>
+                        <label for="unique-only">Только уникальные числа</label>
+                    </div>
+
+                    <button class="generate-btn" id="generate-numbers">
+                        🎲 Сгенерировать числа!
+                    </button>
+
+                    <div class="number-result" id="number-result">
+                        <span class="number-emoji" id="result-emoji">🔢</span>
+                        <h3 class="result-title" id="result-title">Ваши случайные числа:</h3>
+                        
+                        <div class="result-numbers" id="result-numbers">
+                            <!-- Числа будут добавляться через JS -->
+                        </div>
+
+                        <div class="wolf-comment" id="wolf-comment">
+                            Волк одобряет эти числа! Идеально для розыгрыша или выбора победителя.
+                        </div>
+
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn share-vk" id="share-vk">📤 Поделиться в VK</a>
+                            <a href="#" class="share-btn share-tg" id="share-tg">📤 Поделиться в Telegram</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- История генераций -->
+                <div class="number-history" id="number-history">
+                    <h3 class="history-title">📜 Последние генерации:</h3>
+                    <div class="history-list" id="history-list">
+                        <!-- История будет добавляться через JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Особенности -->
+            <hr class="section-separator">  
+            <div class="tool-features">
+                <div class="feature">
+                    <h4>🐺 Волчий рандом</h4>
+                    <p>Настоящая случайность с волчьим алгоритмом - никаких предсказуемых паттернов</p>
+                </div>
+                <div class="feature">
+                    <h4>🎯 Гибкие настройки</h4>
+                    <p>Любой диапазон, количество чисел и точность - полный контроль над генерацией</p>
+                </div>
+                <div class="feature">
+                    <h4>🔢 Уникальные числа</h4>
+                    <p>Опция для генерации только неповторяющихся значений</p>
+                </div>
+                <div class="feature">
+                    <h4>📱 Делитесь результатами</h4>
+                    <p>Быстрая отправка результатов братанам в соцсети</p>
+                </div>
+            </div>
+
+            <!-- SEO контент -->
+            <div class="article">
+                <h2>🎲 Как работает волчий рандомайзер чисел</h2>
+                
+                <h3>🐾 Волк знает толк в случайностях!</h3>
+                <p>Наш генератор использует продвинутые алгоритмы для создания истинно случайных чисел с волчьей мудростью:</p>
+                
+                <h3>⚙️ Возможности генератора:</h3>
+                <ul>
+                    <li><strong>Любой диапазон</strong> - от отрицательных до положительных значений</li>
+                    <li><strong>Настройка точности</strong> - от целых чисел до 10 знаков после запятой</li>
+                    <li><strong>Множественные числа</strong> - генерируйте до 100 чисел за раз</li>
+                    <li><strong>Уникальные значения</strong> - исключите повторы для лотерей и розыгрышей</li>
+                </ul>
+                <br>
+
+                <h3>💡 Где использовать случайные числа:</h3>
+                <div class="example-grid">
+                    <div class="example">
+                        <h4>🎰 Розыгрыши и лотереи</h4>
+                        <p>Честный выбор победителей в конкурсах и розыгрышах</p>
+                    </div>
+                    <div class="example">
+                        <h4>🎮 Игры и развлечения</h4>
+                        <p>Случайные значения для настольных игр или придумывания правил</p>
+                    </div>
+                    <div class="example">
+                        <h4>📊 Обучение и тесты</h4>
+                        <p>Генерация данных для математических задач и статистики</p>
+                    </div>
+                </div>
+                
+                <h3>❓ Частые вопросы</h3>
+                <p><strong>Насколько случайны числа?</strong><br>
+                Абсолютно случайны! Волк использует криптографически стойкий генератор. Никаких махинаций! 🐺</p>
+                
+                <p><strong>Можно ли доверять для важных решений?</strong><br>
+                Конечно! Волк никогда не подведет. Идеально для жеребьевок и розыгрышей.</p>
+
+                <div class="wolf-comment">
+                    "Помни, братан: случайность - это не хаос, а высшая форма порядка. Доверься волчьей интуиции! 🐾"
+                </div>
+            </div>
+            <div data-include="related"></div>
+        </div></br>
+
+<section id="socials">
+    <h2>🌐 При чем  тут волки?</h2>
+    <p>Присоединяйся к волчьей стае в соцсетях! Здесь мы делимся новостями, принимаем feedback и строим коммьюнити.</p>
+    
+    <div class="socials-grid">
+        <a href="https://t.me/neural_wise_wolf" class="social-card telegram" target="_blank" rel="noopener">
+            <div class="social-icon">📢</div>
+            <div class="social-info">
+                <h4>Telegram-канал</h4>
+                <p>Главные новости и анонсы. Черные юмор и ауф</p>
+                <span class="social-stat">1K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://t.me/neural_wise_wolf_bot" class="social-card bot" target="_blank" rel="noopener">
+            <div class="social-icon">🤖</div>
+            <div class="social-info">
+                <h4>Нейроклык бот</h4>
+                <p>AI-советчик в Telegram</p>
+                <span class="social-stat">10K+ пользователей</span>
+            </div>
+        </a>
+        
+        <a href="https://instagram.com/neural_wise_wolf" class="social-card instagram" target="_blank" rel="noopener">
+            <div class="social-icon">📷</div>
+            <div class="social-info">
+                <h4>Instagram</h4>
+                <p>Ауф мемы, рилсы. Больше всего контента тут!</p>
+                <span class="social-stat">99K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://youtube.com/@neural_wolf" class="social-card youtube" target="_blank" rel="noopener">
+            <div class="social-icon">🎥</div>
+            <div class="social-info">
+                <h4>YouTube</h4>
+                <p>Обзоры и туториалы</p>
+                <span class="social-stat">1K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://tiktok.com/@neural_wolf" class="social-card tiktok" target="_blank" rel="noopener">
+            <div class="social-icon">🎵</div>
+            <div class="social-info">
+                <h4>TikTok</h4>
+                <p>Короткие видео и лайфхаки. А так же стримы тут бывают</p>
+                <span class="social-stat">10K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://t.me/neural_wolf" class="social-card support" target="_blank" rel="noopener">
+            <div class="social-icon">💬</div>
+            <div class="social-info">
+                <h4>Поддержка</h4>
+                <p>Вопросы и предложения</p>
+                <span class="social-stat">Ответ в течение 24ч</span>
+            </div>
+        </a>
+    </div>
+</section>
+
+    </main>
+
+    
+
+    <div data-include="footer"></div>
+    <script src="js/loader.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация
+            const generateBtn = document.getElementById('generate-numbers');
+            const resultDiv = document.getElementById('number-result');
+            const resultNumbers = document.getElementById('result-numbers');
+            const wolfComment = document.getElementById('wolf-comment');
+            const historyList = document.getElementById('history-list');
+            const resultEmoji = document.getElementById('result-emoji');
+            const resultTitle = document.getElementById('result-title');
+            const shareVk = document.getElementById('share-vk');
+            const shareTg = document.getElementById('share-tg');
+
+            let generationHistory = [];
+
+            // Функция генерации чисел
+            function generateNumbers() {
+                const min = parseInt(document.getElementById('min-number').value) || 1;
+                const max = parseInt(document.getElementById('max-number').value) || 100;
+                const count = parseInt(document.getElementById('count').value) || 5;
+                const decimals = parseInt(document.getElementById('decimals').value) || 0;
+                const uniqueOnly = document.getElementById('unique-only').checked;
+
+                // Валидация
+                if (min > max) {
+                    alert('Минимальное число не может быть больше максимального!');
+                    return;
+                }
+
+                if (count <= 0) {
+                    alert('Количество чисел должно быть больше 0!');
+                    return;
+                }
+
+                if (uniqueOnly && (max - min + 1) < count) {
+                    alert('Невозможно сгенерировать столько уникальных чисел в данном диапазоне!');
+                    return;
+                }
+
+                // Генерация чисел
+                const numbers = [];
+                const range = max - min;
+
+                while (numbers.length < count) {
+                    let randomNumber = Math.random() * range + min;
+                    
+                    // Округление до нужного количества знаков
+                    if (decimals === 0) {
+                        randomNumber = Math.round(randomNumber);
+                    } else {
+                        randomNumber = parseFloat(randomNumber.toFixed(decimals));
+                    }
+
+                    if (!uniqueOnly || !numbers.includes(randomNumber)) {
+                        numbers.push(randomNumber);
+                    }
+                }
+
+                // Сортировка чисел
+                numbers.sort((a, b) => a - b);
+
+                // Отображение результатов
+                displayResults(numbers, min, max, count, decimals, uniqueOnly);
+                
+                // Сохранение в историю
+                saveToHistory(numbers, min, max, count, decimals, uniqueOnly);
+                
+                // Обновление кнопок поделиться
+                updateShareButtons(numbers);
+            }
+
+            // Отображение результатов
+            function displayResults(numbers, min, max, count, decimals, uniqueOnly) {
+                resultNumbers.innerHTML = '';
+                
+                numbers.forEach(number => {
+                    const bubble = document.createElement('div');
+                    bubble.className = 'number-bubble';
+                    bubble.textContent = number;
+                    bubble.style.animationDelay = `${Math.random() * 0.5}s`;
+                    resultNumbers.appendChild(bubble);
+                });
+
+                // Волчий комментарий
+                const randomComments = [
+                    "Отличные числа! Волк одобряет этот рандом! 🐺",
+                    "Идеально для розыгрыша! Никто не заподозрит подвох! 🎲",
+                    "Волчья удача на твоей стороне! Эти числа принесут победу! 🐾",
+                    "Настоящая случайность! Даже я не смог бы предсказать! 🌪️",
+                    "Пацанский рандом! Идеально для честных решений! 💪"
+                ];
+                
+                wolfComment.textContent = randomComments[Math.floor(Math.random() * randomComments.length)];
+                
+                // Анимация появления
+                resultDiv.classList.add('show');
+                
+                // Анимация волка
+                document.querySelector('.number-emoji').classList.add('wolf-howling');
+                setTimeout(() => {
+                    document.querySelector('.number-emoji').classList.remove('wolf-howling');
+                }, 1000);
+            }
+
+            // Сохранение в историю
+            function saveToHistory(numbers, min, max, count, decimals, uniqueOnly) {
+                const timestamp = new Date().toLocaleTimeString();
+                const historyItem = {
+                    numbers,
+                    min,
+                    max,
+                    count,
+                    decimals,
+                    uniqueOnly,
+                    timestamp
+                };
+                
+                generationHistory.unshift(historyItem);
+                if (generationHistory.length > 5) {
+                    generationHistory = generationHistory.slice(0, 5);
+                }
+                
+                updateHistoryDisplay();
+            }
+
+            // Обновление отображения истории
+            function updateHistoryDisplay() {
+                historyList.innerHTML = '';
+                
+                generationHistory.forEach((item, index) => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    
+                    const numbersText = item.numbers.join(', ');
+                    historyItem.innerHTML = `
+                        <strong>${item.timestamp}</strong><br>
+                        ${numbersText}<br>
+                        <small>Диапазон: ${item.min}-${item.max}, ${item.count} чисел</small>
+                    `;
+                    
+                    historyList.appendChild(historyItem);
+                });
+            }
+
+            // Обновление кнопок поделиться
+            function updateShareButtons(numbers) {
+                const numbersText = numbers.join(', ');
+                const shareText = `🎲 Волчий рандомайзер сгенерировал числа: ${numbersText}\n\nПопробуй и ты: ${window.location.href}`;
+                
+                shareVk.href = `https://vk.com/share.php?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent('Случайные числа от Волка')}&comment=${encodeURIComponent(shareText)}`;
+                shareTg.href = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareText)}`;
+            }
+
+            // Обработчики событий
+            generateBtn.addEventListener('click', generateNumbers);
+
+            // Генерация при загрузке
+            generateNumbers();
+
+            // Включение других скриптов
+            if (typeof loadHeader === 'function') loadHeader();
+            if (typeof loadSidebar === 'function') loadSidebar();
+            if (typeof loadFooter === 'function') loadFooter();
+        });
+    </script>
+
+</body>
+</html>
