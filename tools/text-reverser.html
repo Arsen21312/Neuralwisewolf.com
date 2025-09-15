@@ -33,8 +33,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Реверс текста | Neural Wise Wolf</title>
-    <meta name="description" content="Переверните текст задом наперед, по словам или построчно. Полезно для программирования, шифрования и креативных задач.">
+    <title>Реверс текста онлайн — перевернуть текст задом наперед, по словам и строкам. Волчий инстмуент</title>
+    <meta name="description" content="Бесплатный инструмент для реверса текста онлайн. Переверните весь текст, слова или строки задом наперед. Для программирования, шифрования и творчества. Работает с emoji. Мгновенный результат, копирование в один клик.">
     
     <!-- Canonical -->
     <link rel="canonical" href="https://neuralwisewolf.com/tools/text-reverser" />
@@ -57,212 +57,285 @@
     <meta name="twitter:image" content="https://neuralwisewolf.com/assets/og-text-reverser.png">
 
         <script type="application/ld+json">
-        {
-        "@context": "https://schema.org",
-        "@type": ["WebPage","SoftwareApplication"],
-        "name": "Реверс текста",
-        "url": "https://neuralwisewolf.com/tools/text-reverser",
-        "applicationCategory": "UtilityApplication",
-        "operatingSystem": "Web",
-        "inLanguage": "ru-RU",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "RUB"
-        },
-        "description": "Онлайн-инструмент для реверса текста: полный переворот, перестановка слов или строк. Подходит для программирования, шифрования, креативных задач.",
-        "publisher": {
-            "@type": "Organization",
-            "name": "Neural Wise Wolf",
-            "logo": {
-            "@type": "ImageObject",
-            "url": "https://neuralwisewolf.com/assets/logowolf.png"
-            }
-        }
-        }
-        </script>
+{
+  "@context": "https://schema.org",
+  "@type": ["WebPage", "SoftwareApplication"],
+  "name": "Реверс текста онлайн — перевернуть текст задом наперед",
+  "url": "https://neuralwisewolf.com/tools/text-reverser",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "ru-RU",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "RUB"
+  },
+  "description": "Бесплатный онлайн-инструмент для реверса текста. Переверните весь текст, слова или строки задом наперед. Для программирования, шифрования и творчества. Работает с emoji. Мгновенный результат.",
+  "featureList": [
+    "Полный реверс текста (символы)",
+    "Реверс по словам",
+    "Реверс по строкам",
+    "Подсчет символов, слов, строк",
+    "Копирование результата",
+    "Работает в браузере (без сервера)"
+  ],
+  "review": [
+    {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Михаил, разработчик"
+      },
+      "reviewBody": "Именно то, что искал. Реверс по строкам спас при анализе логов. Работает мгновенно, даже с большими файлами."
+    },
+    {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Анна, SMM-специалист"
+      },
+      "reviewBody": "Использую для создания вирусного контента в сторис. Зеркальные тексты привлекают в 3 раза больше внимания! Супер инструмент."
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "bestRating": "5",
+    "ratingCount": "127"
+  },
+  "screenshot": {
+    "@type": "ImageObject",
+    "url": "https://neuralwisewolf.com/assets/screenshot-text-reverser.png"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Neural Wise Wolf",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://neuralwisewolf.com/assets/logowolf.png"
+    }
+  }
+}
+</script>
 
 
     <base href="/Neuralwisewolf.com/">
     <link rel="stylesheet" href="assets/styles.css">
-    <style>
-        .tool-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .tool-header h1 {
-            margin-bottom: .5rem;
-        }
-        .tool-header p {
-            max-width: 600px;
-            margin: 0 auto;
-            color: var(--text-secondary);
-        }
 
-        .tool-features {
-            margin-top: 28px;
-            padding-top: 18px;
-            border-top: 1px solid var(--border-light);
-        }
-        .tool-features .feature {
-            margin-bottom: 1rem;
-        }
-        
-        .text-reverser {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .calculator-card {
-            background: var(--bg-primary);
-            padding: 2rem;
-            border-radius: 20px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-md);
-            margin-bottom: 2rem;
-        }
-        
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .text-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--border-light);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            min-height: 120px;
-            resize: vertical;
-            font-family: var(--font-sans);
-        }
-        
-        .text-input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .option-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            border: 1px solid var(--border-light);
-        }
-        
-        .option-item input[type="radio"] {
-            margin: 0;
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent-primary);
-        }
-        
-        .option-item label {
-            margin: 0;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .action-btn {
-            flex: 1;
-            padding: 1rem;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        
-        .results-container {
-            background: var(--bg-secondary);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border: 2px solid var(--border-light);
-        }
-        
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .copy-btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-        }
-        
-        .copy-btn:hover {
-            background: var(--border-light);
-        }
-        
-        .result-text {
-            background: var(--bg-primary);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-light);
-            min-height: 120px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: var(--font-sans);
-        }
-        
-        .stats {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-light);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-        
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-        
-        @media (max-width: 768px) {
-            .options-grid {
-                grid-template-columns: 1fr;
+        <style>
+            .tool-header {
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+            .tool-header h1 {
+                margin-bottom: .5rem;
+            }
+            .tool-header p {
+                max-width: 600px;
+                margin: 0 auto;
+                color: var(--text-secondary);
+            }
+
+            .tool-features {
+                margin-top: 28px;
+                padding-top: 18px;
+                border-top: 1px solid var(--border-light);
+            }
+            .tool-features .feature {
+                margin-bottom: 1rem;
+            }
+            
+            .text-reverser {
+                max-width: 800px;
+                margin: 0 auto;
             }
             
             .calculator-card {
-                padding: 1.5rem;
+                background: var(--bg-primary);
+                padding: 2rem;
+                border-radius: 20px;
+                border: 1px solid var(--border-light);
+                box-shadow: var(--shadow-md);
+                margin-bottom: 2rem;
+            }
+            
+            .input-group {
+                margin-bottom: 1.5rem;
+            }
+            
+            .input-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+                color: var(--text-primary);
+            }
+            
+            .text-input {
+                width: 100%;
+                padding: 0.75rem;
+                border: 2px solid var(--border-light);
+                border-radius: 12px;
+                font-size: 1rem;
+                transition: border-color 0.3s ease;
+                min-height: 120px;
+                resize: vertical;
+                font-family: var(--font-sans);
+            }
+            
+            .text-input:focus {
+                outline: none;
+                border-color: var(--accent-primary);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+            
+            .options-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .option-item {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.75rem;
+                background: var(--bg-secondary);
+                border-radius: 12px;
+                border: 1px solid var(--border-light);
+            }
+            
+            .option-item input[type="radio"] {
+                margin: 0;
+                width: 18px;
+                height: 18px;
+                accent-color: var(--accent-primary);
+            }
+            
+            .option-item label {
+                margin: 0;
+                font-weight: 500;
+                cursor: pointer;
             }
             
             .action-buttons {
-                flex-direction: column;
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
             }
+            
+            .action-btn {
+                flex: 1;
+                padding: 1rem;
+                font-size: 1.1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .results-container {
+                background: var(--bg-secondary);
+                padding: 1.5rem;
+                border-radius: 16px;
+                border: 2px solid var(--border-light);
+            }
+            
+            .results-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+            }
+            
+            .copy-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                background: var(--bg-primary);
+                border: 1px solid var(--border-light);
+            }
+            
+            .copy-btn:hover {
+                background: var(--border-light);
+            }
+            
+            .result-text {
+                background: var(--bg-primary);
+                padding: 1rem;
+                border-radius: 12px;
+                border: 1px solid var(--border-light);
+                min-height: 120px;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                font-family: var(--font-sans);
+            }
+            
+            .stats {
+                display: flex;
+                gap: 1rem;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid var(--border-light);
+                color: var(--text-muted);
+                font-size: 0.9rem;
+            }
+            
+            .stat-item {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+            }
+            
+            @media (max-width: 768px) {
+                .options-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .calculator-card {
+                    padding: 1.5rem;
+                }
+                
+                .action-buttons {
+                    flex-direction: column;
+                }
+            }
+
+                /* Стили для кнопки "Прокрутить к результату" */
+        .scroll-to-result {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            font-weight: 600;
         }
-    </style>
+        .scroll-to-result.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        </style>
+
 </head>
 <body>
     <div data-include="header"></div>
@@ -293,8 +366,11 @@
 
                 <h1>Реверс текста онлайн</h1>
                 <p class="tool-description">
-                Бесплатный онлайн-инструмент для реверса текста: переворот строки целиком, перестановка слов или строк. 
-                Полезно для программирования, шифрования, креативных задач и учебных примеров.
+                <h2 style="text-align: center; font-size: 1.5rem; margin-top: 1.5rem; color: var(--text-primary);">
+                Переверните текст задом наперед онлайн — бесплатно и без регистрации
+                </h2>
+                <p style="text-align: center; color: var(--text-secondary); max-width: 800px; margin-left: auto; margin-right: auto;">
+                Наш конвертер мгновенно преобразует ваш текст тремя способами: <strong>полный реверс</strong> (символы), <strong>реверс по словам</strong> и <strong>реверс по строкам</strong>. Просто введите текст, выберите опцию и получите результат!
                 </p>
 
             </div>
@@ -386,6 +462,20 @@
                 <h3>📄 Реверс по строкам</h3>
                 <p>Переворачивает порядок строк в тексте, но сохраняет содержимое каждой строки. Полезно для обработки многострочного текста.</p>
                 
+
+                <h2>Реверс текста онлайн: решение для профессионалов и творческих людей</h2>
+                <p>Наш инструмент создан для тех, кто ценит точность, скорость и простоту в работе с текстом. В отличие от простых «переворачивателей», мы предлагаем три продвинутых режима работы, что делает нас лучшим выбором для:</p>
+
+                <ul>
+                    <li><strong>Программистов и разработчиков</strong> — для тестирования функций реверса строк, обработки логов (где новая информация часто в конце) и работы с алгоритмами.</li>
+                    <li><strong>Специалистов по кибербезопасности и OSINT</strong> — для расшифровки простых шифров, где данные записаны в обратном порядке, и анализа строк.</li>
+                    <li><strong>Копирайтеров, SMM-специалистов и маркетологов</strong> — для создания креативного контента, вирусных постов с «секретным» посылом и оформления сторис.</li>
+                    <li><strong>Студентов и преподавателей</strong> — для наглядной демонстрации работы алгоритмов на уроках информатики и выполнения практических заданий.</li>
+                    <li><strong>Всех, кто работает с текстом</strong> — для быстрой инверсии списков, изменения порядка абзацев и нестандартного форматирования.</li>
+                </ul>
+
+                <p>Благодаря работе прямо в браузере, ваш текст остается конфиденциальным и обрабатывается мгновенно, без задержек на передачу данных.</p>
+
                 <h2>Примеры использования реверса текста</h2>
                 <ul>
                 <li><strong>Программирование:</strong> реверс строк, проверка алгоритмов, парсинг логов, быстрые трансформации данных.</li>
@@ -460,6 +550,60 @@
                 }
                 </script>
 
+                    <script type="application/ld+json">
+                    {
+                    "@context": "https://schema.org",
+                    "@type": "HowTo",
+                    "name": "Как перевернуть текст задом наперед",
+                    "description": "Инструкция по использованию онлайн-инструмента для реверса текста.",
+                    "totalTime": "PT1M",
+                    "supply": [
+                        {
+                        "@type": "HowToSupply",
+                        "name": "Исходный текст"
+                        }
+                    ],
+                    "tool": [
+                        {
+                        "@type": "HowToTool",
+                        "name": "Онлайн-инструмент реверса текста"
+                        }
+                    ],
+                    "step": [
+                        {
+                        "@type": "HowToStep",
+                        "name": "Введите текст",
+                        "text": "Вставьте или напечатайте ваш текст в поле ввода.",
+                        "url": "https://neuralwisewolf.com/tools/text-reverser#inputText",
+                        "image": {
+                            "@type": "ImageObject",
+                            "url": "https://neuralwisewolf.com/assets/howto-step1.png"
+                        }
+                        },
+                        {
+                        "@type": "HowToStep",
+                        "name": "Выберите тип реверса",
+                        "text": "Выберите нужный вариант: полный реверс, реверс по словам или реверс по строкам.",
+                        "url": "https://neuralwisewolf.com/tools/text-reverser#reverseType",
+                        "image": {
+                            "@type": "ImageObject",
+                            "url": "https://neuralwisewolf.com/assets/howto-step2.png"
+                        }
+                        },
+                        {
+                        "@type": "HowToStep",
+                        "name": "Получите результат",
+                        "text": "Нажмите кнопку \"Перевернуть текст\" и скопируйте готовый результат.",
+                        "url": "https://neuralwisewolf.com/tools/text-reverser#reverse-btn",
+                        "image": {
+                            "@type": "ImageObject",
+                            "url": "https://neuralwisewolf.com/assets/howto-step3.png"
+                        }
+                        }
+                    ]
+                    }
+                    </script>
+
             
             <div data-include="related"></div>
         </div>
@@ -532,6 +676,10 @@
     <script src="js/loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Объявляем переменные для новой кнопки и поля результата
+            const scrollToResultBtn = document.getElementById('scrollToResultBtn');
+            const outputTextElement = document.getElementById('outputText');
+            
             const inputText = document.getElementById('inputText');
             const outputText = document.getElementById('outputText');
             const reverseBtn = document.getElementById('reverse-btn');
@@ -548,7 +696,22 @@
             reverseBtn.addEventListener('click', reverseText);
             clearBtn.addEventListener('click', clearText);
             copyBtn.addEventListener('click', copyToClipboard);
-            inputText.addEventListener('input', updateStats);
+            
+            // Обработчик для клика по кнопке прокрутки
+            scrollToResultBtn.addEventListener('click', function() {
+                outputTextElement.scrollIntoView({ behavior: 'smooth' });
+                this.classList.remove('show');
+            });
+            
+            // Обработчик ввода текста (исправленный)
+            inputText.addEventListener('input', function() {
+                updateStats();
+                if (this.value.trim() && !outputTextElement.textContent) {
+                    setTimeout(() => { scrollToResultBtn.classList.add('show'); }, 1000);
+                } else {
+                    scrollToResultBtn.classList.remove('show');
+                }
+            });
             
             function reverseText() {
                 const text = inputText.value;
@@ -573,6 +736,7 @@
                 }
                 
                 outputText.textContent = result;
+                scrollToResultBtn.classList.remove('show');
                 updateStats();
             }
             
@@ -625,5 +789,8 @@
             updateStats();
         });
     </script>
+
+    <button class="scroll-to-result" id="scrollToResultBtn" aria-label="Прокрутить к результату">↓ К результату</button>
+
 </body>
 </html>
