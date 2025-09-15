@@ -414,42 +414,4 @@ function toTarget({sign,intVal,frac}, base, precision, trimZeros, grouping){
 
 }
 
-// Инициируем поиск, когда сайдбар уже вставлен на страницу
-function initSidebarSearch() {
-  const input = document.getElementById('sideSearch');
-  if (!input) return; // сайдбара ещё нет
-
-  const links = Array.from(document.querySelectorAll('#sideGrid .side-link'));
-  const groups = Array.from(document.querySelectorAll('#sideGrid .category-group'));
-
-  const apply = () => {
-    const q = input.value.trim().toLowerCase();
-    links.forEach(a => {
-      const title = a.querySelector('.side-link-title')?.textContent.toLowerCase() || '';
-      a.style.display = title.includes(q) ? '' : 'none';
-    });
-    // скрывать пустые категории
-    groups.forEach(g => {
-      const anyVisible = !!g.querySelector('.side-link[style=""] , .side-link:not([style])');
-      g.style.display = anyVisible || q === '' ? '' : 'none';
-    });
-  };
-
-  input.addEventListener('input', apply);
-  input.addEventListener('keydown', e => { if (e.key === 'Escape') { input.value = ''; apply(); }});
-  apply();
-}
-
-// Ждём, пока include вставит разметку сайдбара
-if (document.getElementById('sideSearch')) {
-  initSidebarSearch();
-} else {
-  const mo = new MutationObserver(() => {
-    if (document.getElementById('sideSearch')) {
-      initSidebarSearch();
-      mo.disconnect();
-    }
-  });
-  mo.observe(document.body, { childList: true, subtree: true });
-}
 
