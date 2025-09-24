@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <script>
+(function () {
+  var isGH = location.hostname.endsWith('github.io');
+  var repo = isGH ? location.pathname.split('/')[1] : '';
+  var href = isGH ? '/' + repo + '/' : '/';
+  var b = document.createElement('base');
+  b.setAttribute('href', href);
+  document.head.prepend(b);
+})();
+</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=103991776', 'ym');
+
+    ym(103991776, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/103991776" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+    <base href="/Neuralwisewolf.com/">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+    <link rel="apple-touch-icon" href="assets/logowolf.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Волчья кнопка дзена - Сделать всё хорошо | Нейронный Волк</title>
+    <meta name="description" content="🐺 Просто нажми кнопку. Волк знает, как сделать всё хорошо. Медитативный инструмент для расслабления и перезагрузки.">
+    <meta name="keywords" content="сделать всё хорошо, кнопка дзена, медитация, расслабление, волк мудрость, нейронный волк, успокоиться">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Волчья кнопка дзена - Сделать всё хорошо">
+    <meta property="og:description" content="Просто нажми кнопку. Волк знает, как сделать всё хорошо.">
+    <meta property="og:image" content="https://neuralwisewolf.com/assets/zen-button-preview.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://neuralwisewolf.com/vse-horosho">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Волчья кнопка дзена - Сделать всё хорошо">
+    <meta name="twitter:description" content="Просто нажми кнопку. Волк знает, как сделать всё хорошо.">
+    <meta name="twitter:image" content="https://neuralwisewolf.com/assets/zen-button-preview.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://neuralwisewolf.com/vse-horosho">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Волчья кнопка дзена",
+        "description": "Медитативный инструмент для расслабления и гармонии",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "RUB"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "Нейронный Волк",
+            "url": "https://neuralwisewolf.com"
+        }
+    }
+    </script>
+
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .zen-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .zen-machine {
+            background: var(--bg-primary);
+            padding: 3rem 2rem;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zen-machine::before {
+            content: '🐺';
+            font-size: 4rem;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            opacity: 0.1;
+            transform: rotate(-20deg);
+        }
+
+        .zen-machine::after {
+            content: '🌙';
+            font-size: 4rem;
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
+        .zen-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .zen-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .zen-button {
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-xl);
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zen-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-2xl);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        .zen-button:active {
+            transform: translateY(1px);
+        }
+
+        .zen-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .zen-button:hover::before {
+            left: 100%;
+        }
+
+        .zen-process {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--border-medium);
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .zen-process.show {
+            display: block;
+            animation: zenFadeIn 1s ease;
+        }
+
+        .zen-message {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            border-left: 4px solid #667eea;
+        }
+
+        .wolf-wisdom {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--bg-dark), #1e293b);
+            color: white;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            position: relative;
+            font-style: italic;
+        }
+
+        .wolf-wisdom::before {
+            content: '🐺 Волчья мудрость:';
+            display: block;
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+            font-style: normal;
+        }
+
+        .breathing-exercise {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: var(--radius-lg);
+            border: 1px solid #90caf9;
+        }
+
+        .breathing-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1565c0;
+        }
+
+        .breathing-steps {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .breath-step {
+            padding: 1rem;
+            background: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .breath-inhale { background: #c8e6c9; color: #2e7d32; }
+        .breath-hold { background: #fff9c4; color: #f57f17; }
+        .breath-exhale { background: #ffcdd2; color: #c62828; }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 3s ease-in-out;
+        }
+
+        @keyframes zenFadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .zen-title {
+                font-size: 2rem;
+            }
+            
+            .zen-button {
+                padding: 1.25rem 2rem;
+                font-size: 1.25rem;
+            }
+            
+            .breathing-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .social-share {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .share-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .share-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tool-header {
+    text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="tool" data-category="fun" data-slug="vse-horosho">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>🌌 Волчья кнопка дзена</h1>
+                <p class="tool-description">Когда всё сложно, просто нажми на кнопку. Волк знает, как сделать всё хорошо.</p>
+            </div>
+
+            <div class="zen-container">
+                <div class="zen-machine">
+                    <div class="zen-title">Нажми на кнопку</div>
+                    <div class="zen-subtitle">
+                        И будет запущен процесс улучшения реальности...<br>
+                        Волчья магия уже работает
+                    </div>
+                    
+                    <button class="zen-button" id="zen-button">
+                        🐾 Сделать всё хорошо
+                    </button>
+
+                    <div class="zen-process" id="zen-process">
+                        <div class="zen-message" id="zen-message">
+                            Всё сделано хорошим. Если кажется, что это не так — продолжайте процедуру.
+                        </div>
+
+                        <div class="breathing-exercise">
+                            <div class="breathing-title">🌬️ Волчье дыхание для гармонии:</div>
+                            <div class="breathing-steps">
+                                <div class="breath-step breath-inhale">Вдох</div>
+                                <div class="breath-step breath-hold">Задержка</div>
+                                <div class="breath-step breath-exhale">Выдох</div>
+                            </div>
+                            <p>Закройте глаза на 30 секунд. Дышите глубоко и медленно.</p>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+
+                        <div class="wolf-wisdom" id="wolf-wisdom">
+                            Иногда нужно просто перестать бороться с течением и позволить реке самой нести тебя к океану. Волки понимают это лучше всех.
+                        </div>
+
+                        <div class="social-share">
+                            <a href="#" class="share-btn" id="share-vk">📤 Поделиться в VK</a>
+                            <a href="#" class="share-btn" id="share-tg">📤 Поделиться в Telegram</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Волчьи советы -->
+                <div class="wolf-tips" style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border-radius: 15px;">
+                    <h3>🐺 Волчьи законы гармонии</h3>
+                    <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                        <div style="padding: 1rem; background: white; border-radius: 10px; border-left: 4px solid #f59e0b;">
+                            <strong>🌕 Принимай лунные циклы</strong>
+                            <p>Как волки воют на луну принимай естественные ритмы жизни. Не сопротивляйся тому, что нельзя изменить.</p>
+                        </div>
+                        <div style="padding: 1rem; background: white; border-radius: 10px; border-left: 4px solid #3b82f6;">
+                            <strong>🐾 Ищи свой след</strong>
+                            <p>У каждого волка свой путь. Не сравнивай свою тропу с чужой, у тебя своя уникальная дорога.</p>
+                        </div>
+                        <div style="padding: 1rem; background: white; border-radius: 10px; border-left: 4px solid #10b981;">
+                            <strong>🌲 Чувствуй лес</strong>
+                            <p>Будь внимателен к знакам вокруг. Ответы часто приходят из тишины и наблюдения.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO контент -->
+                <div class="article" style="margin-top: 3rem; text-align: left;">
+                    <h2>🌌 Почему волчья кнопка дзена работает?</h2>
+                    
+                    <h3>🐺 Мудрость волка</h3>
+                    <p>Волки — существа, которые понимают гармонию природы лучше многих. Они не борются с ветром, а используют его. Не воют против луны, а общаются с ней.</p>
+                    
+                    <h3>🎯 Как работает эта кнопка?</h3>
+                    <p>Это не магия, а психология:</p>
+                    <ul>
+                        <li><strong>Символическое действие</strong> — нажатие кнопки создает ощущение контроля</li>
+                        <li><strong>Медитативный эффект</strong> — пауза и дыхание успокаивают нервную систему</li>
+                        <li><strong>Позитивное перефразирование</strong> — мозг начинает искать подтверждения, что "всё хорошо"</li>
+                    </ul></br>
+
+                    <h3>🌱 Научное обоснование</h3>
+                    <p>Техники осознанности и дыхательные практики, подобные тем что предлагает волк, доказано снижают уровень кортизола и повышают уровень серотонина.</p>
+
+                    <div class="wolf-wisdom" style="margin: 2rem 0;">
+                        "Настоящая сила не в том, чтобы контролировать всё вокруг, а в том, чтобы принимать то, что нельзя изменить, и мудро действовать там, где можно что-то улучшить. Вот что значит быть волком."
+                    </div>
+
+                    <h3>📈 Когда особенно полезно нажать кнопку?</h3>
+                    <div class="beer-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                        <div class="category" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px;">
+                            <h4>😰 Стресс на работе</h4>
+                            <p>Когда дедлайны давят и кажется, что ничего не успеваешь</p>
+                        </div>
+                        <div class="category" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px;">
+                            <h4>🌙 Бессонная ночь</h4>
+                            <p>Когда мысли крутятся в голове и не дают уснуть</p>
+                        </div>
+                        <div class="category" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px;">
+                            <h4>⚡ Принятие решений</h4>
+                            <p>Когда нужно успокоиться и посмотреть на ситуацию ясным взглядом</p>
+                        </div>
+                        <div class="category" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px;">
+                            <h4>❤️ Отношения</h4>
+                            <p>Когда эмоции застилают разум и нужна пауза</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div data-include="related"></div>
+        </div>
+
+        <section id="socials">
+    <h2>🌐 Где нас найти и следить за развитием</h2>
+    <p>Присоединяйся к волчьей стае в соцсетях! Здесь мы делимся новостями, принимаем feedback и строим коммьюнити.</p>
+    
+    <div class="socials-grid">
+        <a href="https://t.me/neural_wise_wolf" class="social-card telegram" target="_blank" rel="noopener">
+            <div class="social-icon">📢</div>
+            <div class="social-info">
+                <h4>Telegram-канал</h4>
+                <p>Главные новости и анонсы. Черные юмор и ауф</p>
+                <span class="social-stat">1K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://t.me/neural_wise_wolf_bot" class="social-card bot" target="_blank" rel="noopener">
+            <div class="social-icon">🤖</div>
+            <div class="social-info">
+                <h4>Нейроклык бот</h4>
+                <p>AI-советчик в Telegram</p>
+                <span class="social-stat">10K+ пользователей</span>
+            </div>
+        </a>
+        
+        <a href="https://instagram.com/neural_wise_wolf" class="social-card instagram" target="_blank" rel="noopener">
+            <div class="social-icon">📷</div>
+            <div class="social-info">
+                <h4>Instagram</h4>
+                <p>Ауф мемы, рилсы. Больше всего контента тут!</p>
+                <span class="social-stat">99K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://youtube.com/@neural_wolf" class="social-card youtube" target="_blank" rel="noopener">
+            <div class="social-icon">🎥</div>
+            <div class="social-info">
+                <h4>YouTube</h4>
+                <p>Обзоры и туториалы</p>
+                <span class="social-stat">1K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://tiktok.com/@neural_wolf" class="social-card tiktok" target="_blank" rel="noopener">
+            <div class="social-icon">🎵</div>
+            <div class="social-info">
+                <h4>TikTok</h4>
+                <p>Короткие видео и лайфхаки. А так же стримы тут бывают</p>
+                <span class="social-stat">10K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://t.me/neural_wolf" class="social-card support" target="_blank" rel="noopener">
+            <div class="social-icon">💬</div>
+            <div class="social-info">
+                <h4>Поддержка</h4>
+                <p>Вопросы и предложения</p>
+                <span class="social-stat">Ответ в течение 24ч</span>
+            </div>
+        </a>
+    </div>
+        </section>
+
+    </main>
+
+    <div data-include="footer"></div>
+    
+    <script src="js/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const zenButton = document.getElementById('zen-button');
+            const zenProcess = document.getElementById('zen-process');
+            const zenMessage = document.getElementById('zen-message');
+            const wolfWisdom = document.getElementById('wolf-wisdom');
+            const progressFill = document.getElementById('progress-fill');
+            const shareVk = document.getElementById('share-vk');
+            const shareTg = document.getElementById('share-tg');
+
+            // Волчьи мудрости
+            const wolfWisdoms = [
+                "Иногда нужно просто перестать бороться с течением и позволить реке самой нести тебя к океану. Волки понимают это лучше всех.",
+                "Сильный волк не тот, кто никогда не падает, а тот, кто каждый раз находит силы подняться и продолжить путь.",
+                "В тишине леса слышны самые важные ответы. Научись слушать тишину внутри себя.",
+                "Луна всегда восходит, даже если облака скрывают её от глаз. Так и свет внутри тебя — он всегда есть, даже когда кажется, что темно.",
+                "Волчья стая сильна не количеством, а единством. Помни о своих близких — вместе легче идти через любые бури.",
+                "Каждый след на снегу — это история. Каждый твой шаг — это часть твоего уникального пути. Цени его.",
+                "Иногда чтобы найти решение, нужно просто отойти подальше и посмотреть на картину целиком. Как волк с высокой скалы.",
+                "Сила в спокойствии. Настоящий воин знает, когда нужно действовать, а когда — просто наблюдать и ждать.",
+                "Зимой волк экономит силы для весны. Умей отдыхать, чтобы было больше энергии для важных дел.",
+                "Волк никогда не бежит быстрее, чем может. Сохраняй свой ритм — это залог долгого и успешного пути."
+            ];
+
+            // Сообщения процесса
+            const processMessages = [
+                "Всё сделано хорошим. Если кажется, что это не так — продолжайте процедуру.",
+                "Реальность улучшена. Волчья магия работает незаметно, но эффективно.",
+                "Процесс гармонизации завершён. Вселенная благодарна за ваше спокойствие.",
+                "Калибровка восприятия выполнена. Теперь вы видите мир через призму волчьей мудрости.",
+                "Энергетический баланс восстановлен. Продолжайте дышать и чувствовать гармонию."
+            ];
+
+            zenButton.addEventListener('click', function() {
+                // Анимация кнопки
+                zenButton.classList.add('pulse');
+                setTimeout(() => {
+                    zenButton.classList.remove('pulse');
+                }, 2000);
+
+                // Случайные сообщения
+                const randomMessage = processMessages[Math.floor(Math.random() * processMessages.length)];
+                const randomWisdom = wolfWisdoms[Math.floor(Math.random() * wolfWisdoms.length)];
+
+                // Обновление контента
+                zenMessage.textContent = randomMessage;
+                wolfWisdom.textContent = randomWisdom;
+
+                // Показываем процесс
+                zenProcess.classList.add('show');
+
+                // Анимация прогресса
+                setTimeout(() => {
+                    progressFill.style.width = '100%';
+                }, 100);
+
+                // Обновляем ссылки для分享
+                updateShareLinks(randomWisdom);
+            });
+
+            function updateShareLinks(wisdom) {
+                const shareText = `🐺 Волчья мудрость: "${wisdom}"\n\nНажми на кнопку дзена — сделай всё хорошо! 🌌\n\n`;
+                const shareUrl = encodeURIComponent(window.location.href);
+
+                shareVk.href = `https://vk.com/share.php?url=${shareUrl}&title=${encodeURIComponent(shareText)}`;
+                shareTg.href = `https://t.me/share/url?url=${shareUrl}&text=${encodeURIComponent(shareText)}`;
+            }
+        });
+    </script>
+</body>
+</html>
