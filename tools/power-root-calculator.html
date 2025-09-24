@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 
-     <script>
+    <script>
 (function () {
   var isGH = location.hostname.endsWith('github.io');
   var repo = isGH ? location.pathname.split('/')[1] : '';
@@ -33,11 +33,289 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор корней и степеней | Neural Wise Wolf</title>
-    <meta name="description" content="Универсальный калькулятор для возведения в степень и извлечения корней любой степени. Идеально подходит для школьников, студентов и инженеров.">
+    <title>Онлайн калькулятор корней n-й степени и возведения в степень — быстрый расчет</title>
+    <meta name="description" content="Бесплатный калькулятор для вычисления степеней и корней онлайн. Возведите число в степень или извлеките корень любой сложности (квадратный, кубический, n-й). Точный результат для любых чисел. Простой интерфейс, работает на всех устройствах.">
+    
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Calculator",
+    "name": "Калькулятор корней и степеней",
+    "description": "Онлайн калькулятор для возведения в степень и извлечения корней n-й степени.",
+    "url": "https://neuralwisewolf.com/tools/power-root-calculator",
+    "operatingSystem": "Все",
+    "applicationCategory": "Утилита",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RUB"
+    }
+    }
+    </script>
+
     <base href="/Neuralwisewolf.com/">
     <link rel="stylesheet" href="assets/styles.css">
     <style>
+
+        /* Улучшенные стили для блока */
+        .enhanced-features {
+            margin: 3rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-primary);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .feature-content p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Стили для карточки статьи */
+        .article-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            margin: 2rem 0;
+        }
+
+        .article-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .article-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .article-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .content-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .block-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .block-content h3 {
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .block-content p {
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        /* Стили для руководства по калькулятору */
+        .calculator-guide {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .guide-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .guide-header h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Стили для таблиц */
+        .tables-section {
+            margin-top: 3rem;
+        }
+
+        .tables-section h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .table-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .table-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .table-badge {
+            background: var(--accent-primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .number-item {
+            padding: 0.5rem;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-card {
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+            
+            .guide-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-block {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .number-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+        }
+
         .tool-header {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -185,34 +463,127 @@
                     </div>
                 </div>
 
-                <div class="tool-features">
-                    <div class="feature">
-                        <h4>🔢 3-в-1 Калькулятор</h4>
-                        <p>Возведение в степень, извлечение корня и нахождение показателя степени в одном месте.</p>
-                    </div>
-                    <div class="feature">
-                        <h4>✅ Точность</h4>
-                        <p>Высокая точность расчетов для любых чисел, включая дробные.</p>
-                    </div>
-                    <div class="feature">
-                        <h4>🎓 Полезно для учебы</h4>
-                        <p>Отличный помощник для школьников и студентов при решении сложных задач по математике.</p>
-                    </div>
-                </div>
+                <div class="tool-features enhanced-features">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🔢</div>
+            <div class="feature-content">
+                <h4>3-в-1 Калькулятор</h4>
+                <p>Возведение в степень, извлечение корня и нахождение показателя степени в одном месте.</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">✅</div>
+            <div class="feature-content">
+                <h4>Точность расчетов</h4>
+                <p>Высокая точность для любых чисел, включая дробные и отрицательные значения.</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎓</div>
+            <div class="feature-content">
+                <h4>Полезно для учебы</h4>
+                <p>Отличный помощник для школьников и студентов при решении сложных задач.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <div class="article">
-                    <h2>Степени и корни: основы математики</h2>
-                    <p><strong>Степень числа</strong> — это сокращенная запись многократного умножения числа на само себя. Например, 2<sup>3</sup> (два в степени три) означает 2 × 2 × 2 = 8.</p>
-                    <p><strong>Корень числа</strong> — это обратная операция. Например, квадратный корень из 9 — это 3, потому что 3 × 3 = 9. Корень n-й степени из числа x — это число y, которое при возведении в степень n дает x.</p>
-                    
-                    <h3>💡 Как работает наш калькулятор?</h3>
-                    <p>Наш инструмент использует эти обратные зависимости для вычислений. В зависимости от того, какие два поля вы заполните, он выполнит нужную операцию.</p>
-                    <ul>
-                        <li>**Если введены Число (x) и Степень (y):** Расчет: x<sup>y</sup></li>
-                        <li>**Если введены Число (x) и Результат (y):** Расчет: log<sub>x</sub>(y)</li>
-                        <li>**Если введены Степень (y) и Результат (z):** Расчет: y-корень из z</li>
-                    </ul>
+<div class="article-card">
+    <div class="article-header">
+        <h2>📚 Степени и корни: основы математики</h2>
+        <p class="article-subtitle">Полное руководство по работе со степенями и корнями</p>
+    </div>
+    
+    <div class="content-grid">
+        <div class="content-block">
+            <div class="block-icon">⚡</div>
+            <div class="block-content">
+                <h3>Что такое степень числа?</h3>
+                <p><strong>Степень числа</strong> — это сокращенная запись многократного умножения числа на само себя. Например, 2<sup>3</sup> (два в степени три) означает 2 × 2 × 2 = 8.</p>
+            </div>
+        </div>
+        
+        <div class="content-block">
+            <div class="block-icon">🔍</div>
+            <div class="block-content">
+                <h3>Что такое корень числа?</h3>
+                <p><strong>Корень числа</strong> — это обратная операция. Например, квадратный корень из 9 — это 3, потому что 3 × 3 = 9. Корень n-й степени из числа x — это число y, которое при возведении в степень n дает x.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="calculator-guide">
+        <div class="guide-header">
+            <h3>💡 Как работает наш калькулятор?</h3>
+            <p>Наш инструмент использует обратные зависимости для вычислений. Заполните любые два поля:</p>
+        </div>
+        
+        <div class="guide-steps">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Число (x) + Степень (y)</h4>
+                    <p>Расчет: <strong>x<sup>y</sup></strong><br>Возведение в степень</p>
                 </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Число (x) + Результат (z)</h4>
+                    <p>Расчет: <strong><sup>y</sup>√x = z</strong><br>Находится показатель степени</p>
+                </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Степень (y) + Результат (z)</h4>
+                    <p>Расчет: <strong><sup>y</sup>√z = x</strong><br>Извлекается корень степени</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tables-section">
+        <h3>📊 Полезные таблицы для запоминания</h3>
+        <div class="tables-grid">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>Квадраты чисел (1-10)</h4>
+                    <span class="table-badge">Основные</span>
+                </div>
+                <div class="number-grid">
+                    <div class="number-item">1<sup>2</sup> = 1</div>
+                    <div class="number-item">2<sup>2</sup> = 4</div>
+                    <div class="number-item">3<sup>2</sup> = 9</div>
+                    <div class="number-item">4<sup>2</sup> = 16</div>
+                    <div class="number-item">5<sup>2</sup> = 25</div>
+                    <div class="number-item">6<sup>2</sup> = 36</div>
+                    <div class="number-item">7<sup>2</sup> = 49</div>
+                    <div class="number-item">8<sup>2</sup> = 64</div>
+                    <div class="number-item">9<sup>2</sup> = 81</div>
+                    <div class="number-item">10<sup>2</sup> = 100</div>
+                </div>
+            </div>
+            
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>Кубы чисел (1-5)</h4>
+                    <span class="table-badge">Продвинутые</span>
+                </div>
+                <div class="number-grid">
+                    <div class="number-item">1<sup>3</sup> = 1</div>
+                    <div class="number-item">2<sup>3</sup> = 8</div>
+                    <div class="number-item">3<sup>3</sup> = 27</div>
+                    <div class="number-item">4<sup>3</sup> = 64</div>
+                    <div class="number-item">5<sup>3</sup> = 125</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                 
                 <div data-include="related"></div>
             </div>
@@ -295,47 +666,93 @@
             const resultValue = document.getElementById('resultValue');
 
             calculateBtn.addEventListener('click', calculate);
-            [numberInput, powerInput, rootInput].forEach(input => {
-                input.addEventListener('input', calculate);
-            });
-
-            function calculate() {
-                const number = parseFloat(numberInput.value);
-                const power = parseFloat(powerInput.value);
-                const root = parseFloat(rootInput.value);
-
-                let result = NaN;
-                let labelText = 'Результат:';
-
-                if (!isNaN(number) && !isNaN(power)) {
-                    // Возведение в степень
-                    result = Math.pow(number, power);
-                    labelText = `(${number}) в степени ${power} =`;
-                } else if (!isNaN(number) && !isNaN(root)) {
-                    // Извлечение корня
-                    result = Math.pow(number, 1 / root);
-                    labelText = `${root}-й корень из ${number} =`;
-                } else if (!isNaN(power) && !isNaN(root)) {
-                    // Нахождение основания
-                    result = Math.pow(root, power);
-                    labelText = `Основание для степени ${power} =`;
-                } else {
-                    resultContainer.style.display = 'none';
-                    return;
-                }
-
-                if (isNaN(result)) {
-                    resultValue.textContent = 'Ошибка';
-                    resultValue.style.color = 'var(--accent-danger)';
-                } else {
-                    resultValue.textContent = result.toFixed(6);
-                    resultValue.style.color = 'var(--accent-primary)';
-                }
-
-                resultLabel.textContent = labelText;
-                resultContainer.style.display = 'block';
-            }
+    [numberInput, powerInput, rootInput].forEach(input => {
+        input.addEventListener('input', function() {
+            // При вводе в любое поле, прячем результат, чтобы не смущать пользователя
+            resultContainer.style.display = 'none';
+            // Можно добавить дебаунс (задержку) для автоматического расчета, если поля заполнены
+            clearTimeout(window.calcTimeout);
+            window.calcTimeout = setTimeout(calculate, 500);
         });
+    });
+
+    function calculate() {
+        const number = parseFloat(numberInput.value);
+        const power = parseFloat(powerInput.value);
+        const root = parseFloat(rootInput.value);
+
+        // Подсчитываем, сколько полей заполнено
+        const filledInputs = [number, power, root].filter(value => !isNaN(value)).length;
+
+        let result = NaN;
+        let labelText = 'Результат:';
+        let errorMessage = '';
+
+        // Валидация: нужно заполнить ровно 2 поля
+        if (filledInputs !== 2) {
+            resultContainer.style.display = 'none';
+            return;
+        }
+
+        // Логика расчета
+        if (!isNaN(number) && !isNaN(power)) {
+            // Возведение в степень
+            result = Math.pow(number, power);
+            labelText = `${number}<sup>${power}</sup> =`;
+        } else if (!isNaN(number) && !isNaN(root)) {
+            // Извлечение корня: проверка на отрицательное число и четную степень
+            if (number < 0 && root % 2 === 0) {
+                errorMessage = 'Ошибка: нельзя извлечь корень четной степени из отрицательного числа.';
+            } else {
+                result = Math.pow(number, 1 / root);
+                labelText = `Корень ${root}-й степени из ${number} =`;
+            }
+        } else if (!isNaN(power) && !isNaN(root)) {
+            // Нахождение основания: x^y = z => x = z^(1/y)
+            if (root < 0 && power % 2 === 0) {
+                errorMessage = 'Ошибка: нельзя найти четный корень из отрицательного числа.';
+            } else {
+                result = Math.pow(root, 1 / power);
+                labelText = `Число, которое в степени ${power} дает ${root} =`;
+            }
+        }
+
+        // Обработка ошибок и вывод результата
+        if (errorMessage) {
+            resultValue.innerHTML = errorMessage;
+            resultValue.style.color = 'var(--accent-danger)';
+            resultLabel.innerHTML = 'Ошибка расчета';
+        } else if (isNaN(result)) {
+            resultValue.textContent = 'Неверный ввод';
+            resultValue.style.color = 'var(--accent-danger)';
+            resultLabel.textContent = 'Ошибка';
+        } else {
+            // Форматируем результат: если целое число - показываем без десятичных знаков
+            if (Number.isInteger(result)) {
+                resultValue.textContent = result;
+            } else {
+                resultValue.textContent = result.toFixed(8).replace(/\.?0+$/, ''); // Обрезаем нули в конце
+            }
+            resultValue.style.color = 'var(--accent-primary)';
+            resultLabel.innerHTML = labelText; // Используем innerHTML для поддержки <sup>
+        }
+
+        resultContainer.style.display = 'block';
+    }
+
+    // Добавляем кнопку "Копировать" динамически (опционально, улучшение UX)
+    const copyButton = document.createElement('button');
+    copyButton.textContent = 'Копировать';
+    copyButton.className = 'btn btn-secondary btn-sm'; // Нужно добавить стиль .btn-sm в CSS
+    copyButton.style.marginTop = '1rem';
+    copyButton.addEventListener('click', function() {
+        navigator.clipboard.writeText(resultValue.textContent).then(() => {
+            copyButton.textContent = 'Скопировано!';
+            setTimeout(() => { copyButton.textContent = 'Копировать'; }, 2000);
+        });
+    });
+    resultContainer.appendChild(copyButton);
+});
     </script>
 </body>
 </html>
