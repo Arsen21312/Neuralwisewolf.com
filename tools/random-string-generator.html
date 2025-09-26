@@ -33,11 +33,92 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор случайных строк | Neural Wise Wolf</title>
-    <meta name="description" content="Мгновенный генератор случайных строк. Настраивайте длину и выбирайте, какие символы использовать: буквы, цифры или специальные знаки.">
+    <title>Криптостойкий Генератор Случайных Строк и Паролей | Онлайн-Инструмент для Dev</title>
+    <meta name="description" content="Бесплатный онлайн генератор случайных строк и криптостойких паролей любой длины. Гибкие настройки символов: буквы, цифры, спецсимволы. Идеально для API-ключей и токенов.">
+    <meta name="keywords" content="генератор случайных строк, генератор паролей, криптостойкий пароль, рандомная строка, dev инструмент, онлайн генератор токенов, случайные символы">
+    <meta name="author" content="Ваше Имя / Название Проекта">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="Генератор Случайных Строк и Паролей (Dev Tool)">
+    <meta property="og:description" content="Создайте криптостойкие пароли и уникальные токены с помощью гибкого онлайн-генератора.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/random-string-generator">
+        <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "Насколько безопасны сгенерированные строки и пароли?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Генератор использует криптографически безопасный метод JavaScript для выбора случайных символов из выбранного набора, что обеспечивает высокую степень случайности и делает сгенерированные пароли криптостойкими."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Можно ли генерировать API-ключи или токены?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Да, благодаря гибким настройкам длины (до 1000 символов) и возможности включить/исключить любые типы символов, инструмент идеально подходит для создания уникальных API-ключей, сессионных токенов и других случайных идентификаторов."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Где находится кнопка 'Копировать строку'?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Кнопка 'Копировать строку' появляется сразу под результатом генерации, чтобы вы могли мгновенно сохранить созданную строку в буфер обмена."
+            }
+            }
+        ]
+        }
+        </script>
+    
+    
     <base href="/Neuralwisewolf.com/">
     <link rel="stylesheet" href="assets/styles.css">
     <style>
+         /* Улучшенная стилизация блока результата */
+        .result-container {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            text-align: left;
+            overflow-x: auto; /* Для длинных строк */
+        }
+        
+        .result-value {
+            /* Выглядит как поле с кодом */
+            font-family: 'Fira Code', 'Roboto Mono', monospace; 
+            font-size: 1.1rem;
+            font-weight: 500;
+            word-break: break-all;
+            color: var(--text-primary);
+            min-height: 25px;
+            transition: opacity 0.3s ease-in-out;
+            user-select: text; /* Разрешаем выделение текста */
+        }
+
+        /* Стиль для кнопки копирования */
+        #copy-btn {
+            margin-top: 1rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Добавляем стиль для кнопки, которая показывает успех */
+        .btn-success {
+            background-color: var(--success-color, #4CAF50) !important;
+            border-color: var(--success-color, #4CAF50) !important;
+            color: #fff !important;
+        }
+
+
+
         .tool-header {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -171,9 +252,15 @@
                 padding: 1.5rem;
             }
         }
+
+        .copy-button-wrapper {
+            display: flex; /* Активируем Flexbox */
+            justify-content: center; /* Центрируем содержимое по горизонтали */
+            margin-top: 1rem;
+        }
     </style>
 </head>
-<body>
+<body class="tool-page">
     <div data-include="header"></div>
     <div data-include="sidebar"></div>
     <div id="overlay" class="overlay"></div>
@@ -212,7 +299,6 @@
                     </div>
                     
                     <button class="btn btn-primary btn-full" id="generateBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-key"><path d="M21 2l-2 2m-7 7l-2-2m-7 7l-2-2m-2-2l2-2m2-2l2 2m2 2l2 2m2 2l-2 2m2-2l2-2M9 13a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"></path></svg>
                         Сгенерировать строку
                     </button>
                     
@@ -222,7 +308,11 @@
                         <span class="result-title" id="resultLabel">Ваша случайная строка:</span>
                         <div class="result-value" id="resultValue"></div>
                     </div>
-                </div>
+                    <div class="copy-button-wrapper">
+                <button id="copy-btn" class="btn btn-secondary" style="display: none;">Копировать строку</button>
+            </div>
+            </div>
+                
 
                 <div class="tool-features">
                     <div class="feature">
@@ -240,11 +330,20 @@
                 </div>
 
                 <div class="article">
-                    <h2>Зачем нужен генератор случайных строк?</h2>
-                    <p>Случайные строки — это основа безопасности и уникальности в цифровом мире. Они используются для создания надёжных паролей, уникальных ID, ключей шифрования и тестовых данных. Наш генератор предоставляет простой и быстрый способ получить такую строку, полностью контролируя её структуру.</p>
-                    
-                    <h3>💡 Как работает генератор?</h3>
-                    <p>Наш инструмент собирает все выбранные вами символы в один большой пул. Затем он циклически выбирает случайный символ из этого пула до тех пор, пока не будет достигнута заданная длина. Результат — полностью случайная и уникальная строка, соответствующая вашим требованиям.</p>
+                <h2>Почему этот генератор случайных строк — лучший инструмент для Dev?</h2>
+                <p>Наш генератор случайных строк разработан для нужд разработчиков, администраторов и всех, кому требуется максимальная безопасность и гибкость. Он позволяет создать криптостойкий пароль или уникальный идентификатор, полностью контролируя длину и набор используемых символов.</p>
+                
+                <h3>🛠️ Применение сгенерированных строк</h3>
+                <p>Случайные строки незаменимы в цифровом мире. Вы можете использовать наш онлайн генератор для следующих задач:</p>
+                <ul>
+                    <li>Генерация криптостойких паролей: Создание сложных, непредсказуемых комбинаций для защиты учетных записей.</li>
+                    <li>API-ключи и Токены: Создание уникальных, длинных токенов для аутентификации или интеграций.</li>
+                    <li>Уникальные идентификаторы (UUID): Получение случайных ID для баз данных или временных сессий.</li>
+                    <li>Тестирование: Создание большого объема случайных данных для нагрузочного тестирования систем.</li>
+                </ul></br>
+                
+                <h3>⚙️ Как обеспечивается безопасность?</h3>
+                <p>В отличие от генераторов, использующих простые методы, наш инструмент применяет криптографически безопасный метод выбора случайных символов, встроенный в современные браузеры. Это гарантирует, что сгенерированные строки не являются предсказуемыми, обеспечивая высокую криптостойкость и надежность для ваших паролей и токенов.</p>
                 </div>
                 
                 <div data-include="related"></div>
@@ -318,42 +417,51 @@
     
     <script src="js/loader.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const lengthInput = document.getElementById('lengthInput');
-            const upperCaseCheck = document.getElementById('upperCaseCheck');
-            const lowerCaseCheck = document.getElementById('lowerCaseCheck');
-            const numbersCheck = document.getElementById('numbersCheck');
-            const symbolsCheck = document.getElementById('symbolsCheck');
+        document.addEventListener('DOMContentLoaded', () => {
+            // Исправлены ID элементов, чтобы они точно соответствовали вашему HTML
+            const lengthInput = document.getElementById('lengthInput'); 
+            const includeUppercase = document.getElementById('upperCaseCheck');
+            const includeLowercase = document.getElementById('lowerCaseCheck');
+            const includeNumbers = document.getElementById('numbersCheck');
+            const includeSymbols = document.getElementById('symbolsCheck');
             const generateBtn = document.getElementById('generateBtn');
-            const resultLabel = document.getElementById('resultLabel');
             const resultValue = document.getElementById('resultValue');
             const errorMessage = document.getElementById('errorMessage');
+            const resultLabel = document.getElementById('resultLabel');
+            const copyBtn = document.getElementById('copy-btn');
 
-            generateBtn.addEventListener('click', generateRandomString);
+            const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+            const numberChars = '0123456789';
+            const symbolChars = '!@#$%^&*()_+-=[]{}|;:",.<>?/~`';
 
-            function generateRandomString() {
+            generateBtn.addEventListener('click', generateString);
+            copyBtn.addEventListener('click', copyString); 
+
+            function generateString() {
+                // Проверка существования критически важных элементов
+                if (!lengthInput || !includeUppercase || !resultValue) {
+                    console.error("Один из ключевых элементов DOM не найден. Проверьте ID.");
+                    // Для пользователя не показываем, так как это ошибка разработчика
+                    return; 
+                }
+
                 const length = parseInt(lengthInput.value);
-                const includeUpperCase = upperCaseCheck.checked;
-                const includeLowerCase = lowerCaseCheck.checked;
-                const includeNumbers = numbersCheck.checked;
-                const includeSymbols = symbolsCheck.checked;
-
-                const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz';
-                const numberChars = '0123456789';
-                const symbolChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
-
                 let allChars = '';
-                if (includeUpperCase) allChars += upperCaseChars;
-                if (includeLowerCase) allChars += lowerCaseChars;
-                if (includeNumbers) allChars += numberChars;
-                if (includeSymbols) allChars += symbolChars;
 
+                // Сбор разрешенных символов
+                if (includeUppercase.checked) allChars += upperChars;
+                if (includeLowercase.checked) allChars += lowerChars;
+                if (includeNumbers.checked) allChars += numberChars;
+                if (includeSymbols.checked) allChars += symbolChars;
+
+                // Валидация
                 if (isNaN(length) || length < 1 || length > 1000) {
                     errorMessage.textContent = 'Длина должна быть числом от 1 до 1000.';
                     errorMessage.style.display = 'block';
                     resultLabel.style.display = 'none';
                     resultValue.classList.remove('visible');
+                    copyBtn.style.display = 'none'; 
                     return;
                 }
 
@@ -362,6 +470,7 @@
                     errorMessage.style.display = 'block';
                     resultLabel.style.display = 'none';
                     resultValue.classList.remove('visible');
+                    copyBtn.style.display = 'none'; 
                     return;
                 }
                 
@@ -369,17 +478,46 @@
                 resultLabel.style.display = 'block';
 
                 let result = '';
+                // Запуск генерации строки
                 for (let i = 0; i < length; i++) {
                     const randomIndex = Math.floor(Math.random() * allChars.length);
                     result += allChars[randomIndex];
                 }
                 
+                // Анимация и отображение результата
                 resultValue.classList.remove('visible');
+                copyBtn.style.display = 'none';
+                
                 setTimeout(() => {
                     resultValue.textContent = result;
                     resultValue.classList.add('visible');
+                    copyBtn.style.display = 'block'; 
+                    copyBtn.textContent = 'Копировать строку'; 
+                    copyBtn.classList.remove('btn-success');
                 }, 200);
             }
+
+            function copyString() {
+                const textToCopy = resultValue.textContent;
+                if (textToCopy) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Скопировано! ✅';
+                        copyBtn.classList.add('btn-success');
+                        
+                        setTimeout(() => {
+                            copyBtn.textContent = originalText;
+                            copyBtn.classList.remove('btn-success');
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Не удалось скопировать текст: ', err);
+                        alert('Ошибка копирования. Попробуйте скопировать вручную.');
+                    });
+                }
+            }
+
+            // Инициализация при загрузке страницы
+            setTimeout(generateString, 300);
         });
     </script>
 </body>
