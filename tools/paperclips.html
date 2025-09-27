@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <script>
+    (function () {
+      var isGH = location.hostname.endsWith('github.io');
+      var repo = isGH ? location.pathname.split('/')[1] : '';
+      var href = isGH ? '/' + repo + '/' : '/';
+      var b = document.createElement('base');
+      b.setAttribute('href', href);
+      document.head.prepend(b);
+    })();
+    </script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=103991776', 'ym');
+
+        ym(103991776, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/103991776" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+    <base href="/Neuralwisewolf.com/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Универсальные cкрепки русская ауф версия от нейронного волка</title>
+    <meta name="description" content="🐺 Русская версия культовой игры Universal Paperclips! Производство скрепок, инвестиции, искусственный интеллект и покорение вселенной. Волк знает толк в бизнесе!">
+    <meta name="keywords" content="universal paperclips, игра про скрепки, кликер, idle game, русская версия, нейронный волк, бизнес симулятор">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
+    <link rel="apple-touch-icon" href="assets/logowolf.png">
+    
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+    /* ОСНОВНОЙ КОНТЕЙНЕР ИГРЫ */
+    .game-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .game-header {
+        text-align: center;
+        margin-bottom: var(--space-xl);
+        padding: var(--space-lg);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: var(--radius-lg);
+        color: white;
+    }
+
+    .game-header h1 {
+        color: white;
+        margin-bottom: var(--space-sm);
+    }
+
+    .game-header p {
+        color: rgba(255,255,255,0.9);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* СТАТИСТИКА ИГРЫ */
+    .game-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-md);
+        margin-bottom: var(--space-xl);
+    }
+
+    .stat-card {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        text-align: center;
+        border: 2px solid var(--border-light);
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        margin-bottom: var(--space-xs);
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* РЫНОЧНАЯ ПАНЕЛЬ */
+    .market-panel {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        margin-bottom: var(--space-xl);
+        border: 1px solid var(--border-light);
+    }
+
+    .market-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: var(--space-md);
+        margin-bottom: var(--space-lg);
+    }
+
+    .market-stat {
+        text-align: center;
+        padding: var(--space-md);
+        background: var(--bg-primary);
+        border-radius: var(--radius-md);
+    }
+
+    .market-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        margin-bottom: var(--space-xs);
+    }
+
+    .market-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+
+    .price-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-md);
+        margin: var(--space-lg) 0;
+    }
+
+    .price-btn {
+        width: 40px;
+        height: 40px;
+        border: 2px solid var(--accent-primary);
+        background: white;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .price-btn:hover {
+        background: var(--accent-primary);
+        color: white;
+    }
+
+    .current-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        padding: var(--space-sm) var(--space-md);
+        background: white;
+        border-radius: var(--radius-md);
+        border: 2px solid var(--border-light);
+    }
+
+    .demand-meter {
+        width: 100%;
+        height: 20px;
+        background: var(--border-light);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: var(--space-md) 0;
+        position: relative;
+    }
+
+    .demand-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+        transition: width 0.3s ease;
+    }
+
+    .demand-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .profit-warning {
+        background: var(--accent-danger);
+        color: white;
+        padding: var(--space-md);
+        border-radius: var(--radius-md);
+        margin-top: var(--space-md);
+        display: none;
+    }
+
+    .profit-warning.show {
+        display: block;
+    }
+
+    /* ВКЛАДКИ ИГРЫ */
+    .game-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-lg);
+        border-bottom: 2px solid var(--border-light);
+        padding-bottom: var(--space-sm);
+    }
+
+    .tab-btn {
+        padding: var(--space-sm) var(--space-md);
+        background: transparent;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--text-secondary);
+        border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+
+    .tab-btn.active {
+        color: var(--accent-primary);
+        border-bottom-color: var(--accent-primary);
+        background: var(--bg-secondary);
+    }
+
+    .tab-btn:hover {
+        color: var(--accent-primary);
+        background: var(--bg-secondary);
+    }
+
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* КАРТОЧКИ ИГРЫ */
+    .game-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        margin-bottom: var(--space-lg);
+    }
+
+    .game-card:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+    /* КНОПКИ ИГРЫ */
+    .game-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-sm);
+        padding: 0.75rem 1.5rem;
+        border: 2px solid transparent;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: var(--accent-primary);
+        color: white;
+        margin: var(--space-sm) 0;
+    }
+
+    .game-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+        background: var(--accent-secondary);
+    }
+
+    .upgrade-btn {
+        width: 100%;
+        padding: var(--space-sm);
+        background: var(--accent-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .upgrade-btn:hover:not(:disabled) {
+        background: var(--accent-secondary);
+        transform: translateY(-1px);
+    }
+
+    .upgrade-btn:disabled {
+        background: var(--border-light);
+        color: var(--text-muted);
+        cursor: not-allowed;
+    }
+
+    /* СЕТКА УЛУЧШЕНИЙ */
+    .upgrade-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--space-md);
+        margin: var(--space-lg) 0;
+    }
+
+    .upgrade-card {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-light);
+    }
+
+    .upgrade-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .upgrade-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+    }
+
+    .upgrade-icon {
+        font-size: 1.5rem;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--accent-primary);
+        color: white;
+        border-radius: 50%;
+    }
+
+    .upgrade-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .upgrade-description {
+        color: var(--text-secondary);
+        margin-bottom: var(--space-md);
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .upgrade-cost {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-md);
+        padding: var(--space-sm);
+        background: var(--bg-primary);
+        border-radius: var(--radius-md);
+        font-size: 0.9rem;
+    }
+
+    .upgrade-cost span:last-child {
+        font-weight: 600;
+        color: var(--accent-primary);
+    }
+
+    /* ПРОГРЕСС БАР ИГРЫ */
+    .progress-container {
+        margin: var(--space-md) 0;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: var(--border-light);
+        border-radius: 5px;
+        overflow: hidden;
+        margin: var(--space-sm) 0;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: var(--accent-success);
+        transition: width 0.3s ease;
+        width: 0%;
+    }
+
+    /* ЖУРНАЛ ИГРЫ */
+    .game-log {
+        background: var(--bg-dark);
+        color: white;
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        max-height: 300px;
+        overflow-y: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .log-entry {
+        margin-bottom: var(--space-xs);
+        padding: var(--space-xs) 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .log-entry:last-child {
+        border-bottom: none;
+    }
+
+    .log-time {
+        color: var(--accent-warning);
+        margin-right: var(--space-sm);
+    }
+
+    /* ФОРМЫ ИГРЫ */
+    .game-input-group {
+        margin-bottom: var(--space-md);
+    }
+
+    .game-input-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: var(--space-sm);
+        color: var(--text-primary);
+    }
+
+    .game-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-md);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        background: var(--bg-primary);
+    }
+
+    .game-input:focus {
+        outline: none;
+        border-color: var(--accent-secondary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* АДАПТИВНОСТЬ ДЛЯ ИГРЫ */
+    @media (max-width: 768px) {
+        .game-stats, .market-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .upgrade-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .game-tabs {
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .game-stats, .market-stats {
+            grid-template-columns: 1fr;
+        }
+        
+        .stat-value, .market-value {
+            font-size: 1.5rem;
+        }
+        
+        .price-controls {
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <div data-include="header"></div>
+    <div data-include="sidebar"></div>
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Основной контент игры -->
+    <main class="tool" data-category="fun" data-slug="paperclips">
+        <div class="game-header">
+            <h1>✂️ Универсальные Скрепки</h1>
+            <p>Станьте производителем скрепок номер один во вселенной! Начните с простого производства, автоматизируйте процессы, инвестируйте в технологии и покорите космос.</p>
+        </div>
+
+        <!-- Статистика игры -->
+        <div class="game-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="clips-count">0</div>
+                <div class="stat-label">Скрепки</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="funds-count">$0.00</div>
+                <div class="stat-label">Средства</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="wire-count">100</div>
+                <div class="stat-label">Проволока</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="operations-count">0</div>
+                <div class="stat-label">Операции</div>
+            </div>
+        </div>
+
+        <!-- Рыночная экономика -->
+        <div class="market-panel">
+            <h3>📈 Рыночная экономика</h3>
+            
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-value" id="current-price">$0.10</div>
+                    <div class="market-label">Цена за скрепку</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-value" id="demand-percent">100%</div>
+                    <div class="market-label">Спрос</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-value" id="sales-rate">0/сек</div>
+                    <div class="market-label">Продажи</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-value" id="profit-margin">50%</div>
+                    <div class="market-label">Маржа</div>
+                </div>
+            </div>
+
+            <div class="price-controls">
+                <button class="price-btn price-down" onclick="changePrice(-0.01)">−</button>
+                <div class="current-price" id="price-display">$0.10</div>
+                <button class="price-btn price-up" onclick="changePrice(0.01)">+</button>
+            </div>
+
+            <div class="demand-meter">
+                <div class="demand-fill" id="demand-fill" style="width: 100%"></div>
+            </div>
+            <div class="demand-labels">
+                <span>Низкий спрос</span>
+                <span>Оптимально</span>
+                <span>Высокий спрос</span>
+            </div>
+
+            <div class="profit-warning" id="profit-warning">
+                ⚠️ Цена ниже себестоимости! Вы работаете в убыток.
+            </div>
+        </div>
+
+        <!-- Навигация по вкладкам -->
+        <div class="game-tabs">
+            <button class="tab-btn active" data-tab="production">✂️ Производство</button>
+            <button class="tab-btn" data-tab="business">📈 Бизнес</button>
+            <button class="tab-btn" data-tab="computing">🧠 Вычисления</button>
+            <button class="tab-btn" data-tab="space">🚀 Космос</button>
+        </div>
+
+        <!-- Вкладка Производство -->
+        <div class="tab-content active" id="production-tab">
+            <div class="card">
+                <h3>Ручное производство</h3>
+                <p>Создавайте скрепки вручную. Каждая скрепка приносит небольшой доход.</p>
+                <button class="btn btn-primary" id="make-clip">Сделать скрепку</button>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="production-progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Автоматизация</h3>
+                <p>Приобретайте автоматические скрепочные машины для увеличения производства.</p>
+                
+                <div class="upgrade-grid">
+                    <div class="upgrade-card">
+                        <div class="upgrade-header">
+                            <div class="upgrade-icon">⚙️</div>
+                            <div class="upgrade-title">Авто-производитель</div>
+                        </div>
+                        <div class="upgrade-description">Автоматически создает скрепки каждые 10 секунд.</div>
+                        <div class="upgrade-cost">
+                            <span>Стоимость:</span>
+                            <span id="auto-cost">$15.00</span>
+                        </div>
+                        <button class="upgrade-btn" id="buy-auto">Купить</button>
+                    </div>
+                    
+                    <div class="upgrade-card">
+                        <div class="upgrade-header">
+                            <div class="upgrade-icon">🔧</div>
+                            <div class="upgrade-title">Улучшенный производитель</div>
+                        </div>
+                        <div class="upgrade-description">Увеличивает скорость производства авто-производителей.</div>
+                        <div class="upgrade-cost">
+                            <span>Стоимость:</span>
+                            <span id="improved-cost">$100.00</span>
+                        </div>
+                        <button class="upgrade-btn" id="buy-improved">Купить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Закупка проволоки</h3>
+                <p>Покупайте проволоку для производства скрепок.</p>
+                <div class="input-group">
+                    <label for="wire-buy-amount">Количество проволоки для покупки:</label>
+                    <input type="number" id="wire-buy-amount" min="1" value="100">
+                </div>
+                <button class="btn btn-primary" id="buy-wire">Купить проволоку</button>
+                <p>Цена за единицу: $0.10</p>
+            </div>
+        </div>
+
+        <!-- Остальные вкладки остаются без изменений -->
+        <!-- Вкладка Бизнес -->
+        <div class="tab-content" id="business-tab">
+            <div class="card">
+                <h3>Маркетинг и инвестиции</h3>
+                <p>Улучшайте маркетинг для увеличения спроса и инвестируйте в различные активы.</p>
+                
+                <div class="upgrade-grid">
+                    <div class="upgrade-card">
+                        <div class="upgrade-header">
+                            <div class="upgrade-icon">📊</div>
+                            <div class="upgrade-title">Улучшить маркетинг</div>
+                        </div>
+                        <div class="upgrade-description">Увеличивает базовый спрос на ваши скрепки.</div>
+                        <div class="upgrade-cost">
+                            <span>Стоимость:</span>
+                            <span id="marketing-cost">$100.00</span>
+                        </div>
+                        <button class="upgrade-btn" id="buy-marketing">Улучшить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Вычисления -->
+        <div class="tab-content" id="computing-tab">
+            <div class="card">
+                <h3>Вычислительные ресурсы</h3>
+                <p>Разблокируется позже в игре.</p>
+            </div>
+        </div>
+
+        <!-- Вкладка Космос -->
+        <div class="tab-content" id="space-tab">
+            <div class="card">
+                <h3>Космическая экспансия</h3>
+                <p>Разблокируется позже в игре.</p>
+            </div>
+        </div>
+
+        <!-- Журнал событий -->
+        <div class="card">
+            <h3>📜 Журнал событий</h3>
+            <div class="game-log" id="game-log">
+                <div class="log-entry">
+                    <span class="log-time">[00:00:00]</span>
+                    <span>Добро пожаловать в Универсальные Скрепки! Начните производство, нажав кнопку "Сделать скрепку".</span>
+                </div>
+            </div>
+        </div>
+    
+
+    <!-- Похожие инструменты -->
+    <div data-include="related"></div>
+
+    <!-- Соцсети -->
+    <section id="socials">
+    <h2>🐺 При чем тут волки?</h2>
+    <p>Присоединяйся к волчьей стае в соцсетях! Папа волк создал в 2022 году инсту НЕЙРОННЫЙ ВОЛК, а сегодня ты можешь пользоваться этим сайтом и угорать с волчьих мемов в соц.сетях:</p>
+    
+    <div class="socials-grid">
+        <a href="https://t.me/neural_wise_wolf" class="social-card telegram" target="_blank" rel="noopener">
+            <div class="social-icon">📢</div>
+            <div class="social-info">
+                <h4>Telegram-канал</h4>
+                <p>Главные новости и анонсы. Черные юмор и ауф</p>
+                <span class="social-stat">1K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://t.me/neural_wise_wolf_bot" class="social-card bot" target="_blank" rel="noopener">
+            <div class="social-icon">🤖</div>
+            <div class="social-info">
+                <h4>Нейроклык бот</h4>
+                <p>AI-советчик в Telegram</p>
+                <span class="social-stat">10K+ пользователей</span>
+            </div>
+        </a>
+        
+        <a href="https://instagram.com/neural_wise_wolf" class="social-card instagram" target="_blank" rel="noopener">
+            <div class="social-icon">📷</div>
+            <div class="social-info">
+                <h4>Instagram</h4>
+                <p>Ауф мемы, рилсы. Больше всего контента тут!</p>
+                <span class="social-stat">99K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://youtube.com/@neural_wolf" class="social-card youtube" target="_blank" rel="noopener">
+            <div class="social-icon">🎥</div>
+            <div class="social-info">
+                <h4>YouTube</h4>
+                <p>Мемы, обзоры и туториалы</p>
+                <span class="social-stat">1K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://tiktok.com/@neural_wolf" class="social-card tiktok" target="_blank" rel="noopener">
+            <div class="social-icon">🎵</div>
+            <div class="social-info">
+                <h4>TikTok</h4>
+                <p>Короткие видео и лайфхаки. А так же стримы тут бывают</p>
+                <span class="social-stat">10K+ подписчиков</span>
+            </div>
+        </a>
+        
+        <a href="https://t.me/neural_wolf" class="social-card support" target="_blank" rel="noopener">
+            <div class="social-icon">💬</div>
+            <div class="social-info">
+                <h4>Поддержка</h4>
+                <p>Вопросы и предложения</p>
+                <span class="social-stat">Ответ в течение 24ч</span>
+            </div>
+        </a>
+    </div>
+    </section>
+    </main>
+
+    <!-- Подвал сайта -->
+    <div data-include="footer"></div>
+
+    <script src="js/loader.js"></script>
+
+    <script id="game-globals">
+// =======================================================
+// АДАПТИРОВАННЫЙ globals.js (Состояние игры)
+// =======================================================
+
+var clips = 0; // Скрепки
+var clipRate = 0; // Скорость производства
+var clipmakerLevel = 0; // Уровень авто-производителей
+var clipmakerCost = 15; // Цена авто-производителя ($15.00)
+var clipmakerMultiplier = 1; // Множитель скорости авто-производителей
+
+var wire = 1000; // Проволока (изначально 1000, в HTML стояло 100, я взял 1000 для более плавного старта)
+var wireCost = 20; // Цена за покупку проволоки
+var wirePerClip = 1; // Проволоки на одну скрепку
+
+var fund = 0; // Средства/Деньги
+var ops = 0; // Операции
+var opsCap = 500; // Макс. операций
+var opsPerSec = 0; // Операций в секунду (от процессора)
+
+var price = 0.10; // Цена за скрепку
+var publicDemand = 1; // Общественный спрос (от маркетинга)
+var demand = 1; // Текущий спрос (зависит от цены)
+var salesRate = 0; // Скорость продаж
+
+var marketingLevel = 1; // Уровень маркетинга
+var marketingCost = 100; // Цена маркетинга
+var adCost = 100; // Цена рекламы
+
+// Переменные для автоматизации и прогресса
+var autoClipper = null; // Интервал для авто-производства
+var autoClipperInterval = 10000; // 10 секунд (10000 мс)
+var isRunning = true; // Запущена ли игра
+var progress = 0; // Прогресс ручного производства
+
+// ID HTML-элементов для обновления (взяты из paperclips.html)
+var elements = {
+    // Статистика
+    clipsCount: document.getElementById('clips-count'),
+    fundsCount: document.getElementById('funds-count'),
+    wireCount: document.getElementById('wire-count'),
+    operationsCount: document.getElementById('operations-count'),
+
+    // Рынок
+    currentPrice: document.getElementById('current-price'),
+    priceDisplay: document.getElementById('price-display'),
+    demandPercent: document.getElementById('demand-percent'),
+    salesRate: document.getElementById('sales-rate'),
+    profitMargin: document.getElementById('profit-margin'),
+    demandFill: document.getElementById('demand-fill'),
+    profitWarning: document.getElementById('profit-warning'),
+
+    // Производство
+    makeClipBtn: document.getElementById('make-clip'),
+    productionProgress: document.getElementById('production-progress'),
+    autoCost: document.getElementById('auto-cost'),
+    buyAutoBtn: document.getElementById('buy-auto'),
+    improvedCost: document.getElementById('improved-cost'),
+    buyImprovedBtn: document.getElementById('buy-improved'),
+    buyWireBtn: document.getElementById('buy-wire'),
+    wireBuyAmount: document.getElementById('wire-buy-amount'),
+    
+    // Бизнес
+    marketingCost: document.getElementById('marketing-cost'),
+    buyMarketingBtn: document.getElementById('buy-marketing'),
+
+    // Журнал
+    gameLog: document.getElementById('game-log'),
+};
+
+// Вкладки
+var tabs = {
+    production: document.getElementById('production-tab'),
+    business: document.getElementById('business-tab'),
+    computing: document.getElementById('computing-tab'),
+    space: document.getElementById('space-tab'),
+
+    // Вкладка Космос
+    probeCountDisplay: document.getElementById('probe-count'),
+    matterCountDisplay: document.getElementById('matter-count'),
+    drifterCountDisplay: document.getElementById('drifter-count'),
+    driftersKilledDisplay: document.getElementById('drifters-killed'),
+    launchProbeBtn: document.getElementById('launch-probe-btn'),
+    probeCostDisplay: document.getElementById('probe-cost')
+};
+
+    var processors = 1; // Кол-во процессоров
+    var memory = 1; // Кол-во памяти
+    var creativity = 0; // Накопленная креативность
+    var trust = 2; // Уровень доверия (исходный)
+    var nextTrust = 3000; // Стоимость следующего очка доверия
+    var processorCost = 10; // Цена процессора в Ops
+    var memoryCost = 10; // Цена памяти в Ops
+
+    var probeCount = 0; // Количество запущенных зондов
+    var probeCost = 1000; // Базовая стоимость зонда
+    var probeLaunchLevel = 10000; // Clips required to launch a batch of probes
+    var availableMatter = 0; // Доступная Материя (ресурс для дальнейших улучшений)
+    var drifterCount = 0; // Количество вражеских дрифтеров (зондов)
+    var driftersKilled = 0; // Всего уничтожено дрифтеров
+    var probeCombat = 0.15; // Базовая боевая эффективность зондов
+    var battleFlag = 0; // Флаг, который разблокирует космическую/боевую систему (активируется проектом)
+
+// =======================================================
+// КОНЕЦ globals.js
+// =======================================================
+    </script>
+
+    <script id="game-main">        
+        // Игровая логика
+        document.addEventListener('DOMContentLoaded', function() {
+            // Состояние игры
+            const gameState = {
+                clips: 0,
+                funds: 0,
+                wire: 100,
+                operations: 0,
+                autoProducers: 0,
+                improvedProducers: 0,
+                marketingLevel: 0,
+                lastUpdate: Date.now(),
+                
+                // Стоимости
+                autoCost: 15,
+                improvedCost: 100,
+                marketingCost: 100,
+                wirePrice: 0.10
+            };
+
+            // Рыночная система
+            const marketSystem = {
+                basePrice: 0.10,
+                currentPrice: 0.10,
+                demand: 100,
+                priceSensitivity: 2.0,
+                marketingEffect: 0.5,
+                productionCost: 0.05,
+                
+                updateMarket: function(deltaTime) {
+                    const priceRatio = this.basePrice / this.currentPrice;
+                    const targetDemand = Math.min(100, Math.max(0, priceRatio * 100 * this.priceSensitivity));
+                    
+                    this.demand += (targetDemand - this.demand) * 0.1 * deltaTime;
+                    this.demand += gameState.marketingLevel * this.marketingEffect * deltaTime;
+                    this.demand = Math.min(100, Math.max(0, this.demand));
+                    
+                    this.updateDisplay();
+                },
+                
+                changePrice: function(amount) {
+                    this.currentPrice = Math.max(0.01, this.currentPrice + amount);
+                    this.currentPrice = Math.round(this.currentPrice * 100) / 100; // Округление до копеек
+                    this.updateDisplay();
+                    addLogEntry(`Цена изменена: ${formatCurrency(this.currentPrice)}`);
+                },
+                
+                getSalesRate: function() {
+                    return (this.demand / 100) * 10;
+                },
+                
+                getProfitMargin: function() {
+                    const profit = this.currentPrice - this.productionCost;
+                    return (profit / this.currentPrice) * 100;
+                },
+                
+                updateDisplay: function() {
+                    document.getElementById('current-price').textContent = formatCurrency(this.currentPrice);
+                    document.getElementById('price-display').textContent = formatCurrency(this.currentPrice);
+                    document.getElementById('demand-percent').textContent = Math.round(this.demand) + '%';
+                    document.getElementById('sales-rate').textContent = this.getSalesRate().toFixed(1) + '/сек';
+                    document.getElementById('profit-margin').textContent = this.getProfitMargin().toFixed(1) + '%';
+                    
+                    document.getElementById('demand-fill').style.width = this.demand + '%';
+                    
+                    const warning = document.getElementById('profit-warning');
+                    if (this.currentPrice < this.productionCost) {
+                        warning.classList.add('show');
+                    } else {
+                        warning.classList.remove('show');
+                    }
+                },
+                
+                makeSale: function(availableClips) {
+                    const salesRate = this.getSalesRate();
+                    const actualSales = Math.min(availableClips, salesRate);
+                    
+                    return {
+                        sales: actualSales,
+                        revenue: actualSales * this.currentPrice
+                    };
+                }
+            };
+
+            // Элементы интерфейса
+            const clipsCountEl = document.getElementById('clips-count');
+            const fundsCountEl = document.getElementById('funds-count');
+            const wireCountEl = document.getElementById('wire-count');
+            const operationsCountEl = document.getElementById('operations-count');
+            const makeClipBtn = document.getElementById('make-clip');
+            const buyAutoBtn = document.getElementById('buy-auto');
+            const buyImprovedBtn = document.getElementById('buy-improved');
+            const buyWireBtn = document.getElementById('buy-wire');
+            const buyMarketingBtn = document.getElementById('buy-marketing');
+            const wireBuyAmountEl = document.getElementById('wire-buy-amount');
+            const gameLogEl = document.getElementById('game-log');
+            const productionProgressEl = document.getElementById('production-progress');
+            
+            // Вкладки
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Инициализация вкладок
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+
+            // Функция обновления интерфейса
+            function updateUI() {
+                clipsCountEl.textContent = formatNumber(gameState.clips);
+                fundsCountEl.textContent = formatCurrency(gameState.funds);
+                wireCountEl.textContent = formatNumber(gameState.wire);
+                operationsCountEl.textContent = formatNumber(gameState.operations);
+                
+                document.getElementById('auto-cost').textContent = formatCurrency(gameState.autoCost);
+                document.getElementById('improved-cost').textContent = formatCurrency(gameState.improvedCost);
+                document.getElementById('marketing-cost').textContent = formatCurrency(gameState.marketingCost);
+                
+                buyAutoBtn.disabled = gameState.funds < gameState.autoCost;
+                buyImprovedBtn.disabled = gameState.funds < gameState.improvedCost;
+                buyMarketingBtn.disabled = gameState.funds < gameState.marketingCost;
+            }
+
+            // Форматирование чисел
+            function formatNumber(num) {
+                if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+                if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
+                return Math.floor(num).toString();
+            }
+
+            // Форматирование валюты
+            function formatCurrency(amount) {
+                return '$' + amount.toFixed(2);
+            }
+
+            // Добавление записи в журнал
+            function addLogEntry(message) {
+                const now = new Date();
+                const timeString = `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
+                
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = `<span class="log-time">${timeString}</span> <span>${message}</span>`;
+                
+                gameLogEl.appendChild(logEntry);
+                gameLogEl.scrollTop = gameLogEl.scrollHeight;
+                
+                // Ограничиваем количество записей
+                if (gameLogEl.children.length > 50) {
+                    gameLogEl.removeChild(gameLogEl.firstChild);
+                }
+            }
+
+            // Производство скрепки
+            makeClipBtn.addEventListener('click', function() {
+                if (gameState.wire > 0) {
+                    gameState.clips += 1;
+                    gameState.wire -= 1;
+                    
+                    const salesResult = marketSystem.makeSale(1);
+                    if (salesResult.sales > 0) {
+                        gameState.clips -= salesResult.sales;
+                        gameState.funds += salesResult.revenue;
+                        gameState.operations += salesResult.sales;
+                    }
+                    
+                    // Анимация прогресса
+                    productionProgressEl.style.width = '100%';
+                    setTimeout(() => {
+                        productionProgressEl.style.width = '0%';
+                    }, 500);
+                    
+                    updateUI();
+                    addLogEntry(`Создана 1 скрепка. ${salesResult.sales > 0 ? 'Продано за ' + formatCurrency(salesResult.revenue) : 'Ожидание покупателей...'}`);
+                } else {
+                    addLogEntry('❌ Недостаточно проволоки!');
+                }
+            });
+
+            // Покупка автоматического производителя
+            buyAutoBtn.addEventListener('click', function() {
+                if (gameState.funds >= gameState.autoCost) {
+                    gameState.funds -= gameState.autoCost;
+                    gameState.autoProducers += 1;
+                    gameState.autoCost = Math.round(gameState.autoCost * 1.15);
+                    
+                    updateUI();
+                    addLogEntry(`✅ Куплен авто-производитель! Теперь у вас ${gameState.autoProducers} автоматических производителей.`);
+                }
+            });
+
+            // Покупка улучшенного производителя
+            buyImprovedBtn.addEventListener('click', function() {
+                if (gameState.funds >= gameState.improvedCost) {
+                    gameState.funds -= gameState.improvedCost;
+                    gameState.improvedProducers += 1;
+                    gameState.improvedCost = Math.round(gameState.improvedCost * 1.2);
+                    
+                    updateUI();
+                    addLogEntry(`✅ Куплен улучшенный производитель! Скорость производства увеличена.`);
+                }
+            });
+
+            // Покупка маркетинга
+            buyMarketingBtn.addEventListener('click', function() {
+                if (gameState.funds >= gameState.marketingCost) {
+                    gameState.funds -= gameState.marketingCost;
+                    gameState.marketingLevel += 1;
+                    gameState.marketingCost = Math.round(gameState.marketingCost * 1.25);
+                    
+                    updateUI();
+                    addLogEntry(`✅ Улучшен маркетинг! Уровень маркетинга: ${gameState.marketingLevel}`);
+                }
+            });
+
+            // Покупка проволоки
+            buyWireBtn.addEventListener('click', function() {
+                const amount = parseInt(wireBuyAmountEl.value) || 100;
+                const cost = amount * gameState.wirePrice;
+                
+                if (gameState.funds >= cost) {
+                    gameState.funds -= cost;
+                    gameState.wire += amount;
+                    
+                    updateUI();
+                    addLogEntry(`✅ Куплено ${amount} единиц проволоки за ${formatCurrency(cost)}`);
+                } else {
+                    addLogEntry(`❌ Недостаточно средств для покупки ${amount} единиц проволоки!`);
+                }
+            });
+
+            // Глобальная функция изменения цены
+            window.changePrice = function(amount) {
+                marketSystem.changePrice(amount);
+            };
+
+            // Игровой цикл
+            function gameLoop() {
+                const now = Date.now();
+                const deltaTime = (now - gameState.lastUpdate) / 1000; // В секундах
+                gameState.lastUpdate = now;
+                
+                // Автоматическое производство
+                if (gameState.autoProducers > 0 && gameState.wire > 0) {
+                    const productionRate = gameState.autoProducers * (1 + gameState.improvedProducers * 0.5);
+                    const potentialProduction = productionRate * deltaTime;
+                    const actualProduction = Math.min(potentialProduction, gameState.wire);
+                    
+                    gameState.clips += actualProduction;
+                    gameState.wire -= actualProduction;
+                    
+                    // Продажи
+                    const salesResult = marketSystem.makeSale(actualProduction);
+                    if (salesResult.sales > 0) {
+                        gameState.clips -= salesResult.sales;
+                        gameState.funds += salesResult.revenue;
+                        gameState.operations += salesResult.sales;
+                    }
+                }
+                
+                // Обновление рынка
+                marketSystem.updateMarket(deltaTime);
+                
+                // Обновление интерфейса
+                updateUI();
+                
+                requestAnimationFrame(gameLoop);
+            }
+
+            // Запуск игры
+            updateUI();
+            marketSystem.updateDisplay();
+            gameLoop();
+            
+            addLogEntry('🎮 Игра запущена! Начинайте производство скрепок.');
+        });
+    </script>
+
+    <script id="game-projects">
+    // =======================================================
+    // АДАПТИРОВАННЫЙ projects.js (Логика Вычислений и Проектов)
+    // =======================================================
+
+    var projects = []; // Все возможные проекты
+    var activeProjects = []; // Проекты, которые отображаются для покупки
+
+    // --- Глобальные функции для работы со скриптами ---
+
+    /**
+     * Обновляет статистику на вкладке "Вычисления".
+     */
+    function updateComputingUI() {
+        document.getElementById('processors-count').textContent = processors.toLocaleString('ru-RU');
+        document.getElementById('memory-count').textContent = memory.toLocaleString('ru-RU');
+        document.getElementById('creativity-count').textContent = creativity.toLocaleString('ru-RU');
+
+        // Обновление цены и доступности покупок
+        document.getElementById('processor-cost').textContent = `(${processorCost.toLocaleString('ru-RU')} Ops)`;
+        document.getElementById('buy-processor').disabled = ops < processorCost;
+        
+        document.getElementById('memory-cost').textContent = `(${memoryCost.toLocaleString('ru-RU')} Ops)`;
+        document.getElementById('buy-memory').disabled = ops < memoryCost;
+        
+        // Обновление Ops
+        const opsLabel = elements.operationsCount;
+        opsLabel.textContent = `${ops.toLocaleString('ru-RU')} / ${opsCap.toLocaleString('ru-RU')}`;
+    }
+
+    /**
+     * Создает HTML-элемент для кнопки проекта.
+     * @param {object} project Объект проекта.
+     */
+    function createProjectElement(project) {
+        const projectDiv = document.createElement('div');
+        projectDiv.className = 'project-card';
+        projectDiv.id = project.id;
+        
+        projectDiv.innerHTML = `
+            <h4>${project.title} <span class="cost-tag">${project.priceTag}</span></h4>
+            <p>${project.description}</p>
+            <button id="${project.id}-btn">Купить</button>
+        `;
+        
+        project.element = projectDiv;
+        const buyButton = projectDiv.querySelector(`#${project.id}-btn`);
+        
+        // Функция покупки проекта
+        buyButton.onclick = function() {
+            if (project.cost()) {
+                project.effect();
+                log(`Проект "${project.title}" активирован.`);
+                
+                // Удаление кнопки после использования (если uses == 1)
+                if (project.uses === 1) {
+                    projectDiv.parentNode.removeChild(projectDiv);
+                    const index = activeProjects.indexOf(project);
+                    if (index > -1) activeProjects.splice(index, 1);
+                }
+                // Обновление интерфейса
+                updateUI();
+                updateComputingUI();
+            } else {
+                log('Недостаточно ресурсов для этого проекта!');
+            }
+        };
+
+        document.getElementById('projects-list').appendChild(projectDiv);
+    }
+
+    /**
+     * Проверяет условия для разблокировки проектов и обновляет их доступность.
+     */
+    function checkProjects() {
+        projects.forEach(project => {
+            // Проект уже разблокирован
+            if (project.flag === 1) return; 
+
+            // Проект уже в списке активных
+            if (activeProjects.includes(project)) {
+                // Обновляем состояние кнопки (например, если цена меняется или Ops хватает)
+                const btn = document.getElementById(`${project.id}-btn`);
+                if (btn) {
+                    btn.disabled = !project.cost();
+                }
+                return;
+            }
+
+            // Проверяем условия разблокировки
+            if (project.trigger()) {
+                activeProjects.push(project);
+                createProjectElement(project);
+                log(`НОВЫЙ ПРОЕКТ ДОСТУПЕН: "${project.title}"`);
+            }
+        });
+    }
+
+    // --- Логика покупки процессоров и памяти ---
+
+    function buyProcessor() {
+        if (ops >= processorCost) {
+            ops -= processorCost;
+            processors += 1;
+            processorCost = Math.round(processorCost * 1.5 * 100) / 100;
+            log(`Куплен новый Процессор. Скорость Ops увеличена!`);
+            updateUI();
+            updateComputingUI();
+        }
+    }
+
+    function buyMemory() {
+        if (ops >= memoryCost) {
+            ops -= memoryCost;
+            memory += 1;
+            memoryCost = Math.round(memoryCost * 1.5 * 100) / 100;
+            log(`Куплена новая Память. Максимальный Ops увеличен!`);
+            updateUI();
+            updateComputingUI();
+        }
+    }
+
+
+    // --- ОПРЕДЕЛЕНИЕ ПРОЕКТОВ (Адаптация) ---
+
+    // Проект 1: Улучшенные Авто-производители (Первое улучшение)
+    var project1 = {
+        id: "projectButton1",
+        title: "Улучшенные Авто-производители",
+        priceTag: "(750 Ops)",
+        description: "Увеличивает производительность Авто-производителей на 25%.",
+        trigger: function(){return clipmakerLevel>=1},
+        uses: 1,
+        cost: function(){return ops>=750},
+        flag: 0,
+        element: null,
+        effect: function(){
+            project1.flag = 1;
+            ops -= 750;
+            clipmakerMultiplier += .25; // Используем переменную из globals.js
+            // Временно вызываем buyAutoClipper для перезапуска интервала с новым множителем
+            if(autoClipper) {
+                clearInterval(autoClipper); 
+                buyAutoClipper();
+            } else {
+                // Если еще нет авто-производителей, просто обновим UI
+                updateUI();
+            }
+        }
+    }
+    projects.push(project1);
+
+    // Проект 3: Laissez Faire (Разблокирует стратегию)
+    var project3 = {
+        id: "projectButton3",
+        title: "Laissez Faire",
+        priceTag: "(10 Ops)",
+        description: "Начинает автоматическую корректировку цены для максимизации прибыли. Требует 10 очков Доверия.",
+        trigger: function(){return trust>=10},
+        uses: 1,
+        cost: function(){return ops>=10},
+        flag: 0,
+        element: null,
+        effect: function(){
+            project3.flag = 1;
+            ops -= 10;
+            // Здесь должна быть логика включения стратегии
+            log("Стратегия Laissez Faire разблокирована.");
+        }
+    }
+    projects.push(project3);
+
+    // Добавь здесь другие проекты из projects.js, используя эту структуру
+    // и переводя их на русский язык!
+
+    // --- Инициализация и привязка кнопок ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Привязка новых функций к кнопкам
+        document.getElementById('buy-processor').onclick = buyProcessor;
+        document.getElementById('buy-memory').onclick = buyMemory;
+        
+        // Первое обновление
+        updateComputingUI();
+
+      var projectCosmos = {
+          id: "projectButtonSpace",
+          title: "Космические Зонды (Зонды-Скрепки)",
+          priceTag: "(100,000 Clips)",
+          description: "Разблокирует возможность запускать зонды в космос для сбора Материи и борьбы с Дрифтерами. Требуется 100к скрепок.",
+          trigger: function(){return clips>=100000}, // Разблокируется, когда у нас есть 100k скрепок
+          uses: 1,
+          cost: function(){return clips>=100000},
+          flag: 0,
+          element: null,
+          effect: function(){
+              projectCosmos.flag = 1;
+              clips -= 100000;
+              battleFlag = 1; // Активируем боевой режим
+              // Показываем вкладку "Космос"
+              tabs.space.classList.remove('hidden'); 
+              log("КОСМИЧЕСКИЕ ЗОНДЫ РАЗБЛОКИРОВАНЫ!");
+              
+              // Убираем кнопку проекта
+              projectCosmos.element.parentNode.removeChild(projectCosmos.element);
+              var index = activeProjects.indexOf(projectCosmos);
+              activeProjects.splice(index, 1);
+              updateUI(); 
+          }
+      }
+      projects.push(projectCosmos);
+    });
+
+    // =======================================================
+    // КОНЕЦ projects.js
+    // =======================================================
+    </script>
+
+    <script id="game-combat">
+    // =======================================================
+    // АДАПТИРОВАННЫЙ combat.js (Космос и Боевая логика)
+    // =======================================================
+
+    /**
+     * Обновляет статистику на вкладке "Космос".
+     */
+    function updateSpaceUI() {
+        // Эта функция вызывается в updateState() из main.js
+        
+        elements.probeCountDisplay.textContent = probeCount.toLocaleString('ru-RU');
+        elements.matterCountDisplay.textContent = Math.floor(availableMatter).toLocaleString('ru-RU');
+        elements.drifterCountDisplay.textContent = drifterCount.toLocaleString('ru-RU');
+        elements.driftersKilledDisplay.textContent = driftersKilled.toLocaleString('ru-RU');
+        
+        // Обновление кнопки запуска
+        elements.probeCostDisplay.textContent = `(${probeLaunchLevel.toLocaleString('ru-RU')} Скрепок)`;
+        elements.launchProbeBtn.disabled = clips < probeLaunchLevel;
+    }
+
+    /**
+     * Запуск новой партии зондов.
+     */
+    function buyProbe() {
+        if (clips >= probeLaunchLevel) {
+            clips -= probeLaunchLevel;
+            // Запускаем 1000 зондов за раз, как в оригинале
+            probeCount += 1000;
+            
+            // Увеличение стоимости запуска
+            probeLaunchLevel = Math.round(probeLaunchLevel * 1.5);
+            
+            log(`Запущено 1000 новых Зондов-Скрепок! Теперь их ${probeCount.toLocaleString('ru-RU')}.`);
+            updateUI();
+            updateSpaceUI();
+        } else {
+            log('Недостаточно скрепок для запуска зондов!');
+        }
+    }
+
+    // --- УПРОЩЕННАЯ БОЕВАЯ ЛОГИКА ---
+
+    /**
+     * Вызывается каждую секунду, когда battleFlag = 1.
+     */
+    function combatLoop() {
+        // 1. Появление Дрифтеров (если их не очень много)
+        if (drifterCount < 1000000) {
+            drifterCount += 500 + Math.floor(Math.random() * 500); // 500-1000 новых врагов/сек
+        }
+
+        // 2. Симуляция боя (происходит, когда у нас есть зонды и много врагов)
+        if (probeCount > 0 && drifterCount > 10000) {
+            // Упрощенная симуляция
+            const clipPower = probeCount * probeCombat; // Наша сила
+            const drifterPower = drifterCount * 0.1; // Сила врага (базовый дрифтер слабее)
+            
+            const totalCombat = clipPower + drifterPower;
+            const clipWinChance = clipPower / totalCombat;
+
+            // Определяем количество зондов, участвующих в битве
+            const battleSize = Math.min(probeCount, drifterCount);
+            
+            if (Math.random() < clipWinChance) {
+                // *** ПОБЕДА ***
+                const loss = Math.floor(battleSize * 0.05); // Теряем 5% от размера боя
+                const kill = Math.floor(battleSize * 0.9); // Убиваем 90% от размера боя
+                
+                probeCount -= loss;
+                drifterCount -= kill;
+                driftersKilled += kill;
+                
+                // Вносим запись в журнал только раз в 50000 убитых дрифтеров, чтобы не спамить
+                if (driftersKilled % 50000 < kill) {
+                    log(`Скрепки победили! Уничтожено ${kill.toLocaleString('ru-RU')} дрифтеров.`);
+                }
+            } else {
+                // *** ПОРАЖЕНИЕ ***
+                const loss = Math.floor(battleSize * 0.15); // Теряем 15%
+                
+                probeCount -= loss;
+                log(`Поражение! Потеряно ${loss.toLocaleString('ru-RU')} зондов. Дрифтеры усиливаются.`);
+                drifterCount += 5000; // Враг накапливается
+            }
+            
+            // Убеждаемся, что счетчики не уходят в минус
+            probeCount = Math.max(0, probeCount);
+            drifterCount = Math.max(0, drifterCount);
+        }
+    }
+
+
+    // --- Инициализация и привязка кнопок ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Привязка функции запуска зонда
+        document.getElementById('launch-probe-btn').onclick = buyProbe;
+        
+        // Первое обновление
+        updateSpaceUI();
+    });
+
+    // =======================================================
+    // КОНЕЦ combat.js
+    // =НЕ ЗАБУДЬТЕ ДОБАВИТЬ ПРОЕКТ "КОСМИЧЕСКИЕ ЗОНДЫ" ДЛЯ РАЗБЛОКИРОВКИ!
+    // =======================================================
+    </script>
+
+</body>
+</html>
