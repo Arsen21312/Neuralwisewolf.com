@@ -1,483 +1,465 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://neuralwisewolf.com/</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/about.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/pivo.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/vse-horosho.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/chisla.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/summa-propisyu.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/percentage-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/fraction-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/decimal-to-fraction.html</loc>
-        <lastmod>2025-09-02</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://neuralwisewolf.com/tools/equation-solver.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/equation-solver.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/prime-number-checker.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/currency-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/length-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/weight-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/temperature-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/time-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/volume-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/area-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/speed-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/pressure-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/energy-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/text-reverser.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/whitespace-cleaner.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/unit-circle-visualizer.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/morse-code-translator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/lorem-ipsum-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/md5-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/password-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/json-formatter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/url-encoder-decoder.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/base64-encoder-decoder.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/dns-lookup.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/ip-location-finder.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/ip-address-lookup.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/user-agent-parser.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/random-number-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/coin-flip.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/dice-roller.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/random-word-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/random-quote-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/would-you-rather.html</loc>
-        <lastmod>2025-09-02</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://neuralwisewolf.com/tools/random-quote-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/random-item-picker.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/mortgage-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/bmi-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/tip-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/calorie-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/loan-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-
     <url>
         <loc>https://neuralwisewolf.com/tools/discount-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/inflation-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/investment-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/age-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/zodiac-finder.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/love-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/truth-or-dare-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/coin-collection-tracker.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
-        <url>
+    <url>
         <loc>https://neuralwisewolf.com/tools/anagram-finder.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/ascii-art-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/average-median-mode.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/barcode-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/bmr-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/case-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/color-picker.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/css-minifier.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/density-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/determinant-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/factorial-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/frequency-converter.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/gradient-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/hash-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/hronomer.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/maze-generator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/html-minifier.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/ideal-weight-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/tools/interest-calculator.html</loc>
-        <lastmod>2025-09-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://neuralwisewolf.com/ads.html</loc>
-        <lastmod>2025-11-02</lastmod>
+        <lastmod>2025-11-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://neuralwisewolf.com/tools/paperclips.html</loc>
+        <lastmod>2025-11-28</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
     </url>
 </urlset>

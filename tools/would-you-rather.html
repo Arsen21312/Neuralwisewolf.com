@@ -26,7 +26,6 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/103991776" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
-    <base href="/Neuralwisewolf.com/">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/logowolf.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/logowolf.png">
     <link rel="apple-touch-icon" href="assets/logowolf.png">
@@ -640,6 +639,7 @@ body {
         choiceA.classList.remove('selected');
         choiceB.classList.remove('selected');
         nextQuestionBtn.style.display = 'none';
+        nextQuestionBtn.disabled = true;
         progressA.style.height = '0%';
         progressB.style.height = '0%';
         
@@ -675,7 +675,9 @@ body {
 
         gameWrapper.classList.add('answered');
         selectedChoice.classList.add('selected');
-         setTimeout(displayQuestion, 2500); // 2500 миллисекунд = 2.5 секунды
+        nextQuestionBtn.style.display = 'inline-flex';
+        nextQuestionBtn.disabled = false;
+        nextQuestionBtn.focus();
     }
 
     // --- Обработчики событий ---
@@ -688,6 +690,11 @@ body {
     choiceB.addEventListener('click', () => {
         if (!gameWrapper.classList.contains('answered')) {
             revealResults(choiceB);
+        }
+    });
+    nextQuestionBtn.addEventListener('click', () => {
+        if (gameWrapper.classList.contains('answered')) {
+            displayQuestion();
         }
     });
     // --- Инициализация ---
